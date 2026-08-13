@@ -9,3 +9,6 @@ DEV
 
 __pycache__/
 *.pyc
+
+# built packages
+dist/

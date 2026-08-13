@@ -14,7 +14,10 @@ Xvfb "$DISP" -screen 0 "${W}x${H}x24" > /dev/null 2>&1 &
 XPID=$!
 sleep 3
 
-env -u WAYLAND_DISPLAY DISPLAY="$DISP" dbus-run-session -- bash -c '
+# A nested mutter ignores the host screen size and comes up 800x600 unless it
+# is given a mode spec, which makes screenshots too small to be useful.
+env -u WAYLAND_DISPLAY DISPLAY="$DISP" MUTTER_DEBUG_DUMMY_MODE_SPECS="${W}x${H}" \
+  dbus-run-session -- bash -c '
   gnome-shell --nested --wayland > /tmp/shoot-shell.log 2>&1 &
   sleep 20
   OBJ=/org/gnome/shell/extensions/topknot

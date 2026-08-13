@@ -1,3 +1,12 @@
+/* Topknot — a good luck charm, knotted to the top of your screen.
+ * Copyright (C) 2026 Rahul Patwa
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version. See the LICENSE file for the full text.
+ */
+
 import Adw from 'gi://Adw';
 import Gtk from 'gi://Gtk';
 import Gdk from 'gi://Gdk';
