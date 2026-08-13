@@ -1,4 +1,4 @@
-/* Topknot — a good luck charm, knotted to the top of your screen.
+/* SudoCharm — a good luck charm, knotted to the top of your screen.
  * Copyright (C) 2026 Rahul Patwa
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -7,7 +7,7 @@
  * any later version. See the LICENSE file for the full text.
  */
 
-/* pendulum.js — Topknot, the implementation.
+/* pendulum.js — SudoCharm, the implementation.
  *
  * Everything lives here rather than in extension.js so that it can be reloaded
  * without ending your session: extension.js is a stable shim that imports this
@@ -37,10 +37,10 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {CHARMS, charmById, buildCharm, playRitual} from './charms.js';
 
-const DBUS_PATH = '/org/gnome/shell/extensions/topknot';
+const DBUS_PATH = '/org/gnome/shell/extensions/sudocharm';
 const DBUS_IFACE = `
 <node>
-  <interface name="org.gnome.Shell.Extensions.Topknot">
+  <interface name="org.gnome.Shell.Extensions.SudoCharm">
     <method name="Bless">
       <arg type="s" name="message" direction="in"/>
     </method>
@@ -183,7 +183,7 @@ class Pendulum {
         });
 
         // The hook it hangs from, flush under the top bar.
-        this._hook = new St.Widget({style_class: 'topknot-hook'});
+        this._hook = new St.Widget({style_class: 'sudocharm-hook'});
         this._layer.add_child(this._hook);
 
         // Cord and charm rotate together about the hook.
@@ -191,7 +191,7 @@ class Pendulum {
         this._pendulum.set_pivot_point(0.5, 0);
         this._layer.add_child(this._pendulum);
 
-        this._cord = new St.Widget({style_class: 'topknot-cord'});
+        this._cord = new St.Widget({style_class: 'sudocharm-cord'});
         this._pendulum.add_child(this._cord);
 
         this._charmBin = new St.Widget({
@@ -347,9 +347,9 @@ class Pendulum {
         const visible = this._settings.get_boolean('visible');
 
         if (visible)
-            this._hook.remove_style_class_name('topknot-hook-empty');
+            this._hook.remove_style_class_name('sudocharm-hook-empty');
         else
-            this._hook.add_style_class_name('topknot-hook-empty');
+            this._hook.add_style_class_name('sudocharm-hook-empty');
 
         this._applyInput();
     }
@@ -416,7 +416,7 @@ class Pendulum {
         } catch (e) {
             this._destroyed = true;
             this._clock?.stop();
-            console.error(`Topknot: animation stopped after an error — ${e}`);
+            console.error(`SudoCharm: animation stopped after an error — ${e}`);
         }
     }
 
@@ -594,13 +594,13 @@ class Pendulum {
             if (typeof global.stage.grab === 'function')
                 return {kind: 'stage', grab: global.stage.grab(this._hitCharm)};
         } catch (e) {
-            console.error(`Topknot: stage grab unavailable — ${e}`);
+            console.error(`SudoCharm: stage grab unavailable — ${e}`);
         }
         try {
             if (Main.pushModal(this._hitCharm, {actionMode: Shell.ActionMode.NORMAL}))
                 return {kind: 'modal'};
         } catch (e) {
-            console.error(`Topknot: modal grab unavailable — ${e}`);
+            console.error(`SudoCharm: modal grab unavailable — ${e}`);
         }
         return {kind: 'none'};
     }
@@ -616,7 +616,7 @@ class Pendulum {
             else if (held.kind === 'modal')
                 Main.popModal(this._hitCharm);
         } catch (e) {
-            console.error(`Topknot: releasing the grab — ${e}`);
+            console.error(`SudoCharm: releasing the grab — ${e}`);
         }
     }
 
@@ -783,7 +783,7 @@ class Pendulum {
         for (let i = 0; i < count; i++) {
             const label = new St.Label({
                 text: SPARKLES[i % SPARKLES.length],
-                style_class: 'topknot-sparkle',
+                style_class: 'sudocharm-sparkle',
                 style: `font-size: ${Math.round(size * (0.13 + Math.random() * 0.12))}px;`,
                 reactive: false,
             });
@@ -822,7 +822,7 @@ class Pendulum {
 
     _buildMenu() {
         this._menu = new PopupMenu.PopupMenu(this._hitHook, 0.5, St.Side.TOP);
-        this._menu.actor.add_style_class_name('topknot-menu');
+        this._menu.actor.add_style_class_name('sudocharm-menu');
         Main.layoutManager.uiGroup.add_child(this._menu.actor);
         this._menu.actor.hide();
 
@@ -835,7 +835,7 @@ class Pendulum {
             const item = new PopupMenu.PopupMenuItem(def.name);
             item.add_child(new St.Label({
                 text: def.origin,
-                style_class: 'topknot-origin',
+                style_class: 'sudocharm-origin',
                 x_align: Clutter.ActorAlign.END,
                 x_expand: true,
                 y_align: Clutter.ActorAlign.CENTER,
@@ -853,9 +853,9 @@ class Pendulum {
         const story = new PopupMenu.PopupBaseMenuItem({
             reactive: false,
             can_focus: false,
-            style_class: 'topknot-story-item',
+            style_class: 'sudocharm-story-item',
         });
-        this._storyLabel = new St.Label({style_class: 'topknot-story'});
+        this._storyLabel = new St.Label({style_class: 'sudocharm-story'});
         this._storyLabel.clutter_text.line_wrap = true;
         story.add_child(this._storyLabel);
         this._menu.addMenuItem(story);
@@ -875,7 +875,7 @@ class Pendulum {
         const takeDown = new PopupMenu.PopupMenuItem('Take it down');
         takeDown.connect('activate', () => {
             this._settings.set_boolean('visible', false);
-            Main.notify('Topknot',
+            Main.notify('SudoCharm',
                 'Click the hook under the top bar to hang it up again.');
         });
         this._menu.addMenuItem(takeDown);
@@ -913,7 +913,7 @@ class Pendulum {
                     this._clock.disconnect(this._clockId);
                 this._clock.stop();
             } catch (e) {
-                console.error(`Topknot: could not stop the clock — ${e}`);
+                console.error(`SudoCharm: could not stop the clock — ${e}`);
             }
             this._clockId = 0;
             this._clock = null;
@@ -960,20 +960,20 @@ class Pendulum {
                 Main.layoutManager.untrackChrome(area);
                 area.destroy();
             } catch (e) {
-                console.error(`Topknot: hit area teardown — ${e}`);
+                console.error(`SudoCharm: hit area teardown — ${e}`);
             }
         }
         try {
             Main.layoutManager.removeChrome(this._layer);
             this._layer.destroy();
         } catch (e) {
-            console.error(`Topknot: layer teardown — ${e}`);
+            console.error(`SudoCharm: layer teardown — ${e}`);
         }
         this._layer = null;
     }
 }
 
-export default class Topknot {
+export default class SudoCharm {
     /** @param {Extension} ext the shim, for path/settings/openPreferences */
     constructor(ext) {
         this._ext = ext;

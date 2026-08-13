@@ -4,7 +4,7 @@ Generate these elsewhere, drop the PNGs into `art-drop/`, and run:
 
 ```sh
 ./import-art          # normalises them onto the shared canvas
-topknot-reload
+sudocharm-reload
 ```
 
 A PNG overrides the SVG of the same name, so nothing else has to change.

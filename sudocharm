@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# topknot — talk to the Topknot GNOME Shell extension over D-Bus.
+# sudocharm — talk to the SudoCharm GNOME Shell extension over D-Bus.
 #
-#   topknot bless [message]   call it down; it performs its ritual
-#   topknot flick [strength]  give it a push
-#   topknot toggle            hang it up, or take it down
-#   topknot menu              open the charm's menu
-#   topknot charm <id>        switch charms
-#   topknot list              list charm ids
-#   topknot count             how many times it has been called down
+#   sudocharm bless [message]   call it down; it performs its ritual
+#   sudocharm flick [strength]  give it a push
+#   sudocharm toggle            hang it up, or take it down
+#   sudocharm menu              open the charm's menu
+#   sudocharm charm <id>        switch charms
+#   sudocharm list              list charm ids
+#   sudocharm count             how many times it has been called down
 set -euo pipefail
 
 DEST=org.gnome.Shell
-OBJ=/org/gnome/shell/extensions/topknot
-IFACE=org.gnome.Shell.Extensions.Topknot
+OBJ=/org/gnome/shell/extensions/sudocharm
+IFACE=org.gnome.Shell.Extensions.SudoCharm
 
 call() { gdbus call --session --dest "$DEST" --object-path "$OBJ" "$@" >/dev/null; }
 
@@ -22,7 +22,7 @@ case "${1:-bless}" in
   toggle) call --method "$IFACE.Toggle" ;;
   menu)   call --method "$IFACE.OpenMenu" ;;
   charm)
-    [ $# -ge 2 ] || { echo "usage: topknot charm <id>" >&2; exit 2; }
+    [ $# -ge 2 ] || { echo "usage: sudocharm charm <id>" >&2; exit 2; }
     call --method "$IFACE.SetCharm" "$2"
     ;;
   list)
@@ -36,7 +36,7 @@ case "${1:-bless}" in
       grep -o '[0-9]\+'
     ;;
   *)
-    echo "usage: topknot {bless [msg]|flick [n]|toggle|menu|charm <id>|list|count}" >&2
+    echo "usage: sudocharm {bless [msg]|flick [n]|toggle|menu|charm <id>|list|count}" >&2
     exit 2
     ;;
 esac

@@ -1,6 +1,6 @@
-# Topknot
+# SudoCharm
 
-A good luck charm, knotted to the top of your screen.
+Root-level good luck for your desktop.
 
 ![A nazar bead hanging on a cord below the GNOME top bar](docs/hanging.png)
 
@@ -37,15 +37,15 @@ version and none planned.
 Download the zip from [Releases](../../releases) and:
 
 ```sh
-gnome-extensions install --force topknot@rahul.local.shell-extension.zip
-gnome-extensions enable topknot@rahul.local
+gnome-extensions install --force sudocharm@rahul.local.shell-extension.zip
+gnome-extensions enable sudocharm@rahul.local
 ```
 
 Or from source:
 
 ```sh
-git clone https://github.com/rahul/topknot
-cd topknot
+git clone https://github.com/rahul/sudocharm
+cd sudocharm
 ./install.sh
 ```
 
@@ -71,7 +71,7 @@ Sizes, cord length, how strong the breeze is and how fast a flick rings down are
 all in the preferences:
 
 ```sh
-gnome-extensions prefs topknot@rahul.local
+gnome-extensions prefs sudocharm@rahul.local
 ```
 
 ## From a script
@@ -80,33 +80,33 @@ Everything is on the session bus, so a shell script can reach it with no
 dependencies:
 
 ```sh
-topknot bless              # call it down
-topknot flick 6            # just push it
-topknot charm daruma       # switch charms
-topknot toggle             # hang it up, or take it down
-topknot count              # how many times it has been called down
+sudocharm bless              # call it down
+sudocharm flick 6            # just push it
+sudocharm charm daruma       # switch charms
+sudocharm toggle             # hang it up, or take it down
+sudocharm count              # how many times it has been called down
 ```
 
 Bless a commit:
 
 ```sh
 # .git/hooks/post-commit
-topknot bless "$(git rev-parse --short HEAD)"
+sudocharm bless "$(git rev-parse --short HEAD)"
 ```
 
 Bless a green test run, and nudge it on a red one:
 
 ```sh
-pytest && topknot bless || topknot flick 9
+pytest && sudocharm bless || sudocharm flick 9
 ```
 
-The `topknot` command is a thin wrapper over `gdbus`, so nothing needs
+The `sudocharm` command is a thin wrapper over `gdbus`, so nothing needs
 installing on the far end:
 
 ```sh
 gdbus call --session --dest org.gnome.Shell \
-  --object-path /org/gnome/shell/extensions/topknot \
-  --method org.gnome.Shell.Extensions.Topknot.Bless "deploy"
+  --object-path /org/gnome/shell/extensions/sudocharm \
+  --method org.gnome.Shell.Extensions.SudoCharm.Bless "deploy"
 ```
 
 ## How it hangs
@@ -179,8 +179,8 @@ So `extension.js` is a small stable loader, and in dev mode it copies the
 implementation into a fresh directory on each enable:
 
 ```sh
-touch DEV          # turn dev mode on
-topknot-reload     # about a second, no logout
+touch DEV           # turn dev mode on
+sudocharm-reload    # about a second, no logout
 ```
 
 Delete `DEV` for a normal install and nothing is copied. It ships off, which
@@ -194,8 +194,8 @@ changing those does need a logout.
 Two things that cannot be checked by reading the code:
 
 ```sh
-./shoot /tmp/out            # run it in a nested shell and photograph it
-topknot-drag-check          # watch the drag maths while you drag
+./shoot /tmp/out        # run it in a nested shell and photograph it
+sudocharm-drag-check    # watch the drag maths while you drag
 ```
 
 `shoot` catches what an error log never will — a cord that fails to reach the
@@ -213,8 +213,9 @@ of the same name, so no code changes and deleting it falls back to the vector.
 
 ## The name
 
-A topknot is a knot tied at the top, which is what this is and where it lives.
-GNOME calls the strip across the top of your screen the top bar.
+`sudo` grants superuser rights on a Unix system — the highest privilege there
+is. This applies it to luck, which is not a thing you can actually be granted
+privileges over. That is the joke and it does not need explaining twice.
 
 ## Credit
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="topknot">
-  <schema id="org.gnome.shell.extensions.topknot"
-          path="/org/gnome/shell/extensions/topknot/">
+<schemalist gettext-domain="sudocharm">
+  <schema id="org.gnome.shell.extensions.sudocharm"
+          path="/org/gnome/shell/extensions/sudocharm/">
 
     <key name="charm" type="s">
       <default>'nazar'</default>

@@ -1,7 +1,7 @@
 /* The cord. Wide enough to read as string rather than a stray scratch, and
    dark with a light edge so it survives both a bright sky and a dark wallpaper
    — it hangs over whatever the user happens to have behind it. */
-.topknot-cord {
+.sudocharm-cord {
     background-color: #6b4f2a;
     border-left: 1px solid rgba(255, 255, 255, 0.28);
     border-right: 1px solid rgba(0, 0, 0, 0.45);
@@ -10,7 +10,7 @@
 
 /* The hook, flush under the top bar. Squat and dark so it reads as part of the
    bar's underside rather than a grey tab floating on the wallpaper. */
-.topknot-hook {
+.sudocharm-hook {
     background-color: #2e2e30;
     border: 1px solid rgba(0, 0, 0, 0.55);
     border-top: none;
@@ -20,27 +20,27 @@
 
 /* The hook with nothing on it — the charm has been taken down. Kept visible
    and clickable so there is a way to hang it back up. */
-.topknot-hook-empty {
+.sudocharm-hook-empty {
     background-color: rgba(90, 90, 95, 0.5);
     box-shadow: none;
 }
 
-.topknot-sparkle {
+.sudocharm-sparkle {
     color: #ffe9a8;
 }
 
-.topknot-origin {
+.sudocharm-origin {
     font-size: 0.8em;
     opacity: 0.55;
     padding-left: 24px;
 }
 
-.topknot-story-item {
+.sudocharm-story-item {
     padding-top: 6px;
     padding-bottom: 6px;
 }
 
-.topknot-story {
+.sudocharm-story {
     max-width: 300px;
     font-size: 0.9em;
     opacity: 0.75;

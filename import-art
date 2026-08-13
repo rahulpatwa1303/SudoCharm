@@ -158,7 +158,7 @@ def main():
         print(f"      wrote {dest.relative_to(HERE)}")
 
     if not check:
-        print("\nRun 'topknot-reload'. PNGs override the SVG of the same name,")
+        print("\nRun 'sudocharm-reload'. PNGs override the SVG of the same name,")
         print("so nothing else needs changing. Delete the PNG to fall back.")
     return 0
 

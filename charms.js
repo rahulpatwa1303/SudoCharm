@@ -1,4 +1,4 @@
-/* Topknot — a good luck charm, knotted to the top of your screen.
+/* SudoCharm — a good luck charm, knotted to the top of your screen.
  * Copyright (C) 2026 Rahul Patwa
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -150,7 +150,7 @@ export function buildCharm(def, size, path, emoji) {
         width: size,
         height: size,
         reactive: false,
-        style_class: 'topknot-charm',
+        style_class: 'sudocharm-charm',
     });
     actor.set_pivot_point(def.hangPivot[0], def.hangPivot[1]);
 

@@ -5,7 +5,7 @@
 # modules by path, so extension.js re-imports the implementation from a fresh
 # directory each time it is enabled; disable+enable is therefore a real reload.
 set -euo pipefail
-UUID=topknot@rahul.local
+UUID=sudocharm@rahul.local
 
 if ! gnome-extensions info "$UUID" >/dev/null 2>&1; then
   echo "The shell does not know $UUID yet — log out and back in once." >&2

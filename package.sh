@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build an installable zip: dist/topknot@rahul.local.shell-extension.zip
+# Build an installable zip: dist/sudocharm@rahul.local.shell-extension.zip
 #
 # Install it with:   gnome-extensions install --force <zip>
 # This is the same format extensions.gnome.org accepts.
@@ -11,11 +11,11 @@ UUID="$(python3 -c "import json;print(json.load(open('metadata.json'))['uuid'])"
 mkdir -p dist
 
 EXTRA=()
-for f in pendulum.js charms.js topknot README.md; do EXTRA+=(--extra-source="$f"); done
+for f in pendulum.js charms.js sudocharm README.md; do EXTRA+=(--extra-source="$f"); done
 EXTRA+=(--extra-source=icons)
 
 gnome-extensions pack \
-  --schema=schemas/org.gnome.shell.extensions.topknot.gschema.xml \
+  --schema=schemas/org.gnome.shell.extensions.sudocharm.gschema.xml \
   "${EXTRA[@]}" \
   --out-dir=dist --force .
 

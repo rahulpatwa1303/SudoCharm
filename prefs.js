@@ -1,4 +1,4 @@
-/* Topknot — a good luck charm, knotted to the top of your screen.
+/* SudoCharm — a good luck charm, knotted to the top of your screen.
  * Copyright (C) 2026 Rahul Patwa
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -17,7 +17,7 @@ import {ExtensionPreferences} from 'resource:///org/gnome/shell/extensions/prefs
 
 import {CHARMS} from './charms.js';
 
-export default class TopknotPreferences extends ExtensionPreferences {
+export default class SudoCharmPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         const settings = this.getSettings();
 
@@ -136,7 +136,7 @@ export default class TopknotPreferences extends ExtensionPreferences {
 
         const keyGroup = new Adw.PreferencesGroup({
             title: 'Shortcuts',
-            description: 'Also available as topknot bless, or over D-Bus ' +
+            description: 'Also available as sudocharm bless, or over D-Bus ' +
                          'from a git hook or a build script.',
         });
         page.add(keyGroup);

@@ -20,8 +20,8 @@ env -u WAYLAND_DISPLAY DISPLAY="$DISP" MUTTER_DEBUG_DUMMY_MODE_SPECS="${W}x${H}"
   dbus-run-session -- bash -c '
   gnome-shell --nested --wayland > /tmp/shoot-shell.log 2>&1 &
   sleep 20
-  OBJ=/org/gnome/shell/extensions/topknot
-  IF=org.gnome.Shell.Extensions.Topknot
+  OBJ=/org/gnome/shell/extensions/sudocharm
+  IF=org.gnome.Shell.Extensions.SudoCharm
   if [ $# -gt 0 ]; then
     gdbus call --session --dest org.gnome.Shell --object-path $OBJ \
       --method "$IF.$1" "${@:2}" > /dev/null 2>&1

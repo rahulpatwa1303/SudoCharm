@@ -4,9 +4,9 @@
 echo "Grab the charm and pull it, hold at the far point. Watching for 12 seconds..."
 for i in $(seq 1 40); do
   gdbus call --session --dest org.gnome.Shell \
-    --object-path /org/gnome/shell/extensions/topknot \
+    --object-path /org/gnome/shell/extensions/sudocharm \
     --method org.freedesktop.DBus.Properties.Get \
-    org.gnome.Shell.Extensions.Topknot DragState 2>/dev/null |
+    org.gnome.Shell.Extensions.SudoCharm DragState 2>/dev/null |
     sed 's/^(<.//;s/.>,)$//'
   sleep 0.3
 done | grep --line-buffered "dragging=true" | tail -20

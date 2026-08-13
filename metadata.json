@@ -1,9 +1,9 @@
 {
-  "uuid": "topknot@rahul.local",
-  "name": "Topknot",
+  "uuid": "sudocharm@rahul.local",
+  "name": "SudoCharm",
   "description": "A good luck charm that hangs from the top edge of your screen on a cord. It sways in a breeze, stays out of every click, and drops in when you call it. Grab it and give it a flick, or drag its hook along the top edge to re-hang it. Seven charms from seven traditions, each with its own ritual.",
   "shell-version": ["45", "46", "47", "48"],
-  "settings-schema": "org.gnome.shell.extensions.topknot",
-  "gettext-domain": "topknot",
+  "settings-schema": "org.gnome.shell.extensions.sudocharm",
+  "gettext-domain": "sudocharm",
   "version": 1
 }

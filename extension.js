@@ -1,4 +1,4 @@
-/* Topknot — a good luck charm, knotted to the top of your screen.
+/* SudoCharm — a good luck charm, knotted to the top of your screen.
  * Copyright (C) 2026 Rahul Patwa
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -41,7 +41,7 @@ const HOT_DIR = '.hot';
  * has to come along or the copy would import nothing. */
 const IMPL_FILES = ['pendulum.js', 'charms.js'];
 
-export default class TopknotExtension extends Extension {
+export default class SudoCharmExtension extends Extension {
     /* Loading is asynchronous, so enable/disable can interleave with an import
      * that is still in flight. A plain "am I still enabled?" check is not
      * enough: disable-then-enable flips it back to true, and a stale import
@@ -53,7 +53,7 @@ export default class TopknotExtension extends Extension {
     enable() {
         this._generation = (this._generation ?? 0) + 1;
         this._boot(this._generation).catch(e => {
-            console.error(`Topknot: failed to load — ${e}`);
+            console.error(`SudoCharm: failed to load — ${e}`);
             logError(e);
         });
     }
@@ -66,10 +66,10 @@ export default class TopknotExtension extends Extension {
     }
 
     async _boot(generation) {
-        const {default: Topknot} = await import(this._implUrl());
+        const {default: SudoCharm} = await import(this._implUrl());
         if (generation !== this._generation)
             return;                     // superseded while the import was running
-        this._impl = new Topknot(this);
+        this._impl = new SudoCharm(this);
         this._impl.enable();
     }
 
@@ -92,7 +92,7 @@ export default class TopknotExtension extends Extension {
             this._pruneHot(stamp);
             return `file://${dir}/pendulum.js`;
         } catch (e) {
-            console.error(`Topknot: hot reload unavailable — ${e}`);
+            console.error(`SudoCharm: hot reload unavailable — ${e}`);
             return plain;
         }
     }

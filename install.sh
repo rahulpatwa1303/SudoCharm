@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install Topknot into GNOME Shell.
+# Install SudoCharm into GNOME Shell.
 #
 # The repo is symlinked into place rather than copied, so editing the repo
 # edits the live extension.
@@ -19,9 +19,9 @@ ln -sfn "$HERE" "$TARGET"
 
 echo "==> linking commands into ~/.local/bin"
 mkdir -p "$HOME/.local/bin"
-ln -sf "$HERE/topknot"    "$HOME/.local/bin/topknot"
-ln -sf "$HERE/reload"     "$HOME/.local/bin/topknot-reload"
-ln -sf "$HERE/drag-check" "$HOME/.local/bin/topknot-drag-check"
+ln -sf "$HERE/sudocharm"    "$HOME/.local/bin/sudocharm"
+ln -sf "$HERE/reload"     "$HOME/.local/bin/sudocharm-reload"
+ln -sf "$HERE/drag-check" "$HOME/.local/bin/sudocharm-drag-check"
 
 echo "==> enabling"
 if ! gnome-extensions enable "$UUID" 2>/dev/null; then
@@ -40,10 +40,10 @@ cat <<MSG
 Done. Log out and back in — GNOME Shell cannot load an extension into a
 running Wayland session.
 
-  Call it down:   Super+Alt+L, click the charm, or 'topknot bless'
+  Call it down:   Super+Alt+L, click the charm, or 'sudocharm bless'
   Show / hide:    Super+Alt+K
   Settings:       gnome-extensions prefs $UUID
 
 To work on it, create a file named DEV in this directory; changes then take
-effect with 'topknot-reload' instead of a logout. See the README.
+effect with 'sudocharm-reload' instead of a logout. See the README.
 MSG
