@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Painted pupil for the left eye. Position measured from
+       daruma-body.png, not guessed: the blank eye sits at (43.5, 48.2)
+       on the 128 grid with radius 10.5. Regenerate this if the doll art changes. -->
+  <circle cx="43.5" cy="48.2" r="6.5" fill="#141110"/>
+  <circle cx="41.4" cy="45.8" r="1.4" fill="#ffffff" opacity="0.5"/>
+</svg>

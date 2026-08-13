@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="topknot">
+  <schema id="org.gnome.shell.extensions.topknot"
+          path="/org/gnome/shell/extensions/topknot/">
+
+    <key name="charm" type="s">
+      <default>'nazar'</default>
+      <summary>Active charm</summary>
+    </key>
+
+    <key name="emoji" type="s">
+      <default>'🍀'</default>
+      <summary>Custom emoji</summary>
+    </key>
+
+    <key name="visible" type="b">
+      <default>true</default>
+      <summary>Whether the charm is hanging</summary>
+    </key>
+
+    <key name="charm-size" type="i">
+      <default>76</default>
+      <range min="32" max="220"/>
+      <summary>Charm size in pixels</summary>
+    </key>
+
+    <key name="cord-length" type="i">
+      <default>46</default>
+      <range min="8" max="400"/>
+      <summary>Length of the cord it hangs from, in pixels</summary>
+    </key>
+
+    <key name="anchor" type="d">
+      <default>0.86</default>
+      <range min="0.0" max="1.0"/>
+      <summary>Where along the top edge it hangs, as a fraction of the width</summary>
+    </key>
+
+    <key name="sway" type="b">
+      <default>true</default>
+      <summary>Whether a breeze keeps it moving</summary>
+    </key>
+
+    <key name="liveliness" type="d">
+      <default>1.0</default>
+      <range min="0.0" max="3.0"/>
+      <summary>How strong the breeze is</summary>
+    </key>
+
+    <key name="damping" type="d">
+      <default>0.55</default>
+      <range min="0.05" max="3.0"/>
+      <summary>How quickly a flick rings down</summary>
+    </key>
+
+    <key name="bless-shortcut" type="as">
+      <default><![CDATA[['<Super><Alt>l']]]></default>
+      <summary>Call the charm down</summary>
+    </key>
+
+    <key name="toggle-shortcut" type="as">
+      <default><![CDATA[['<Super><Alt>k']]]></default>
+      <summary>Hang the charm up, or take it down</summary>
+    </key>
+
+    <key name="daruma-state" type="i">
+      <default>0</default>
+      <range min="0" max="2"/>
+      <summary>Daruma eye progress</summary>
+    </key>
+
+    <key name="bless-count" type="i">
+      <default>0</default>
+      <summary>How many times the charm has been called down</summary>
+    </key>
+
+  </schema>
+</schemalist>

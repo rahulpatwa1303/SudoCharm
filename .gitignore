@@ -1,0 +1,11 @@
+# generated at install time
+schemas/gschemas.compiled
+
+# hot-reload working copies (see extension.js)
+.hot/
+
+# local dev marker — presence enables hot reload
+DEV
+
+__pycache__/
+*.pyc

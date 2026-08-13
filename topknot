@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# topknot — talk to the Topknot GNOME Shell extension over D-Bus.
+#
+#   topknot bless [message]   call it down; it performs its ritual
+#   topknot flick [strength]  give it a push
+#   topknot toggle            hang it up, or take it down
+#   topknot menu              open the charm's menu
+#   topknot charm <id>        switch charms
+#   topknot list              list charm ids
+#   topknot count             how many times it has been called down
+set -euo pipefail
+
+DEST=org.gnome.Shell
+OBJ=/org/gnome/shell/extensions/topknot
+IFACE=org.gnome.Shell.Extensions.Topknot
+
+call() { gdbus call --session --dest "$DEST" --object-path "$OBJ" "$@" >/dev/null; }
+
+case "${1:-bless}" in
+  bless)  call --method "$IFACE.Bless" "${2:-}" ;;
+  flick)  call --method "$IFACE.Flick" "${2:-4.0}" ;;
+  toggle) call --method "$IFACE.Toggle" ;;
+  menu)   call --method "$IFACE.OpenMenu" ;;
+  charm)
+    [ $# -ge 2 ] || { echo "usage: topknot charm <id>" >&2; exit 2; }
+    call --method "$IFACE.SetCharm" "$2"
+    ;;
+  list)
+    gdbus call --session --dest "$DEST" --object-path "$OBJ" \
+      --method "$IFACE.ListCharms" |
+      tr -d "([],)'" | tr ' ' '\n' | grep -v '^$'
+    ;;
+  count)
+    gdbus call --session --dest "$DEST" --object-path "$OBJ" \
+      --method org.freedesktop.DBus.Properties.Get "$IFACE" BlessCount |
+      grep -o '[0-9]\+'
+    ;;
+  *)
+    echo "usage: topknot {bless [msg]|flick [n]|toggle|menu|charm <id>|list|count}" >&2
+    exit 2
+    ;;
+esac

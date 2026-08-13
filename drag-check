@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# drag-check — watch what the drag maths does while you actually drag the charm.
+# Run it, then grab the charm and pull it as far as you can and hold.
+echo "Grab the charm and pull it, hold at the far point. Watching for 12 seconds..."
+for i in $(seq 1 40); do
+  gdbus call --session --dest org.gnome.Shell \
+    --object-path /org/gnome/shell/extensions/topknot \
+    --method org.freedesktop.DBus.Properties.Get \
+    org.gnome.Shell.Extensions.Topknot DragState 2>/dev/null |
+    sed 's/^(<.//;s/.>,)$//'
+  sleep 0.3
+done | grep --line-buffered "dragging=true" | tail -20

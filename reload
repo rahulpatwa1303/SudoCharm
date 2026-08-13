@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# reload — pick up code changes without ending your session.
+#
+# Works only when the DEV marker file is present (see extension.js). GJS caches
+# modules by path, so extension.js re-imports the implementation from a fresh
+# directory each time it is enabled; disable+enable is therefore a real reload.
+set -euo pipefail
+UUID=topknot@rahul.local
+
+if ! gnome-extensions info "$UUID" >/dev/null 2>&1; then
+  echo "The shell does not know $UUID yet — log out and back in once." >&2
+  exit 1
+fi
+
+gnome-extensions disable "$UUID"
+sleep 0.4
+gnome-extensions enable "$UUID"
+sleep 0.8
+
+state=$(gnome-extensions info "$UUID" | sed -n 's/^ *State: //p')
+echo "State: $state"
+if [ "$state" = "ERROR" ]; then
+  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell \
+    --method org.gnome.Shell.Extensions.GetExtensionErrors "$UUID" |
+    tr ',' '\n' | sed 's/^ *//'
+  exit 1
+fi

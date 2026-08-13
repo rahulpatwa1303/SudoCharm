@@ -1,0 +1,167 @@
+#!/usr/bin/env python3
+"""import-art — turn generated charm images into layers this extension can use.
+
+Drop PNGs into art-drop/ named after the layer they replace (nazar.png,
+nimbu-lemon.png, neko-paw.png ...) and run this. Each image is keyed for
+transparency if needed, trimmed, scaled and placed on the shared square canvas
+that every layer of a charm shares, then written into icons/.
+
+That shared canvas is the whole trick: because every layer of a charm is drawn
+in its final position on the same grid, a moving part (a lemon, a paw, an
+elytron) only has to move relative to where it was drawn. Layers that are not
+in register will visibly slide apart when a ritual plays.
+
+Usage:
+    ./import-art                 # process everything in art-drop/
+    ./import-art nimbu-lemon     # just one
+    ./import-art --check         # report only, write nothing
+"""
+
+import sys
+from pathlib import Path
+
+import numpy as np
+from PIL import Image
+
+HERE = Path(__file__).resolve().parent
+DROP = HERE / "art-drop"
+ICONS = HERE / "icons"
+CANVAS = 512          # stored resolution; displayed around 76px
+MARGIN = 0.04         # keep a little air so nothing touches the canvas edge
+
+# Where each layer sits on the shared canvas, as fractions: (top, height).
+# Anything not listed is centred and fitted. These are taken from the existing
+# vector art so replacement layers land where the rituals expect them.
+PLACEMENT = {
+    # layer                top    height   hcentre
+    "nimbu-string":      (0.00,  0.66,   0.50),
+    "nimbu-lemon":       (0.64,  0.34,   0.50),
+    "daruma-eye-l":      (0.37,  0.20,   0.38),
+    "daruma-eye-r":      (0.37,  0.20,   0.62),
+    "neko-paw":          (0.24,  0.42,   0.72),
+    "scarab-wing-l":     (0.30,  0.62,   0.40),
+    "scarab-wing-r":     (0.30,  0.62,   0.60),
+}
+
+
+def keyed(im):
+    """Give the image an alpha channel, keying out a flat background.
+
+    Generated images do not come back with a clean flat colour: the background
+    of these was magenta, but its corners were (241,12,237), (244,19,235),
+    (237,27,227) — noisy enough that an exact match keys nothing at all and the
+    whole rectangle gets imported as artwork. So the background colour is taken
+    as the median of a border ring, and pixels are keyed on distance from it,
+    with a soft ramp so edges stay anti-aliased rather than jagged.
+    """
+    im = im.convert("RGBA")
+    a = np.asarray(im).astype(np.float32)
+    rgb, alpha = a[..., :3], a[..., 3]
+
+    if alpha.min() < 250:
+        return im                       # already has real transparency
+
+    b = 8
+    border = np.concatenate([
+        rgb[:b].reshape(-1, 3), rgb[-b:].reshape(-1, 3),
+        rgb[:, :b].reshape(-1, 3), rgb[:, -b:].reshape(-1, 3)])
+    bg = np.median(border, axis=0)
+
+    # If the border is not one colour, this is not a keyable image.
+    spread = np.median(np.abs(border - bg).sum(axis=1))
+    if spread > 60:
+        print(f"      ! border is not a flat colour (spread {spread:.0f}) — "
+              f"key it out yourself")
+        return im
+
+    dist = np.sqrt(((rgb - bg) ** 2).sum(axis=2))
+    t0, t1 = 45.0, 150.0
+    new_alpha = np.clip((dist - t0) / (t1 - t0), 0.0, 1.0)
+
+    # Despill. On the soft edge the pixel is a blend of object and background,
+    # which leaves a coloured halo — a magenta key leaves pink fringing. Where
+    # the pixel is not yet fully opaque, cap the channels the background is
+    # strong in, so the halo loses its tint. Interior pixels are untouched.
+    out = rgb.copy()
+    strong = bg > bg.mean()
+    edge = new_alpha < 0.98
+    if strong.any() and (~strong).any():
+        ceiling = out[..., ~strong].max(axis=2)
+        for c in np.where(strong)[0]:
+            ch = out[..., c]
+            ch[edge] = np.minimum(ch[edge], ceiling[edge] + 12)
+
+    keyed_px = np.dstack([out, new_alpha * 255.0]).astype(np.uint8)
+    print(f"      keyed background rgb({int(bg[0])},{int(bg[1])},{int(bg[2])}), "
+          f"despilled")
+    return Image.fromarray(keyed_px, "RGBA")
+
+
+def place(name, im):
+    """Scale and position onto the shared canvas."""
+    im = keyed(im)
+    box = im.getbbox()
+    if not box:
+        raise ValueError("image is entirely transparent")
+    im = im.crop(box)
+
+    top, height, hcentre = PLACEMENT.get(name, (MARGIN, 1 - 2 * MARGIN, 0.50))
+    target_h = CANVAS * height
+    target_w = CANVAS * (1 - 2 * MARGIN)
+    scale = min(target_w / im.width, target_h / im.height)
+    im = im.resize((max(1, round(im.width * scale)),
+                    max(1, round(im.height * scale))), Image.LANCZOS)
+
+    canvas = Image.new("RGBA", (CANVAS, CANVAS), (0, 0, 0, 0))
+    x = round(CANVAS * hcentre - im.width / 2)
+    y = round(CANVAS * top)
+    canvas.alpha_composite(im, (max(0, x), max(0, y)))
+    return canvas
+
+
+def main():
+    args = [a for a in sys.argv[1:] if not a.startswith("-")]
+    check = "--check" in sys.argv
+
+    if not DROP.exists():
+        print(f"no {DROP} — create it and put your PNGs there")
+        return 1
+
+    files = sorted(DROP.glob("*.png")) + sorted(DROP.glob("*.PNG"))
+    if args:
+        files = [f for f in files if f.stem in args]
+    if not files:
+        print(f"nothing to do — put PNGs in {DROP}")
+        print("expected names, e.g.: nazar.png  nimbu-string.png  nimbu-lemon.png")
+        return 0
+
+    for f in files:
+        name = f.stem
+        print(f"  {f.name}")
+        try:
+            out = place(name, Image.open(f))
+        except Exception as e:                                  # noqa: BLE001
+            print(f"      FAILED: {e}")
+            continue
+
+        bb = out.getbbox()
+        print(f"      art occupies y {bb[1] / CANVAS:.3f}–{bb[3] / CANVAS:.3f} "
+              f"of the canvas, x {bb[0] / CANVAS:.3f}–{bb[2] / CANVAS:.3f}")
+        if name not in PLACEMENT and bb[1] / CANVAS > 0.13:
+            print("      ! top of art is below 0.13 — the cord may not reach it; "
+                  "see CORD_OVERLAP in pendulum.js")
+
+        if check:
+            continue
+        dest = ICONS / f"{name}.png"
+        out.save(dest)
+        print(f"      wrote {dest.relative_to(HERE)}")
+
+    if not check:
+        print("\nRun 'topknot-reload'. PNGs override the SVG of the same name,")
+        print("so nothing else needs changing. Delete the PNG to fall back.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <g id="chili">
+      <path d="M0 0 q7 7 6 25 q-1 15 -5 22 q-4 -7 -5 -22 Q-5 7 0 0 z"
+            fill="#c8161f" stroke="#78090f" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M-2 6 q1 14 1 26" stroke="#e8555c" stroke-width="1.6" fill="none" opacity=".7"/>
+      <path d="M0 1 q-1 -7 -6 -10" stroke="#3f7d20" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+    </g>
+  </defs>
+  <path d="M64 2 V34" stroke="#a9803f" stroke-width="4" stroke-linecap="round"/>
+  <use href="#chili" transform="translate(64,36) rotate(-50)"/>
+  <use href="#chili" transform="translate(64,36) rotate(-33)"/>
+  <use href="#chili" transform="translate(64,36) rotate(-17)"/>
+  <use href="#chili" transform="translate(64,36) rotate(0)"/>
+  <use href="#chili" transform="translate(64,36) rotate(17)"/>
+  <use href="#chili" transform="translate(64,36) rotate(33)"/>
+  <use href="#chili" transform="translate(64,36) rotate(50)"/>
+  <circle cx="64" cy="35" r="6" fill="#7a5a2e"/>
+</svg>
