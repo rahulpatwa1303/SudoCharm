@@ -1,6 +1,8 @@
-# Build the landing page for Topknot
+# Build the landing page for SudoCharm
 
-## What Topknot is
+> **SudoCharm** — Root-level good luck for your desktop.
+
+## What SudoCharm is
 
 A GNOME Shell extension for Linux. A good luck charm hangs on a cord from the
 top edge of the screen, over the desktop, and sways. You can grab it and flick
@@ -9,7 +11,22 @@ pleasant object that lives on your monitor.
 
 Seven charms, each from a different tradition, each with its own small ritual.
 
-Repo: `github.com/rahul/topknot` · Linux only, no other platforms planned.
+Repo: `github.com/rahul/sudocharm` · Linux only, no other platforms planned.
+
+## The tension in the name, and how to hold it
+
+The name is a Unix joke. The artwork is not — these are real objects from real
+traditions: a nazar bead, a daruma doll, a nimbu-mirchi hung at a threshold.
+
+Do not resolve that tension by making the charms nerdy. No terminal-green
+recolouring, no ASCII charms, no pixel art, no charms rendered as command
+prompts. The artwork stays exactly as reverent and well-made as it is; that
+contrast is the whole joke and flattening it kills the product.
+
+**Put the wit in the words and the seriousness in the objects.** The name, the
+slogan, and one or two lines of microcopy carry the humour. A monospace face for
+the install command and the name is right; a monospace face for everything is
+not. If a visitor cannot tell whether the page is sincere, it is working.
 
 ## The one idea
 
@@ -137,7 +154,11 @@ No fixed breakpoint list is being prescribed. Use judgement.
 
 Words to work from. Edit them; do not pad them.
 
-> **Topknot** — A good luck charm, knotted to the top of your screen.
+> **SudoCharm**
+> Root-level good luck for your desktop.
+
+The slogan is the hero line. It should be the largest text on the page after
+the name itself, and it should not be explained.
 
 > It hangs there over your desktop and sways. Grab it and it swings — the cord
 > stretches while you pull and whips when you let go, because it is an actual
@@ -155,8 +176,8 @@ The daruma detail is worth its own moment somewhere on the page:
 Install, shown plainly:
 
 ```sh
-gnome-extensions install --force topknot@rahul.local.shell-extension.zip
-gnome-extensions enable topknot@rahul.local
+gnome-extensions install --force sudocharm@rahul.local.shell-extension.zip
+gnome-extensions enable sudocharm@rahul.local
 ```
 
 Needs: a download button, a GitHub link, "GNOME Shell 45–48, Wayland or X11",
@@ -196,6 +217,9 @@ commit. Developers find that funnier than it deserves.
 - Scroll-jacking, parallax layers, or an intro animation between the visitor and
   the charm.
 - Emoji as decoration.
+- Terminal chrome used as decoration — fake shell prompts, blinking cursors,
+  `$` prefixes on things that are not commands, matrix-green anything. The name
+  earns one monospace moment, not a costume.
 
 ## Done looks like
 
