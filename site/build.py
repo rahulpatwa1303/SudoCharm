@@ -79,10 +79,19 @@ def build_page():
     # The same page, minus the document skeleton, for publishing as an artifact.
     body = html.split('<body>', 1)[1].rsplit('</body>', 1)[0]
     css = html.split('<style>', 1)[1].split('</style>', 1)[0]
+
+    # The viewport meta has to travel with the content. A host that wraps this
+    # in its own <head> drops the one in the template, and a phone with no
+    # viewport meta lays the page out at 980px and then zooms out to fit —
+    # every measurement correct, every word too small to read.
+    viewport = html.split('name="viewport" content="', 1)[1].split('"', 1)[0]
+
     # The page's own <title> carries the slogan for search; the artifact
     # gallery wants the bare name.
     with open(os.path.join(SITE, 'artifact.html'), 'w') as f:
-        f.write('<title>SudoCharm</title>\n<style>%s</style>\n%s' % (dual_theme(css), body))
+        f.write('<meta name="viewport" content="%s">\n'
+                '<title>SudoCharm</title>\n<style>%s</style>\n%s'
+                % (viewport, dual_theme(css), body))
 
 
 def dual_theme(css):

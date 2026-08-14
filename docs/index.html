@@ -86,7 +86,9 @@ code, kbd { font-family: var(--mono); font-size: 0.9em; }
 }
 .bar b { font-weight: 600; letter-spacing: 0.02em; flex: none; }
 .bar nav { margin-left: auto; display: flex; gap: 1.1rem; flex: none; }
-.bar a { text-decoration: none; opacity: .78; white-space: nowrap; }
+/* Vertical padding on an inline link grows the tap target without growing the
+   bar, so a thumb gets the whole 34px rather than the 13px of text. */
+.bar a { text-decoration: none; opacity: .78; white-space: nowrap; padding: 11px 3px; }
 .bar a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 3px; }
 .bar .hide-xs { overflow: hidden; white-space: nowrap; }
 @media (max-width: 30rem) { .bar .hide-xs { display: none; } .bar nav { gap: .85rem; } }
@@ -225,6 +227,26 @@ pre {
   font: 400 13.5px/1.7 var(--mono); transition: background-color .55s ease, color .55s ease;
 }
 pre .c { opacity: .55; }
+pre .l { display: block; }
+pre .gap { display: block; height: .95em; }
+
+/* On a phone a command that runs off the edge just looks truncated — there is
+ * no scrollbar to tell you otherwise until you touch it. Wrap instead. The
+ * equations are the exception: they are aligned in three columns and wrapping
+ * would destroy that, so they shrink until the widest line fits. */
+@media (max-width: 61.99rem) {
+  pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12.5px; }
+  /* A wrapped command indents, so a continuation cannot be mistaken for the
+     next command — which is the thing someone will copy wrong. */
+  pre .l { padding-left: 1.7rem; text-indent: -1.7rem; }
+  /* Sized off the viewport so the widest line lands just inside the box at
+     any phone width, rather than being cut off at some of them. */
+  pre.eq {
+    white-space: pre; overflow-wrap: normal;
+    font-size: clamp(8px, 2.6vw, 13.5px); line-height: 1.9;
+    padding: .9rem .6rem;
+  }
+}
 figure { margin: 1.6rem 0 0; }
 figure img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); border-radius: 3px; }
 figcaption { margin-top: .65rem; font-size: .87rem; color: var(--muted); }
@@ -327,9 +349,7 @@ footer p { margin-bottom: .55em; }
   <section id="install">
     <h2>Install</h2>
     <p class="lede">Download the zip from the releases page, then:</p>
-<pre><span class="c"># from the downloaded zip</span>
-gnome-extensions install --force sudocharm@rahul.local.shell-extension.zip
-gnome-extensions enable sudocharm@rahul.local</pre>
+<pre><span class="c l"># from the downloaded zip</span><span class="l">gnome-extensions install --force sudocharm@rahul.local.shell-extension.zip</span><span class="l">gnome-extensions enable sudocharm@rahul.local</span></pre>
     <p style="margin-top:1.3rem"><strong>Then log out and back in.</strong> GNOME Shell cannot load a new
     extension into a running Wayland session. There is no way around it and it catches everyone once.</p>
     <dl class="keys">
@@ -349,11 +369,7 @@ gnome-extensions enable sudocharm@rahul.local</pre>
   <section>
     <h2>Bless a commit</h2>
     <p class="lede">It sits on the session bus, so anything that can run a command can reach it.</p>
-<pre><span class="c"># .git/hooks/post-commit</span>
-sudocharm bless "$(git rev-parse --short HEAD)"
-
-<span class="c"># or make it earn its keep</span>
-pytest &amp;&amp; sudocharm bless || sudocharm flick 9</pre>
+<pre><span class="c l"># .git/hooks/post-commit</span><span class="l">sudocharm bless "$(git rev-parse --short HEAD)"</span><span class="gap"></span><span class="c l"># or make it earn its keep</span><span class="l">pytest &amp;&amp; sudocharm bless || sudocharm flick 9</span></pre>
     <p style="margin-top:1.3rem" class="lede">The wrapper is a few lines over <code>gdbus</code>, so nothing
     needs installing on the far end.</p>
   </section>
@@ -362,7 +378,7 @@ pytest &amp;&amp; sudocharm bless || sudocharm flick 9</pre>
     <h2>How it hangs</h2>
     <p class="lede">Three coupled systems, integrated every frame: the swing, the cord's
     elasticity, and the charm's own lag behind the cord.</p>
-<pre>θ''       = −(g/L)·sin θ − damping·θ' + breeze(t)
+<pre class="eq">θ''       = −(g/L)·sin θ − damping·θ' + breeze(t)
 stretch'' = −k·stretch − c·stretch' + ω²·L·0.06
 lag''     = −k₂·(lag − θ) − c₂·lag'</pre>
     <p style="margin-top:1.3rem"><code>L</code> is the live cord length, so hauling the charm down genuinely
