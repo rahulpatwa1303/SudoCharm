@@ -362,7 +362,7 @@ class Pendulum {
         // box; the charm is painted over that last stretch. This does not
         // change the pendulum length, only what is drawn.
         this._cord.layout(size, cord + size * this._hangY,
-            size * this._cordTail);
+            size * this._cordTail, (0.5 - this._hangX) * size);
 
         /* Slide the charm so its OWN hanging point sits under the cord, rather
          * than assuming that point is the middle of its box. The nimbu's brass

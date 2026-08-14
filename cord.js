@@ -50,6 +50,7 @@ export class Cord {
         this._length = 0;
         this._bow = 0;
         this._tail = 0;
+        this._tailDrift = 0;
         this._lag = 0;
         this._slide = 0;
         this._slot = 64;
@@ -92,9 +93,10 @@ export class Cord {
      * @param {number} slot   width of the pendulum; the cord hangs down its middle
      * @param {number} length distance from the hook to the charm's hang point
      */
-    layout(slot, length, tail = 0) {
+    layout(slot, length, tail = 0, drift = 0) {
         this._length = Math.max(1, length);
         this._tail = Math.max(0, tail);
+        this._tailDrift = drift;
         this._slot = slot;
         this.actor.set_position(0, 0);
         // Tall enough for the round cap at the bottom, which the charm covers
@@ -194,9 +196,14 @@ export class Cord {
          * swings out to one side and the thread points at nothing. */
         cr.translate(x, len);
         cr.rotate(-this._lag);
+        /* The far end has to arrive where the thing it is tied to actually is.
+         * The charm is slid sideways so its own hanging point sits under the
+         * cord, which moves everything hanging off it by the same amount — so
+         * the tail ran down beside the lemon's stem rather than into it. */
+        const dx = this._tailDrift;
         const draw = (width, r, g, b, a) => {
             cr.moveTo(0, 0);
-            cr.curveTo(cxp, tail * 0.45, 0, tail * 0.75, 0, tail);
+            cr.curveTo(cxp, tail * 0.45, dx, tail * 0.75, dx, tail);
             cr.setLineWidth(width);
             cr.setSourceRGBA(r, g, b, a);
             cr.stroke();
