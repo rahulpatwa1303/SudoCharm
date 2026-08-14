@@ -250,18 +250,24 @@ export function playRitual(charm, ctx = {}) {
     }
 
     case 'neko': {
-        // Three beckons — toward you, not away.
+        /* Three beckons — toward you, not away.
+         *
+         * There is no paw layer while the body art still has both forelegs of
+         * its own (see charm-list.js), so the whole cat rocks instead. Restore
+         * the layer and this beckons with the paw again, unchanged. */
         const paw = parts.paw;
+        const mover = paw ?? charm.actor;
+        const angle = paw ? 26 : 5;
         let n = 0;
         const beckon = () => {
             if (n++ >= 3) {
                 sparkle(4);
                 return;
             }
-            turn(paw, 'rotation_angle_z', 0, 26, {
+            turn(mover, 'rotation_angle_z', 0, angle, {
                 duration: 200,
                 mode: Clutter.AnimationMode.EASE_IN_OUT_SINE,
-                onDone: () => turn(paw, 'rotation_angle_z', 26, 0, {
+                onDone: () => turn(mover, 'rotation_angle_z', angle, 0, {
                     duration: 200,
                     mode: Clutter.AnimationMode.EASE_IN_OUT_SINE,
                     onDone: beckon,

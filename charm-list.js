@@ -95,16 +95,28 @@ export const CHARMS = [
         story: 'A beckoning cat that invites good fortune in. The raised paw is a ' +
                'come-here, not a wave — the gesture reads backwards to most of the world.',
         ritual: 'Beckon',
-        /* The paw is listed FIRST, so it is drawn behind the body.
+        /* No paw layer, deliberately, until the body art is redrawn.
          *
-         * The artwork is a whole cat plus a severed foreleg — the body was
-         * meant to come with a bare right shoulder for the paw to sit on, and
-         * did not. Over the body, that leg lies across the cat's chest with the
-         * cut end showing as a pink oval in mid-air. Behind it, the body hides
-         * the cut, only the raised paw clears the shoulder, and the beckon
-         * swings the forearm out from behind exactly as a real one does. */
+         * The body was specified to come with a BARE RIGHT SHOULDER so the
+         * separate paw could sit on it — see CHARM-PROMPTS.md, which says so in
+         * bold. It came back as a complete cat with both forelegs: one down the
+         * chest on the left, one resting on the koban on the right. Adding a
+         * raised paw to that gives the cat three front legs, which is what it
+         * did, and no amount of placing or layering can fix it:
+         *
+         *   paw over the body  — the severed end shows as a pink oval in mid-air
+         *   paw behind it      — the arm passes behind the head, so it reads as
+         *                        a hand floating by the face and would slide
+         *                        under it as it moved
+         *
+         * So the cat is shown as it was actually drawn, which is a perfectly
+         * good maneki-neko, and the beckon rocks the whole charm instead. Put
+         * this line back the moment the body has a bare shoulder:
+         *
+         *   {key: 'paw', file: 'neko-paw.svg', pivot: [0.54, 0.59]},
+         *
+         * and list it AFTER the body so the paw sits in front of the face. */
         parts: [
-            {key: 'paw', file: 'neko-paw.svg', pivot: [0.54, 0.59]},
             {key: 'body', file: 'neko-body.svg'},
         ],
         hangPivot: [0.5, 0.1],
