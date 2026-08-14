@@ -67,6 +67,12 @@ everyone once.
 Take it down and the bare hook stays under the top bar. Click the hook to hang
 the charm up again.
 
+**It gets out of the way when you share your screen.** Start a screencast, a
+recording or a remote desktop session and the charm takes itself down — cord,
+beads and hook — and comes straight back when the capture stops. It is charming
+on your own desktop and awkward in front of a meeting. Switch it off in
+preferences if you would rather it stayed.
+
 Sizes, cord length, what it hangs by — wooden beads, a fine thread, a round
 leather cord, or twisted rope — how strong the breeze is and how fast a flick
 rings down are all in the preferences:
@@ -169,6 +175,16 @@ easy to ship. Earlier art had each piece hanging from a different height and the
 code guessing one constant for all of them; every piece now carries the same
 moulded loop with its hole at (64, 8) on the 128 grid, so `hangPivot` is one
 number and the guessing is gone.
+
+**Knowing when the screen is being captured is one signal, not several.**
+Mutter's remote-access controller is what drives the shell's own sharing
+indicator, so watching it covers the xdg-desktop-portal screencast that Zoom,
+Meet, Teams and OBS use, GNOME's own recorder, and remote desktop — without
+knowing anything about any of them. It has one real limitation: it can only
+report handles opened from now on, and cannot be asked what is already running.
+A share that began before the extension was enabled is not noticed. That is
+worth accepting rather than polling something forever, because the extension is
+enabled at login and the call starts later.
 
 **The beads belong to the cord, not to the charm.** Painted into the artwork
 they would be rigid with it, and the charm lags behind the cord by up to

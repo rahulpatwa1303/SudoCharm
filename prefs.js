@@ -84,6 +84,15 @@ export default class SudoCharmPreferences extends ExtensionPreferences {
         settings.bind('visible', visibleRow, 'active', Gio.SettingsBindFlags.DEFAULT);
         charmGroup.add(visibleRow);
 
+        const shareRow = new Adw.SwitchRow({
+            title: 'Hide while the screen is being captured',
+            subtitle: 'Screen sharing, recordings and remote desktop. It ' +
+                      'comes straight back when the capture stops.',
+        });
+        settings.bind('hide-when-shared', shareRow, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        charmGroup.add(shareRow);
+
         /* --------------------------------------------------------- hanging */
 
         const hangGroup = new Adw.PreferencesGroup({

@@ -47,6 +47,13 @@
       <summary>Where along the top edge it hangs, as a fraction of the width</summary>
     </key>
 
+    <key name="hide-when-shared" type="b">
+      <default>true</default>
+      <summary>Take the charm down while the screen is being captured</summary>
+      <description>Screencasts, screen recordings and remote desktop. A charm
+      swinging over a shared screen is charming once and awkward thereafter.</description>
+    </key>
+
     <key name="sway" type="b">
       <default>true</default>
       <summary>Whether a breeze keeps it moving</summary>

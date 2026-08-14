@@ -181,6 +181,10 @@ class Pendulum {
         // height — the knot the cord ties to. Per charm; _buildCharm sets it.
         this._hangY = 0.06;
 
+        // Whether the screen is being captured, and the handles that say so.
+        this._shared = false;
+        this._handleIds = new Map();
+
         this._destroyed = false;
         this._clockId = 0;
         this._blocked = false;
@@ -207,6 +211,9 @@ class Pendulum {
         this._watch('visible', () => this._syncVisible());
         this._watch('cord-style',
             () => this._cord.setStyle(this._settings.get_string('cord-style')));
+        this._watch('hide-when-shared', () => this._syncCapture());
+
+        this._watchCapture();
 
         this._monitorsId = Main.layoutManager.connect('monitors-changed',
             () => this._syncGeometry());
@@ -446,11 +453,71 @@ class Pendulum {
      * which is a race even when it happens to work. Hide the contents. */
     _applyInput() {
         const hanging = this._settings.get_boolean('visible');
+        /* While the screen is being captured the whole thing goes — artwork,
+         * cord AND hook. Leaving the hook behind would be worse than useless:
+         * a stub under the top bar that nobody watching can identify. */
+        const gone = this._overview || this._shared;
 
-        this._pendulum.visible = hanging && !this._overview;
-        this._hook.visible = !this._overview;
-        this._hitCharm.visible = hanging && !this._blocked;
-        this._hitHook.visible = !this._blocked;
+        this._pendulum.visible = hanging && !gone;
+        this._hook.visible = !gone;
+        this._hitCharm.visible = hanging && !this._blocked && !this._shared;
+        this._hitHook.visible = !this._blocked && !this._shared;
+    }
+
+    /* Take the charm down while the screen is being captured.
+     *
+     * Mutter's remote-access controller is what drives the shell's own screen
+     * sharing indicator, so watching it covers everything that goes through
+     * the compositor: the xdg-desktop-portal screencast that Zoom, Meet, Teams
+     * and OBS use, GNOME's own recorder, and remote desktop.
+     *
+     * It can only tell us about handles opened from now on — there is no way
+     * to ask what is already running. A share that began before the extension
+     * was enabled is therefore not noticed. In practice the extension is
+     * enabled at login and the call starts later, so this is the right trade
+     * against polling something every second forever. */
+    _watchCapture() {
+        const backend = global.backend ?? Meta.get_backend?.();
+        const controller = backend?.get_remote_access_controller?.();
+        if (!controller) {
+            console.warn('SudoCharm: no remote access controller on this ' +
+                         'system; the screen-sharing switch cannot work');
+            return;
+        }
+
+        this._signals.push([controller, controller.connect('new-handle',
+            (_c, handle) => this._onCaptureStarted(handle))]);
+    }
+
+    _onCaptureStarted(handle) {
+        if (this._destroyed || this._handleIds.has(handle))
+            return;
+        this._handleIds.set(handle, handle.connect('stopped', () => {
+            this._forgetHandle(handle);
+            this._syncCapture();
+        }));
+        this._syncCapture();
+    }
+
+    _forgetHandle(handle) {
+        const id = this._handleIds.get(handle);
+        if (id) {
+            try {
+                handle.disconnect(id);
+            } catch {
+                // the handle may already be finalised; nothing to do
+            }
+        }
+        this._handleIds.delete(handle);
+    }
+
+    _syncCapture() {
+        const shared = this._handleIds.size > 0 &&
+            this._settings.get_boolean('hide-when-shared');
+        if (shared === this._shared)
+            return;
+        this._shared = shared;
+        this._applyInput();
     }
 
     /* --------------------------------------------------------------- physics */
@@ -1050,6 +1117,9 @@ class Pendulum {
         this._menu?.destroy();
         this._menu = null;
         this._menuManager = null;
+
+        for (const handle of [...this._handleIds.keys()])
+            this._forgetHandle(handle);
 
         try {
             this._cord?.destroy();
