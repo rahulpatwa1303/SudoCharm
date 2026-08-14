@@ -180,6 +180,7 @@ class Pendulum {
         // Where in its own box the charm hangs from, as a fraction of its
         // height — the knot the cord ties to. Per charm; _buildCharm sets it.
         this._hangY = 0.06;
+        this._hangX = 0.5;
         this._cordTail = 0;
 
         // Whether the screen is being captured, and the handles that say so.
@@ -300,6 +301,7 @@ class Pendulum {
         // from 0.12 of the way down, the nimbu string from 0.02. The cord has
         // to run to that point and the charm has to turn about it, or the two
         // come apart the moment it swings.
+        this._hangX = def.hangPivot[0];
         this._hangY = def.hangPivot[1];
         // How far past the hanging point the cord carries on, if at all.
         this._cordTail = Math.max(0, (def.cord?.tail ?? 0) - this._hangY);
@@ -362,7 +364,12 @@ class Pendulum {
         this._cord.layout(size, cord + size * this._hangY,
             size * this._cordTail);
 
-        this._charmBin.set_position(0, Math.round(cord));
+        /* Slide the charm so its OWN hanging point sits under the cord, rather
+         * than assuming that point is the middle of its box. The nimbu's brass
+         * ring is off to one side of its bunch, and centring the box put the
+         * cord a few pixels beside the ring instead of through it. */
+        this._charmBin.set_position(
+            Math.round((0.5 - this._hangX) * size), Math.round(cord));
         this._charmBin.set_size(size, size);
     }
 
@@ -668,6 +675,7 @@ class Pendulum {
         this._bow = clamp(this._bow + this._bowVel * dt,
             -MAX_BOW * drawn * 1.6, MAX_BOW * drawn * 1.6);
         this._cord.setBow(this._bow);
+        this._cord.setLag(lag);
 
         /* The beads slide along the cord. The cord getting longer under them —
          * a pull, or a bless paying it out — leaves them behind, so they ride

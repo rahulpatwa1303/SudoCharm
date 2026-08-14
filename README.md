@@ -201,6 +201,20 @@ A share that began before the extension was enabled is not noticed. That is
 worth accepting rather than polling something forever, because the extension is
 enabled at login and the call starts later.
 
+**A charm hangs from its own hanging point, which is not always the middle of
+it.** The nimbu's brass ring sits off to one side of its bunch of chilies, so
+centring the artwork in its box put the cord a few pixels beside the ring rather
+than through it — the charm appeared to hang off nothing. The box is slid
+sideways by `(0.5 - hangPivot.x)` instead, so whatever the art hangs by ends up
+under the cord.
+
+**Anything hanging off the far end of a charm has to lean with it.** The charm
+lags behind the cord by up to `MAX_LAG`, and it turns about its hanging point,
+so a lemon tied a whole charm-height below swings a long way sideways. The cord
+tail is drawn in the pendulum's frame and knew nothing about that, so mid-swing
+the lemon flew out to one side while the thread meant to be holding it pointed
+straight down at nothing. The tail is rotated by the same lag.
+
 **One charm is not the end of its own cord.** The nimbu-mirchi hangs by the
 brass ring on its chilies and the lemon is tied on *below* them, so the cord has
 to carry past the hanging point and out the other side. That is `cord.tail` in

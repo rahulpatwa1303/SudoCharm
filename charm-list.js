@@ -101,18 +101,19 @@ export const CHARMS = [
         story: 'A beckoning cat that invites good fortune in. The raised paw is a ' +
                'come-here, not a wave — the gesture reads backwards to most of the world.',
         ritual: 'Beckon',
-        /* The paw is listed AFTER the body, so it is drawn in FRONT of it.
+        /* The paw is listed FIRST, so it is drawn BEHIND the body.
          *
-         * That is only safe because this body finally has the bare shoulder the
-         * brief asked for. The previous one had both forelegs, so any raised
-         * paw made three; behind the body it hid the join but passed behind the
-         * head, which is not where a raised paw goes.
+         * In front, the arm's cut end and its gold cuff sit on the cat's cheek
+         * — a limb glued to the face. Behind, the shoulder covers the cut and
+         * only the raised arm shows, which is what a ceramic one does. This
+         * body has the bare shoulder for it, so the arm now emerges from the
+         * shoulder rather than from behind the head.
          *
          * The pivot is the arm's cut end, which sits on the shoulder — turning
          * it about anything else swings the whole limb off the cat. */
         parts: [
-            {key: 'body', file: 'neko-body.svg'},
             {key: 'paw', file: 'neko-paw.svg', pivot: [0.401, 0.639]},
+            {key: 'body', file: 'neko-body.svg'},
         ],
         // Centre of the gold loop's hole, measured off the art.
         hangPivot: [0.5, 0.076],

@@ -50,6 +50,7 @@ export class Cord {
         this._length = 0;
         this._bow = 0;
         this._tail = 0;
+        this._lag = 0;
         this._slide = 0;
         this._slot = 64;
         this._rope = [0.42, 0.31, 0.17];
@@ -121,6 +122,16 @@ export class Cord {
         this.actor.queue_repaint();
     }
 
+    /** How far the charm is leaning away from the cord, in radians. Only the
+     *  tail cares: whatever hangs off the far end of the charm has to lean with
+     *  it, or the two visibly come apart mid-swing. */
+    setLag(lag) {
+        if (Math.abs(lag - this._lag) < 0.004 || this._tail <= 0)
+            return;
+        this._lag = lag;
+        this.actor.queue_repaint();
+    }
+
     /** How far the beads have slid up the cord, in pixels. Positive moves the
      *  group away from the charm, towards the hook. */
     setSlide(slide) {
@@ -175,17 +186,24 @@ export class Cord {
      * does not put a kink where the two meet. */
     _drawTail(cr, x, len, bow) {
         const tail = this._tail;
-        const cxp = x - bow * 0.28;
+        const cxp = -bow * 0.28;
+        cr.save();
+        /* Lean with the charm. What hangs below it — the nimbu's lemon — is
+         * inside the charm and turns with it, so a tail left hanging straight
+         * down detaches from the thing it is supposed to be holding: the lemon
+         * swings out to one side and the thread points at nothing. */
+        cr.translate(x, len);
+        cr.rotate(-this._lag);
         const draw = (width, r, g, b, a) => {
-            cr.moveTo(x, len);
-            cr.curveTo(cxp, len + tail * 0.45, x, len + tail * 0.75,
-                       x, len + tail);
+            cr.moveTo(0, 0);
+            cr.curveTo(cxp, tail * 0.45, 0, tail * 0.75, 0, tail);
             cr.setLineWidth(width);
             cr.setSourceRGBA(r, g, b, a);
             cr.stroke();
         };
         draw(3.0, 0, 0, 0, 0.28);
         draw(1.7, ...this._rope, 1);
+        cr.restore();
     }
 
     /** The cord's centre line. Both ends stay pinned however far it bows, so
