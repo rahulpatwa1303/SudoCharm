@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SudoCharm — root-level good luck for your desktop</title>
-<meta name="description" content="A good luck charm that hangs from the top of your screen and sways. A GNOME Shell extension for Linux. It does nothing useful, and that is the entire point.">
+<title>SudoCharm — a lucky charm for your Linux desktop</title>
+<meta name="description" content="A charm on a cord, hanging from the top of your screen. It sways on its own, swings when you pull it, and does nothing useful whatsoever. For Linux, with GNOME.">
 <meta name="theme-color" content="#0b1230">
 <meta property="og:type" content="website">
 <meta property="og:title" content="SudoCharm">
-<meta property="og:description" content="Root-level good luck for your desktop. A good luck charm that hangs from the top of your screen and sways.">
+<meta property="og:description" content="A charm on a cord, hanging from the top of your screen. Pull it and it swings. That is the whole app.">
 <meta property="og:url" content="https://rahulpatwa1303.github.io/SudoCharm/">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 0v9' stroke='%23888' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='21' r='10' fill='%231b4fd0'/%3E%3Ccircle cx='16' cy='21' r='6.4' fill='%23fff'/%3E%3Ccircle cx='16' cy='21' r='3.4' fill='%2360c0e0'/%3E%3Ccircle cx='16' cy='21' r='1.5' fill='%230b1230'/%3E%3C/svg%3E">
@@ -217,8 +217,39 @@ h2 { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2rem); margin-bottom: 1rem; }
 }
 .card h3 { font-size: 1.5rem; margin-bottom: .15rem; }
 .card .origin { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; transition: color .55s ease; }
+/* The promise is set in the display face and given room, because it is the
+   line doing the charming. The story underneath is the quiet part. */
+.card .claim {
+  font-family: var(--serif); font-size: 1.16rem; line-height: 1.35;
+  margin-bottom: .85rem;
+}
+.card .claim sup { color: var(--accent); font-size: .62em; transition: color .55s ease; }
 .card .ritual { margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid var(--rule); font-size: .95rem; color: var(--muted); }
 .card .ritual b { color: var(--ink); font-weight: 600; }
+.fine { margin-top: 1rem; font-size: .82rem; line-height: 1.5; color: var(--muted); transition: color .55s ease; }
+
+/* The engineering, folded away. Anyone who wants it will open it; nobody
+   else has to walk past a differential equation to reach the download. */
+details {
+  border-top: 1px solid var(--rule); padding: .35rem 0;
+  transition: border-color .55s ease;
+}
+details:last-of-type { border-bottom: 1px solid var(--rule); }
+summary {
+  cursor: pointer; padding: .95rem 0; list-style: none;
+  font-family: var(--serif); font-size: 1.13rem;
+  display: flex; align-items: baseline; gap: .7rem;
+}
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: '+'; flex: none; width: 1ch;
+  font: 600 1rem/1 var(--mono); color: var(--accent);
+  transition: color .55s ease;
+}
+details[open] > summary::before { content: '\2013'; }
+summary:hover { color: var(--accent); }
+details > :not(summary) { margin-bottom: 1.05em; }
+details > :last-child { margin-bottom: 1.4rem; }
 
 /* ------------------------------------------------------------------ code */
 pre {
@@ -304,91 +335,100 @@ footer p { margin-bottom: .55em; }
 <main>
 
   <section class="hero">
-    <p class="eyebrow">GNOME Shell extension</p>
+    <p class="eyebrow">A lucky charm for your Linux desktop</p>
     <h1>Root-level good luck for your desktop.</h1>
 
     <!-- Directly under the headline, because on a phone this is the only part
          of the page the visitor can play with without scrolling. -->
-    <p class="pull" id="hint">The one above is the real thing. Pull it.</p>
-    <p class="pick-label" id="pick-label">Hang a different one</p>
+    <p class="pull" id="hint">The one up there is real. Give it a pull.</p>
+    <p class="pick-label" id="pick-label">Seven to choose from</p>
     <div class="picker" id="picker" role="group" aria-labelledby="pick-label"></div>
 
-    <p class="sub">It hangs there over your desktop and sways. Grab it and it swings — the cord
-    stretches while you pull and whips when you let go, because it is an actual pendulum
-    rather than a looping animation. Call it down and it performs a small ritual belonging
-    to that particular charm.</p>
-    <p class="sub" style="margin-top:1.1rem"><strong>It does nothing useful. That is the entire point.</strong></p>
+    <p class="sub">A charm on a cord, hanging from the top of your screen. It sways on its
+    own. Pull it and it swings. Tap it and it does its little thing.</p>
+    <p class="sub" style="margin-top:1.1rem"><strong>That is the whole app. It does nothing
+    useful, and it is not going to start.</strong></p>
     <div class="row">
-      <a class="btn" href="https://github.com/rahulpatwa1303/SudoCharm/releases">Download</a>
+      <a class="btn" href="https://github.com/rahulpatwa1303/SudoCharm/releases">Get SudoCharm</a>
       <a class="btn ghost" href="https://github.com/rahulpatwa1303/SudoCharm">Source</a>
     </div>
-    <p class="platform">GNOME Shell 45–48 · Wayland or X11 · Linux only, with no other platforms planned.</p>
+    <p class="platform">Free, and staying that way &middot; Linux with GNOME 45&ndash;48</p>
   </section>
 
   <section>
-    <h2>Seven charms, seven traditions</h2>
-    <div class="card" id="card" style="margin-top:1.3rem">
-      <h3 id="c-name">Nazar boncuğu</h3>
+    <h2>Pick your luck</h2>
+    <p class="lede" style="margin-top:.8rem">Tap one and it goes up on the cord. The page
+    takes its colour from whatever is hanging.</p>
+    <div class="card" id="card" style="margin-top:1.4rem">
+      <h3 id="c-name">Nazar boncu&#287;u</h3>
       <p class="origin" id="c-origin">Turkey</p>
+      <p class="claim" id="c-claim">Stares down whatever is staring at you.<sup>*</sup></p>
       <p id="c-story"></p>
-      <p class="ritual">Ritual · <b id="c-ritual">Flick it</b></p>
+      <p class="ritual">Tap it and &middot; <b id="c-ritual">it spins</b></p>
     </div>
-    <p class="lede" style="margin-top:1.2rem">Each one is drawn as separate pieces, because the lemon has to
-    fall off and the wing cases have to part. Or hang any emoji you like, treated with the
-    same reverence.</p>
+    <p class="fine">* Effects unverified, unmeasured, and frankly unmeasurable. The swinging,
+    though, is real.</p>
   </section>
 
   <section>
     <h2>The daruma keeps score</h2>
-    <blockquote>Call it down once to make a wish and it paints its left eye. Call it again
-    when the wish lands and it paints the right.</blockquote>
-    <p class="lede" style="margin-top:1.3rem">That state survives reboots, which means the doll on your
-    screen is quietly keeping a record of what you said you would do.</p>
+    <blockquote>Tap it once to make a wish and it paints its left eye. Tap it again when
+    the wish lands and it paints the right.</blockquote>
+    <p class="lede" style="margin-top:1.3rem">It remembers between reboots. So there is now a
+    small wooden doll on your screen, patiently waiting to find out whether you meant it.</p>
   </section>
 
-  <section id="install">
-    <h2>Install</h2>
-    <p class="lede">Download the zip from the releases page, then:</p>
-<pre><span class="c l"># from the downloaded zip</span><span class="l">gnome-extensions install --force sudocharm@rahul.local.shell-extension.zip</span><span class="l">gnome-extensions enable sudocharm@rahul.local</span></pre>
-    <p style="margin-top:1.3rem"><strong>Then log out and back in.</strong> GNOME Shell cannot load a new
-    extension into a running Wayland session. There is no way around it and it catches everyone once.</p>
-    <dl class="keys">
-      <dt>Click</dt><dd>It drops and performs its ritual</dd>
-      <dt>Drag</dt><dd>It swings, and the cord stretches as you pull</dd>
-      <dt>Ctrl-drag</dt><dd>Re-hang it anywhere along the top edge</dd>
-      <dt>Right-click</dt><dd>Switch charms, read where each one comes from, turn off the breeze</dd>
-      <dt>Super+Alt+L</dt><dd>Call it down</dd>
-      <dt>Super+Alt+K</dt><dd>Take it down, or hang it back up</dd>
-    </dl>
+  <section>
+    <h2>It stays out of your way</h2>
+    <p class="lede">It hangs over your windows without taking your clicks. You can work
+    straight through it &mdash; the only thing on screen that notices your mouse is the
+    charm itself.</p>
     <figure>
       <img src="data:image/webp;base64,UklGRoZfAABXRUJQVlA4IHpfAACwMQKdASqEA58BPmEsk0ekIiapIpGbWSAMCWVuls47ffE6GaU32u8NN/63nlWNVv1ZdPfY+LIdb/wezt0rR6uVixjmrZd+055fYnuLOP3o/d+TP8R3tv/J6tf2J7CXld/+Psf/rnpB/d31uf+x+13wl/xfqH/0v/Qevn6uPoLftd6e3tU/2z/2/th7YmEueP9Knr9K8fJc818yXcT+T/1/mQf0/y/Z0vMGVHjz/g+jbyD/7HqC/on1UvDz+f+op/OP77/xSLOTDJhkwyYZMMmFDffVvMPZsUGn9sqbEsHPJzSqtG2PzvbSd99PV84rTJzxrfFvi3xb4t8W+LfC9/FRIAZRfZnw74lqtl/AGiJYW7sSnw2mflpbpK7l5hwEllW2Ld1rG10ycOYci6tReopWihqnRrMZBmsDRe/f27IJM5ltlucdMR4XeDZnw74lubGfsRCI64nQoMQbDDLjg38uPqgPWwM2DqYPk+qh+PWQXUunK0wKiTYI97vlrTX5pbVMCLVPbeZ7SEtYhQ0rVW85wuMrhqAZPKd6b5X8rH5X9XWgSC1VUWHYKyON7X7P7wq/aVyEvRwyJdkMFCvrKWKrP7RZzVS2UcftuhRAPsLo1VHa6xLPnoJLV6TpQ0Ps4KRzY5c8urxKPUbxwCWEIUzwOncRnTcYptMzb2u2pE3kFc3lGyHiaOQmtDyuWMVrtsiv7TDDYS470i2ILDavF5C/R6w8NXccKrOmNK3xWVKjUV60xwcg4ZiEdf/z8zxVFpObGvR8/dmqfeGgkter1RGYx1tiPI23EmxisifWEaU9hgTEqb4m9FcqlCK2ojw4dcLAXBsbB9+MnzNrjf6U+yueFZbYZYp8rNbyhHO6XlDyKQZmALkL8rxhSlIvW8qIeW8CfnsIL1RfldU8L6RFYEZcbrmu192r66Q7xosbpfRWBZUduKgoiuRWekekhQwSm/RlpI68SC41CzpwokylQNDK10B/bTK6Jb+I5nN+qX0F5Sz9IiMVee0N7mRnusdcKdQvoQ/scX49hAGx46l/dGlIwUpO7OL5QmqrR1iEZyT1EFhGIcvM2mmmQpgDXazMxn/Kv8ocFJCFSwGlpKtyNYgMyGT/5ghc+wQ396G++tPpGVR0S7v13Hqr7lDW9v3nC19aphAwha9JjWhgjb2zJjlSJfFC3ZCqn3F8TItcM4MwSFhL2n5bAh4Ew9cQu4vPnYxbTCnheCONBM7ZfCBbODbnUt0S9FGSKjL18M68kfgyk8j7EARXFa4byKFmoxlAI4Icv8b5Wqtq09wJiIr7pwQmAnIPQL2BFypmN+l0vt0VNQ/XAlD/jCANSOQ1XV7khpdCUr66KWItab99DgH/trT6DzqDjOWAIViWnEBO4PnAzSkwY922ZHDTURKOA6vPMfLldDPJMJ+/UtoDZwxBZ51aUN2yQMQ/r4tteAgi9P6Qs9uA5qkiKrH6cWlUD865B/PNCyQXKqvqQIlvSlCzYF/zecLImemJA/Ync88q24KAqAHewuNxYfBuOKhAmPtorg4FHgJg8dStgc1nmrsg8mco9THvTdoZMw4/eZYcNvLIdU828kJ+78JbP2gSOfy2/GfWLmAnUMainjA/h6cUylm60HW7tx5p5IgoOGBCr7quuJ1fYrM+UqoIBVkaMs5q8cTTZw0fZoF7QreNJ8fg0CPtdD5Jon20FFNjanZAl9d8m3sueeHJ+qZToCynystq2XCzLwor69ERcJZS4PZKEZJFQhLRIWBGmSGtmbuoK587ASDcrdQS1QB/Qf+/lhJQIEwaFArOCpyFSwNpwgS3Yvcu9cu6ldm+hV7I/wRNv6Em340YAF87q9VgE6m50z5rdWgOt8NR7+Co9wDpa657SnJJRMohIEt/d61tevpk9Vu+YWyX+2nYhcy4nW78pOGuYLWGFkx7dbx/s1SR06cNlU0Il/Q/b1OrtPfHWbZdiY2lQZWGXN0Ni0mly8jZDaPHPgeCA4NoOZ4MbXLojU1MRYGCIPo0aQ6gpBizfRfmyEpV+9c3Sz6RnNKZE/xXSM8e9Tbrc1y24cervPblmzQHY/J0U4hK5ut1dM8cK4QZvsHgTm9/9NPfPAJ7js26ZZafKfhF8WFxhGmT/9cg1ynu3TBK0hGmQ3tw3hnt6zOdQGN1XBa3N71udAD+OgIQaaFhvcbkcX51ItNvhA0WXaLV7uo7gFUQFMRwgb/VRgq53VvAF4ZyT5A1UJzn4/700tf34odOYUi031KX/MzIimldwaZCccEraXL2so1AzExe/+U4gQDASE1yjBex6mC1Uvm7bGmvbDsc8dA1o8cwlMNeY05sGY8YC4kei4OO11fycKY/9Atw5SiuIc6X5XFyG5LpNcy/5SEtMO8Iduf8CGKAwI+J2VPTI8xpYUT20Ukl2/wrgvXVPIAZyc5fRTbR49CSuMMJq/Vg/QyUp76LCKBIkQDO3EJ1a00yJcgFNAxXqbdjbjEGef5GsxdME5mjhEa1ojDvQSkzZW7bJ/LzcjuzKmqYBXDUjPIB8ONRxeLZS0IbMw/KYi0yd/Mzvgd12Q+ymAZFMMHWxI43txE3DtxZ6S/zp3dHhbMRss8ZftBE7k2J+NQlywT9MAF3CWlNVeYb1fEq9HUyhkNCkRYH/BLkyP8eLtNnEUNsDV4CYvzNgM/CtQLBvSZKldChKb1fKNUhSeUyqjUwSzQiIHv5vrkc9La0qauFDbr9p6yNs8RHfdfJVNwTlJbP+x7DGrD3W2RO7MkKNb9zxL6zEsC8EmHCr27FFP0XnZJJmnUi66c6c7IW8A5yvmTxtmRwX7YcJyWriO1P23sBkVz13+DVf79droa5acTf+GNOGxx0zZgBqVb1Db8QCEkU0MQmwD94IucnfUJRUATwZI6qUOjMIh/E+yocdFURy8dqbbnZNms7vU5jGHMbae99XezllXcYMoQhGlj1WWsOG5omugLAyw8SXqPZeSShJ0dj0ZG4p9D9tT043SH7l96+GqaBJwcZfpjiZrp0WBfS+tGX1ifeupJH+7MgfovMokn9i4nfYpuHGaT6ehuXFRQgw+L7x3fwI/CW+Bw/KaSnMlKc7eS/vK4AeAf66PxoTD9Ch/Tpu+lCGuyn5UCGOL5fAe7Lq42Ik4Djqrqm1w3L5z52Vbv6SXWX1rlC/Xb5Q1eby/bCx+mlVPVPPsoPlA33D8EYPqQNJAwDJ3WJXLrFnut8zOAHh8bcj2ggBVxGRhefGMr3YmIzNWnifdFexy/iWXgdx/HhtTN7BylLF5nsW9ZbDLGaaSRDTjBSwvcT5dV8sYNR7ohWGBJ4+l8PWk/ZEOSV5WAx5Y5dm+RcfEVtbegR5jyCrF+1y/75zJPm7omPAiqN2Qp1v3XOWLmp6FZQTkpnkjESZsI00iKL5ru6c3a5hFIR+PLOdPdEm8MfExPLkx3Va/yPDzpRuk/VLjr59cUAH8y4e2cNQMfJrAK2TKujMkWlZjOa9rlfz4smVY14qZjgiGx4WrwlQDaZD/R9B86a8LJ0t025X8PfnacIYEAoZ7mxcBepUJWngScyWuSdC5qNihLd/Wm+YKs+9pSIl/8m+Y07wnY5/2elH3x61Ouu9O8pde0QnsK1vh2pUTwjB8b28HY0nZZI/u/XJzYGfElIzRwL/4Nk25885l2UZa1FdrtxHzjrgllUTUsu5u01LCapSg11uKeINSrcpKi32/OibbFw7By/sjCDbJMlXUW8aSlHFEaEUel4dwXy9EvJxI1lV5oydW13l+qtm9Mrp2JCDOr1wlPhaCJYcqPGC+dJztud2fgw6LqNh+3L/4hfpBMU2uN8a/T7pMwLHYi6h5tgC4NghafnVCeC2tznlWqeij0eDOmsEazxaDago/ekFU85NoVCTI4lg/vgR1JenguKLYfb98l06ZqzqvU/vrXIIY855iEWPsQA1EG6Us4iZp9s4h+o/gXYIuZ9PI5mX6tMI7KGvoIRTTvGc9aTDspDWbt+qv0/pGst51mMWIYezIx7MiE0o2Wb4WoHMYI2d6KzO5amjPUCHaWVQjjGP+fAP/ABb7GwQRRrXmFbYbYqFYKK2mgavABVXs8kNQyrVn/NJERX43PM5hoT+ezySyN3VD5+EH0sRNjvxNhEdzypHsDjkWz1o9erZywqVcxBLDaMaDPYex6sFp/tDkMHTg1i2m5uLzW7S7G9gFm17fF/6+bqPhOYwqilymwVgaahFzO4NeH5HUMagDq2ImFSz1DBtCifow/h2yIX7Oj+otDmyzTVoDx7dSnA02CjSp2rk8mKd9fnY/cwP2Ts3pXcW9tH65UM+JYmCSpRBIh6cIbmJkh2GAF3hm7FxHp6CpbnCn52ZJkpWnPUA4Oeb/Coxwimu1h/knkQbsi7qW1FUPddU00qKnNqu89dirjErkX6Y3YIYqXFYTpQ191vxhG2x2atXGkWEQ5t5Wk2oawHug6a3833MJ1A8Fx7OlIH05gh+MLYhJbXt3Z22GkFBM+KzxB2ulZYwp4JF8mrGPo+/UiQc9hogvs5nx4Lc/DviLcH+0MjtlsrV8M12V1v2CHfReR3lH+a5mLNatYxLchNYeer49J3c8YyEkVhkjT7KfzmSs2z/IR+S6MO9oDju9lhBZ/Aaj5lJz0xyy4QprY5KEt2vLnz8sQisEG6RWIAYoJP3QLwVPE255c8Dep1kmTdWKSmdxm8XFDXARE6AR0mdS+cSS6SrTWdrF2Gs2yz9LhBa2AgrE24RIZNtwCQe4RcKjRcNka8UaQtI2c0zdU6CUf/L7C1pLXkbshG5QB6sX4aC1N6DyJLlDVvx221xIbBqnYC2EYDIgLGVt9ANJn3lt3fWJ/hfR5QcPx7YWLk2WbLxAB+YXVzjW+bhvhj49+wIwMmT2zSfpg2WBU81RBnf1lvaiEp8b5iUKFLzbpYkKUnVsqCIb0udCaYNNBBsdB1tJI9UTPASb3MG78D/waSgd/A5J1Vc6wWmqm6po93AG1bpvzIVUDiJTCRsQoxmPyMzms5Ik7qgiFHddsf9EHfPC5UkBqkoG+5Umd6A+SZkEkjKDdi8C5RfwFIG8g8XCi/rUYE/XXS8ArXXmFoPxz2CuJPmHheKm+zM6esojSNUamPQgEagYct4qC6KV+BlzF6jY+pE0m9rDqwzs5MQ3RAMo2X3d5/trl2CFBObOFxHPb5re6dPt/VpuUn2sraTKhFFUx1m3NjaLj3PS6jO/pRB4TzMNk0D+ua40lcA/c3Tj9Vu9v8DKN9A9HmCReFfCbDamYEkpJLJIk+OiA0qDYxGcrwMT8WgrgK1GcJk6hvxAbPPLqoM3iVkj3n6bKbcEzDQi/lEE8VxAF1jbmU5MxBTGHBOtPKJqtNjcTLuEvW4Zpu6DhaOLk2Hp9Ao+2hcdV3IxPuwb2w6EBDIFQzsmifYFA1r53HpBJPgyeX0/XNmFkvCQMzahTykVPQzm+F4bwrtOmOwdTG677mPUZ+4OWpgI2pDPsdmPVs9S75DIaAepzu0Ms3U6NzwfTgn+PKT6sP//20v8W3xh5MuFGMvV6ov/Ir2k8YTRwO1/wrfp3Ns/s3ICGiMu5r1vKf4jxuc8puFdE08sZsJSo7rhjE1eL58ifS5qwod8DUoDMxJWgbCBG8OvH5Y0g1cT4RetcPnkpExKu57+iap+cs/Oi5xZE0g4//////dm+YlPV4pMWj2H/7jhkv/////Q/9/l6r/++/rcOZmqtw0Bp7f8SUYlt9P3YFjVFW6+CJBFzsTAMi6JtdT+/JgmaXQpDUEGEcjfRUlXG3pknMdJcMmQTmyrtsaKfW8WuFttArBw89TluvmhlAidk7mLnMwocIZWrJ62zA1ZaXKt6LWLy7+wuTw8wv3v60uPkHl7rY3Ldy9uX96hWs2I0nJUCT2sj826FRvnFT0fQ6tAPcSfwXnZ9//jXHs0DLqximXm/Vk08xEnRpOXfd9rBKRUCw33VoGHu0LEzn8uPzjUVMyiH9oCTPVnnNsJNWo5TZbcTzo6ynvCqxs7L6AAD+/DXQAAAAAAAAAAAAOHzn+9njNm8pDdfy0oSfe4jXqsmO3kaR4D9bLHtVB/bjzGb8PvVB825QX/3+cST5Po9Nh1u7fcOhHODv8SayXXzUX/vyhAbqLNpQJPV8nBfQ9fFE9fxbEbeBpfJ6yN3MjedbP/JzNZBxrtzhGtZitTftAfDUAzKOPX7juvwKYWfDvLLvP0//q4LB70nsq3f/Nx9UIXsVjz38gQ+LW+K+Scgn93MjszLEt8tNSHgN3nGoR0uwZPTknlOv44kSq1mInQcYcJVui91O5PkrPSnskx+nwBT+BgT87Rszy2srDbvoCq//mztbe6y3c57hr9a+5MbXs8+2/Xf/w7SY6vMCuPbzn4EdnRucl0SeoTVTCiR1niQ1f4yLAt3841aP+/1mGzkdOR/osy/2dOKFMmQUrFZ1a+nXnGbY/pxP7cdWRNAQJ4Qa0u+yBABhe9QKgUei/aV8xsg1zWP/+GGYrwrBZO53zZv4tsjn6UAdybl+eIDQPw+/Dz9HHc8/A66H8gCt2Xb1LvxzjNeee8i/FfOzxzy6sU6aUTpL8NrFilj0RZASeieZKCXkq51CgyfgAAAAAAAAAAAAAAAACNWr/a+Z1xWpEX+8o3ydi+h0ffuw4pNG64ABBKRVKlPr498X1k1RUfCd8TNLAgEbBi5yeUyrXCPb6u+sQ6996o3bjdP0Kjn7L87Ae1f8LqHBjoaT2JBjPyP1H39lKdWqa4X1b6PD6w4/PgYE4dz5nFSIeDq19wMg+5PQzmqYf7aoVEZA4jwQITwFbf9VeYcXdYUPdadyAcBferjRI9JTvof/ma6hG95LAwP64Wh8sPVa9xU8ibVHczgmiHyRN9j2eld4piKBP5TqyEyyofdlZLQsTXX1a35QnH8Hhbfy//fmXqt+XBoH23/BHJt4hao0c8O8XuXUSl/qtWft0ukXmCc3MPzK3tfo1fr4LWt+akhoKJQlmrXPrSieT8vPk8AMARbpF/K3NoJMP1LbkCNlWEYI9FuwhrRFfnJyKRigYr0Hf+mf6A6EmbPUlX6f/VrSo5p1fBIfG6wM9sKshL8P1HgyOMOesfwQD4rfiiujXfPK/L/H3YvzMbdof5Gb7OEBh8EgWdEA+F9qCIVO3tf1jDx7m3cOe6A69Ilr5z8vNnq/6scgDfitztM/RpT65n/0eIPKyyqFx6rfDZv/O3deNNfMZVV3mLz+piVB0gDYxLd13AbIuj0mrBiC/ALLBgL8YyDngInSGBrNBcAi2QFp1Fm1CE7pw/+Ys+DtDxydgpiP01kQ/cGKdzEhL6V6O8QsVJDoDkO8DE9jJ05tvyWtQbCXQcjEqRlqlOTSnvORPlIFRsUYMWLp6CoCqwb2UXJ4FqmKAreeMrUAOqYsCLpAHMVFRT5Jf29xs+qzpYMO6pPGYUwAiauxfVr2c5sb1fMkEAmAewbUdxs79ywTJs7olZTp8xlHfQ2/xFi3TvXxHlcbfeVn2QC7yymw5JrHI6unkT9NmJFsCkXCOQ4wp5hEd4zNZ4m5kKqWSHT9SGUWvc9GCBGObDEzsfalNn+VvsDrqLYOOGmNPiRB92bM9PtZM+szyoTHYA8orUSwzmXidMp1SDXGVaGV0IRgecUtrM+IEBYKL78G8loeBQ1GknX8JW8ydOOpLGOFgsLE9u/dXlyh7SG7bhLBkM9Z6IAn4yOkAA9ysynRbzr1qAXmqn2u5H71CQM/mlN5rqe/ne2hO+TlxMhdUiw4LZwmk+FjfVaoLC6yjVYY2fi5ajDEpED8njWvPx1tJIFYxgAmWRZaEa3VRGicim43+INmvpPL7Flq12KIppyz3B14GeQ1bcoElZqVd1rhKkmIKZbjNShk/eA3MMPUqXBvLrU6SPo1Wp7gonD3WcTDNoRDrbjM68TZTnv1eKZZmab1dNTRmLbJVFN+70p2Rl3waJ3LkZKqT8tTdD+imy3N9rT70kT1HeLh7JYetlayncTn6+SQygJ+NTZeWal4PKDTDy0r1k+aAN38Jq0HXsI/QqOpJd7zHR+T4XVPvkIAi6NcmYgcvgNM1wJQqCc9eyoAKiwXiai+577pXG6dB2Y4RftTVaa2SXVIY64KTry0pJ0ugsgd7nIBYkhXIKmBhEdRXl+v/4UDAhnYaYOo9WOAH6FPMe77ByzjAZ0IKUlD0mnyagS2HSLC/A3WGS0BU/MHUgwFWBkJOO2Chkm4UgChAQ5gOzzmxl+0l3QT5JwCvyioseiJG7ceM8gFvyuWf5Zud4bMF5YgeRc4Lqv2NGmgSwkhpeqkOY21zAGbQlnWU/nNTht4Z2Ojoi/UtKc6BmFtO5VRwFCraeMXUZbWZSmbqIpy8mbf56fmI9RDM8wkyMpLrUU7Ms37EwijrAojVYV4AxsJ4FQKsOzTv8gEin9xrSlP1Uy4Sjrx9vyT0BLgq4eRRRy52a6C5s/hTEADOpIRAGK5jTG2NPakfnWc9zEoIBu8xJM2xQ6gAAMXR6fSv15XTaS9OKUBLGwHC9DhTyTY4dk12HzQfHlvktsEeMnFr/DkpyXRqMs/7EuKsJ2ov59OBzeK77Ft0/aeYnUyeG1Zwi3w4gNfWGb+OlLDb4V1ANWTcDrEuoQ/GuALimooOaj/0KJ6bofvJUDhxtFAhWwmPofv8nHfTGd+4KXO0oYFzqAPSspHR+jHoz9AKWCOK2RQSXWakjs7Bk9zrYvAQje8Bvgjtfmq1HIOMGnRHOn5Pj5N6yZHgL7wN/dm0lZbB2SFpJy1xYmL0l4jPxcej382r/cbDU3n70UNnN4pHJ7QDEoQiMycMhKbOf52G61VZv+aj5RqjRAvwmx/XgLFnw+J0IHLysNBwqt3Jig1EYvT2DN0LRIeVJNMb489FDrFDN+M0tEXg3Y1IOgF0gwYu5CBBzRlpIs7An+sEtU4t/twZEnKIlr9+O6oCK9PfFLNcWI2iEK87Kmtzw/u1PL8BJLYad3eiEjBxZdJoxbiwGnYjnYnzOAwFK8/B6z9LDB2BKEW4SlWjB/NWWGozRieByWH8NhHdLM8te0E2zjx0oFTVPtLp1OCkQznydnqFuai17ByOan0XG2ZzowSNAMTmhn4V67EN150RNVjHqB/9yG+KmKXSZdO6UWZBaUPiEOYN+jbPza5dw1hObMBcJUPplTlH4cty9slajLI+Ye9KXX/aWobm4GF/tsTV1EAoYTqoknDVov79nRs15tDeJMJO5A0ake9IAABnLLJbtI2eoAEP3wG7gfVdi5vDTtDe68lry7av6qeC878m/ZXncn+uRIXY+0lKEbo1Ic94eDsaaCGdnfOkjh17el997Q1XWbow7/534NkUczibFfToMDZVqC6bN/Vs21oefJUbuxSHzLeONSgkKuX7eMvD4fmsyHzkcjCH1im6NZsMgmL10BkYmrNtfo9hN/JTimurc0utYWAdAO2i72EMMopuqzIYuMHmqlOcoxHgtDOaTIQiLZ4adhWz7LJ/sy3eYNd8TDIuo+v7kNLjLuXOE6J6MOJItPqfB/PKrFdYMoCewCCWZB0rsnOaElZNPXhAh83P2sPfWJJvp0YQUnJQ3ISciouzRYJk7Z6NxEdqudmvXsV+dtgH4lw/BRu8uSzjRz7WKvPW7tz7EZky9mP6cohyiIq/EootLQqDMbBWxVyNk0fZmv6cz74Nyhr84KXPTpD81oV2lmMTg/uX37iAd2bXz26q7Ji7+WKWShbW1ldZPtJJhSTiz7ww0NMKsFbt0uInhkQshE5WONPf11BZuV0rjfL/AHPy0TH09BEJ0Jk8d8tJ3DbZDjh1rhPZ5iMIM7KBoerZVHRWbRqaURv8ehFLV0az3BymAIIP0FP1GnEgx1SeBbL7hQY2PqLelO6CeXRHCT4bERm0ZnwPq3HkCvqLgw7D4c10YkxW3ZsZHbaHo+RsnnMAk1NrRrhZjsjNpXh6VJpw7bHWcyjvaOnw+ncagynNdYYbXKt6furSXPqcmU3ZLXyHqvVvtYuQvxlLsOJCsgcLBIvTVS/SgsctBBhiTPVSAR+g6l10JMvYbWGi8puoJ92SxtOn75Fezw/v8Rhed+o8IxAxwUsY66W2/TRy2GnyTEH5EmMMNFHPOj959YMkgRS5rgDxmVFz7DFlb9L9lrcOeg052xqLVCND7l6qg2nI001f/0XVDQ0JMf5XzY7O7AmpqO/A6iGiLi7cAj4NRp0d/HA+CDQq6ERkrwL/+oDH/IPB8FIexTAMbJ1Y9jzmZgVgbPdVQ8C70Zhf1jp2IcQyDj9LbevtK09UlOGZPSEqYRZXNU6nb398YKasiSJN22lrWcw1FGywtZouvDtSkmokCfyxQKO9PjpBaMIDoPyfGI027IXfjahD8DCt5G6VWksKxZFGn46K3XAW9Bdyn2DV1a1k+MMpEKUd55lOjHugzTQunbroCxhjznTkpKqj+RPLVSB5Vbkt1HOazNE7T1SLoeSNW5x59RDL7BysFWUAEdnoiFYedxBF28mYgUm7TjCi5xtZ5ed5rh7+LmbCRgYZqFtSITCKAOhUpkbwYjU/22wQSB6dXlpqKWJYOUY44bnghpUdv02232bAZ2Nkxk9lPRLi7XloELrv/qkD/YiqODli+RqXoPwe8rp4Fvrll0aQPZGM6E7U2c+ZE9pUV3zorW3uzdUbmOzPiZj3KPUwHKHoyTyJqc+/Tjs3PxVs/FeZ1i912VkMMe0dHix7ijxkO/uZd3cKHNVgL80ROxS1GWEeT7kC+0kViC+PRxsmBncz6/sxHATAsx4RQIJmp4crItzGZLMhW5H1bg3BXv10PHg512XvTQPT2QeGRoySz6sz029+Ns5ogTXXlJa30EU6CFkYWiT3JxYCLXgJHLr0Bp2sEzXkfakYpR4HhEoE0K0/iKXVc6h2fXbp5YYZp9GG95f93YrYb6YZ69DBUhYJPhqEif54mHHoS1dkaMPecqEVi3m2F9a6JdqpfDIkj6/fmH+rKt867b46jb1X7zlS4I9tM03oMYWXo8lGampYb7BSM9W392K7LS4OjJaossHJYfs6c1z8ZUuuvGbJm0TNiM1RJzJKEBFpaABK4p5t3YosH+644yHlVRt9eVWz3FeJZBL734q6/6WPhvPVLnHEYOskz/xRD5VQ7p6d0h+fsb0xidPhZSWlUK4blPH4VAM8jr7OfrRIuZnc/ROuZtQVbKm5VPEwetEUpFjAXueJ8UeTRkcQd3gzs23Kc/AR8ijajOaRmE9rj7RFaZQCqW2JD9m95MbNl6/SW7YRfnl9dbq01F4rp3Z8XO2/DWu5qDpZGmwiNyvafZ982j9WQwJmgb/pr7XcH7b4YNkjFylSkNk6V1sE1A+9zWBYt08MMcfJWAAhB/6nnhUaABNVgArznBrxTKxwfcerZsTOOBnzj2gXATrWDf8Uvf5IAAGf2HAB0iR9Ag6nPbfmHqEzrnSKQDkPgXmQTfYoDn1EjLUfpW/MSGLjmeMYqCVd/+fgAw4YROjmO2dYtSLso8mGn8r31ordm7R4wY7m/3AOCTMyqy4+Kv/s9fkeltxkCDNr+Gpprg6JIjYmQQFTtXtmw7bVQocpkw6bmVW2f65+Cgkwqzkdkye7Y4HWmNtZLBfuDnc5u/E8j9GgLXEOuH1MDRwZbGRyhaxKAM0crywgYWl7gDCrCS45N1e/cS2DPW+B6J/gnXP4068suykAFvQ+rP7BgAuzn+I64QPfcfx1g+EYqbr6g68HWFeW9xnBfC73iy6ba0I1F1D+ohdazwVdUW8oOZasfHAWuG5wACWnO2KH4gOz0VXJdrCvhtc3Su1qNOuUb9IWNhb8MTARzeiK6o9C11PYePmcKqo4azmPLE8Pw4qhyemgzlGCsryxkLrTMpb32spa2h8qQSAlLngXQV3cj0M7ScuOlb17Ca70irnbCcxpqxtxark8VCHW8Vqh3vhJRPr66sN6/rU5yqxEL5x1dCOSAH0AmN18gmGYKrahZ798vERqz+mxBrwDajmb4TKteG9aBnGB4I0DRb7uRhD+D00KufOenHnUITRo3ulI6Loy/MvGOUf+EzxIx+vfNUOQLo5YXXynwm5uQlLxh3r2pFBNKsodqUBifryJXWhNaKhw7puCDhkRUREMr/iE1ZPedFEmx11GyaX9O1yjoBLabrN6yeNi366+DptGCWqNIfNyciMTBgxvbofBwR9RnVYCWliztLRzcjjAOvwzNh8iROQ0hbvJ7uZl2UwDWb6uWPumSeeJJTj15bzEZMMvOUr6bcLHVdyCf7nIsgUQtlskcWkApo8leJyALtvRuAwdSymhvvIza9X02TK/tIQGwzdc1SkcmKPr+DR17vBGJ3dM8/wSoD/9h3po939n+jTtxjoYmqstWRh/ZkmVw98R35f3q/DbpEUHa5fXfEnxC2kX6MkfYXz66v+i2LtvBGOMrJm6DAQr+haEW400BQZgwhMeM15wBqk0WubMZaFCfhJIyUWCOb6O7EtUE4JnNT8LcTkvcSe6g5wtzVJ7w0YMESVVxB+pLIMpB53dNy0ZfhRImYj58itLGd0OAYAQNenhXrzE/5ZFvadWu/ZCyvZVuDsSk+BWGFe5yOe/JyawT9tuxTmrVdqeyxYEYFsglygVXybJQTPuy+Jbr6rNPlIH04Y03JjqLwRyWZ3j9JmlNX1zQpDIoSParrEskEguuO9/9YGTLRae2Km4lsKjpR16CFfSc0+K2a++AqT+NgT2osyptru6j92pwLIJeKAU/VUPHQaxyJ755X/tXhBNmWmaRZOrD9Y01JyfNPGDMbIn1c8/hscGrmoR5yxSzODj1Z9q76N6GeWq0e8JeNP7mcikIyC3Z44dgHT5tyvTZIyTLy97oX1N7fU9/4AOoHH6WgUaWpTWY+oP86D/ZKk45qTKL7QqqPJfoMBIoj5BwAiIAWsLEXcgywOP4YnvZmS4sgoVCaaI2jk0ZlHuAfs+kH1/0jex4K7bE9F1DjUou4SbTqRXo2VHbDXtDkU0NbzNlHjluXrFMmM2yEgnea52WGzE3gLWWbApFVJZIL6VlbJD7Eq9cQDbIZ8IOpjyghN3IJpw5UvHLYnXCM6YMsT8r3JK/7D+bUANX9g9RQy1kg+Vl6Q7e2tdyv+lVcozGm1NInk3VKtFJ7omROh4Sd3rx/ya2hXjAiHa+W1YPE0l8TEelx/OCqNu/zRUWt3k1diEZMrZvCgoFRqPydh9PyW1VfIsX8OTqIEWaVaHaM49cR5/Zs42Ye/TdXdew8e0NXfvIuPZZY67zYRCBsTix7VnbT4Lig6kdlDG0GtmxZyoV+Ykl3A+f/09v8Ntyel0M8isdAGzMj50iZBkwEvudCzsbQAFNlpmmgOsohAy4DupkvONqIZXOtfE4cMwvuv3isPGB/WFzT/BRwaV6MD0BfhM+D0KU33j9kER7q+h4H89ZMwdxPbqgj1ksG8nlq9NIU20nGvbv7wJEACRTcUkC7NHM59ggodgsFNf0yMXOE95Q9XD894LdguHHobamvIhXHHokOjn2+ivNUZgV/TTjPVIRAVCfiLP0+qpk4fj2IYUa7QE87OA1gnB1IqqyUtR2RDbiT77kKGUiqONwML9ZPYkitg+iAN932B4bkOYb1fWXcGZNxFwKaHnw2wmgMhAMMLWo+25fGAkxQjgyNIOVrPj+UtV02o0/rb/uoAgBHrK/7Nl7+4O6kqNtvqYGV5B5/Fc3GlRpWsCUqBvJC1kAKu4OJ23or8py1F9BmpHo+TdyJP5I2Q7hgQcNgrFcGd0Y+1jfC33hW+eYhdUyCvK7Eq+GPL1fpzEwy7Uax8e/2UHNnyTq2lo5Lj1LaokwtWexOsdUo4dsdHpXvJIBSV26GphXiqE8l0J+n6uTSJagreQs13Xp25Wpp9a686HDK3F40F2slfMJjchohLTw3HunpML9f4YXxZChAQ+Tbw7Qv/WLGA48JextcJyIRU16p3pxr/TZ8mT/n48oqgb7sg+CZYm1fJhOBWFZcVCEEwHJqmjQrxuhb7wro+UANYr/2+bxFSsiV/NnznrwjMO+CukjjtUXU995URfb/bb1jfvOjaGtfYqLwBKIFll2OkcEvq8F+BB4ns7ss75qCTUI2ZDZZPeG9v7y7IaVFVQCxbIzNArGD/lX2iGRdKTPLfpwuDPVnsDeCYTLmZU608ftpSv5VWH8PBoUco68yumJRXjo2OqBTtkBRisHbrKipYPE9r7Idzd94PogIWwvU6D37Sxy2yjGuI0iIbYBKejyCHfm6qLmEJ3F6tM08lIl1HYHjk4xpbX7KJr+Jw6I2pqiZUH5yk75W1kKi8D4QEZBkbTR4vQtwrL4KVZLNfQB4V9qEL6NdYcuVKL+FEesGrorQkQfuROuVuZ6xObzUlozVSuG3A5e64wcsmxHZgeurZFmYsKR2hEgJQ0Z/rQ3d89AFmV01NhnO0xb5TiqYEQX8ciD83l+QfA+GZWNU4ki1gH1/kBOorZMHeb03XBVjcIsGIKjMjT35a4WAxMCpuTm66++4yq0zNKThWnhGECZrzAjl//m2wwFMXg67R9cTGQY/YeiehiAI7GxdEMEDFhcpcmKSLSawMa/1HVUKb6M5VP6wzPQc99zufr8Dad5VWQ4DFZw3GzA5SzxAWUGz95xI8givSVF8bKTdP/lhls8eYtHi6eoWLBX8tlt0ZBCT1gFKBbM5hYXa6JTgZwSIF6pmYzKNCktEDgKbDBCK60d6TycXPyfRO+fPKyaj/Y7DClTqvp8fG/N35+X8aqlJxjCNjbzKzst4bh8pcZZHVc9OaQ+h2DWQZdbkToAUbGSgA2iK5o+QkYnLs8DpgOg/rRygUKP3nLT//LzzhDbNMjx6K39Ll373SwJ+iFzrMfIitvhGf0YdmzX5Z3mgrX4B/z9Hf6RLGWtSAXJ9YmEB2M9/VKuZGE5lX0YHGWfVcdJubJq1BRtW0eF5wPLjtT0U+FKjhN2zhl8Rg/mwdh/4Uwcr4bEN6tEycTwawyUwm6mTeqotFAqYJCIn+5A8HHE13wBBBOoBVogPPlW4qdr621QbsUolt/ie/LpWSCZnjEeli2IVT6G4jmrBWD5fqaE/ylU8eGarUdv9bCXRa1bSnsG2O01YBY/zLdkeoF9J3UxBO+cJxyDMOXNulosk5Ui2HOAUcLJE/ifj0Lw6Z7vjtsdzy1ze0wGPmx63BbBJZbjamqu6a8mGgRb9oQIZtKaCNyingiUAnHhwlVoffua42nmoFuk31q6IVccXv/evYPAyiV3JfxcGxv0aF7CHB+zb81y8PemZkxYAHpEBUKlhobnwCtHqTfVIstOZSAAO499bHgw/K5KAytL2X6bMItaAKW5uQt60nZBEbFR2c/bOXpJ/bpmegIfZ95twGbjCXmmYQ5NexL/XSt4ACZlROmeRVJIaFbqvRXlwtS56KeHTVOvofwkQWFTHrXieIJbZEtUCpY0jaEwxsbyq+U2HAQ6L6U7u9qOP7Qqqie9LIjws7dXYfFM+7VPdr1ZaYJh+K38Hb2Gwr7+/Fwl9CucLzjZIPH6bg+jM3catBjep3tB8W87MWJ3PJ9HWo8oO8BKCXa0gyGSvNERD/mpzwXYufKSterNrGG0KzVgP5xVFyAowfXtu5pdsAxMj4vvChGOpQgEVNOdtmXEEpWL9YEm/8/ClM8rQ11LQB1KcQ4BrpVSUc02xkKbs7jOD2uMnBLJGtBj0tbnz7lorfWIQAgssJwx4KUMXlH1bxIZs9/xOiahbQAOLzjjOHFQk7A8xZwL3oD09rNTUiorvqIXv33Td7AvVRqgBz3pGKagXYmvSHMPYJETEBfzKMlUYOVVVBGCC34/pG1dG345OG9fLeOzHs93Erp0pRYyOLIA9fIW234rnRX8anaS4BjYVx5zNsL8PEDaFSZu5T+hhuDC2bTnGW7EjiyYJBeIfQd3dR+dA75pXBeM63IbPcFJHdbENGeut5X2xg43nVo/JEOjFeBOA/KqV7ex5y3lJf1wMJUEA1Hf5i25a5vsUnVJ4GTOPW1loZ33Z+1Szrb017hPhChtAu1DKGEA1C1buPW3xgX0imBibSH5b0UwxN4YM/Uce7KnGrZCRzbztDsw3D/B0sURrc9Mv9CCCZlM3jE3gpchviqgtEGQfK72s3oR1LvhTgyFx77GdM2A95q375CAEMA+0BaV0++5x6LAhyVOWKhNqjdKVUPZQ52rRsPgtVyZbb1JgHzHxka5/wP0EBZYQwq+zf7iWQeFpq5V1PcIa4dww6MMyJAHXVJohNmGV386qQFY10ft2kV0cTN9h88mXw7tJqws7opCCgBV9unRiuVZjwi9+l3VVzM8JHBp7mPoenjPjK4TCiBu/h3PAHZl/LDavyRDOP/ubYHkG7m95xDQfCa2C8g9xljdD5qPflZ6liz6RqdJzeinjImchIUhEh94RmstKywNglgIRfFITx+ezTOA+yiH0Rrx/gWjgBhkn4BiQTDVTspMOfOnKl+LA2UFBWVTRKNslmO+vnPvQW3kI+oNm4hceciohcb2QK6VcwP0Vb4fje767As0DrdSKn6blATFKNEZAUF12rIH58aabT/nExFbAUuj7XaC9IJXkZvu4k168QhTcWws8ExqRkO7Zp9jptWnYL0gZ7vubu5hgeZwE3/5p5fU5xIqLzfLJ8CVz1DrlNy0l/RZDpnHaF+zLwd5+RRwb3W+l812IH6o48QMzXHuSgx++QzFdCjG4W8Fz2QzrJIPhDMRaM6QlJ9i0hn7QLrpXL7axFF8xbJ0fvOJf8hcX/ITqfZ4nZi9QbnTObexWF8owpAzVCza9rTEeMxnzmak4BANtjlWL1nxJKCYJuobZLZMTB2tWs9Ed16PYdpgMR008Lq3mIatOTWb2Q6NDovuRmcupDih9MrtOKyKn9LySty/eYOMMQLPxps/M800Ln5ZPzDSbkTbV5TvKDslP7O6+Mr0lUVt1iXngo3IrBJJlfHvWKIHtFguTvA7OokzUxl5ZE2GQ0jOXl8NZfG/FXWGtsYmsYj1e9ovGuBxnXbfxgdXeAYS0tx8qEo5g2282dH85P6Qhydcr4r0kVNSM2mMZlLwn6RplAvAhlQvJZdxII/MYMHo0kuKO+7K0lNWlf8CMFshhGN4gYi0n2rQazabu8pFb/pK3GxNuaD+xc4ulBrChNdmXmr1iIObHTSS0O0q1jUGIAa4cpa8yVGk9uKNhnjIciLCZlQFbqnvGuPnRc//MZ/q8UifRKa6rvRyuI0P2sQaYtqgJtqX6RqlMfwe5h8+BjLtmd7IXl+gB5kxFVOM8jZtc1/bxp+eSJSD4j9LqcjQOnW9vgha2yaLwM8EmjaHOkolZpGH1KAQyrWaxRbRsJ+5qBOgFHoshC59KKfRbxD3RlOJq39LnQg5mDX0XjuLePE2eaozsr8OVkd8INPlK6bUsW/TWviutd8J2Vc5z4hUDGt8y0Dl9Qb07ySyLeoaoYMO/sx/SOhWuOM1TWaYZsYrzqHmTljW+hPAFq9Y06c+W1FmUkKMKuFRZj9sCXaA/k1A0tV1escV4nzFAvywHeGRPa23nVqxEJUuN/bRpDEvRfZSm2jggshcgc7yuQNf4GceWF5/gsdGON83VxDMHUqBTVdiBud7U5JUY8+FKAG7aaoe1d/8IlECUhzoahfiT+bhXSkCEEsKVkdAlHn8IFl9PMNyZxVdWY26mML5KYtBDTZ25o5hmXEQOY5SsvFNs1afLx3VKkUjTakET3PNTirXK0s1T3LbHHmxldAkUSORmJmKFP9HZ/DyPBRnmWV2PUXzJ3rGw7qkuSgWIc8uL+0eTxvlMjEdTY4DaMcoXdFlgiouqwBYHOU1HGCGIgoVQDMpFyELfZEQLvCD4x5u1eewly+rBKk0TEDJbOHuZ79Lcm/YY3drCO0Zg39bosHjaDdckbtKOHwekpGDOBBMzcIoajZTRlV+XEhYBoHDL0ryqUMBI4W0WasSUhfWShBVdKT55IwybiL6PLPhQ6Fo3D5Yib4wFLU8x+FhxArII+AduM3pwVRO4w+BqUVwqW9NSthGDdzph+iWP1QDjbmoFlTZKpnFPa5hQm4Vch88wTnIx4vYIN4iPUX8KYqittfnvC6muCMGy0ERn//IxUNOCgu0jWM/Lvx8T9GHqDBuigzdDcnCQyRgPby0GtcRg/2zZPIBHmE00qN0021GGZ3dLqA8FkvO6z4vA+XRDX7yfBwCFGX6b5d+1hT+ST27FFQkb74/VtNsFHpffoWlQLndrgQaD11gu6qV2GIPqNMqCHlGz9KxvPjxws9LhTZJVn1Va3qXll1rFy1OQCWo5fC1Rfl848/VHYTUT3eosygYNezYmeXZpLk8RFsxcf8GcmCasH8ocFKvK3t5G4l9E5w8n906GNXY+/zvdRwXIiEezhQzLW1jyCAGVHJIrNPSYAACbGKNdN7cIJeqPjP3jGuLdgqMXlBi92Kc+2Wtr8tVyzwvHg7zw3zZy4ONCurvv6EXZqgM2MuDSmU+WNNUgg2Sz2KQUYwZ+RkRU+Vm9vP5KMc0SGDD1vSZzPfOVfQCNhQhXqDNpLdljsSkwplaUXk+G1DjojPBMwb0ayIGCYzltiqWCFkWYZ4e6Lo2VfrLkCqfdyZW/rtZHlD3mLDS16vjRLVYYZnpfQg1rn+yQa743i1bTugkyRCJwp/0wMR09SdHcL0Z0MopyYY1ij6JeZA0O/RWyP+aWG1S/04gICJJYdx1ENGkZjAA8Up2lJtm7nE328BYTXYCd4ycx09/Zrox0m9owYnVNRqKBtFQFgQshetolIHsxLyDaB+xvsHzrbKYLSVcv3Cc31AX99XEXMTgJ8L/bldNGvav7PTvtPaSRvXrpusMhvkspbUqxbC/GxCyWS/gNh7+QM3P/pGqK3cFWTTFc81A75jaT4P/iSvs37+56QA4ExtJcUMlxPyZ9LMSle87AIXQC3EExEohi418qfI9zPORAcqChAZNkx2R2gzRMzuvBpCrv8y/Q0p6E6tIDVx2tgHo6W3Ajlwd+/SNLJc7RMRvQLv06VjVFq/R6l0Wyl1pF4avCcHNLj3qsh6j90DoletpLmLGQbjYaibC8ZcVrboqTLD0iuhnTFBf9bm9ah9YkLDo1mOXLIxBzGRaC89OSMqLRhLtUQ9QmgmkGRxmjm4RuAJ8fjukQouTOvEvH4Ty5ICwabonOr+Vn6181R52t+IzQo9ZP9Vhx6Xe+jGEzWdwGtw3kkuU5Wyi3iiMNdbBt73hnfjRzAOoHW71E3Wg9JZdUWKI9Ge3zS6bbH4F4goFAR/1S4rkrETF0UCPV1Bc0uS3OMCRKUuIz9wi/pJ/O3fqZjkyDKf2eCCLGdrEixUoa/YKhRxJYJjgDmU7Y+y1aqVnscQ87FXWDnGyQbzx58HbdMU3F+/JD9iEG1q0zFEs4+XTjoMsjzI2JfiA5n1Ra22oWSBojBO0jB58jv2ye8yHpdmX85rJgCND6TgscnRwnD0vJZWsNhjFJyTnOwb7i3KrrgtTdD17a3hbvtK5LEIudQDsoeeoDJFL3RXws1FQjlTWHspgx1zIJw2eEITEnBcRs4loK0x7h6ti6DAB9FbKhmoTGB+h0/FXeASwJbsUPX0Pnzs2AFfFSswsHh3PXfD4ponLfbNwcimXNZNTIKY3NIKjE83cV5ar2jHMtwq4P0/bU5EizzJedF/bqIq2YKACbYF29WiAvWM3QmKd52pYsk2mqLY8HQJ7BiswkwNyAujVEnUrd1JiJhDvPBbJTVqioDVYWjdC+B/wmfVSzONU9ZQbPWL9EOW1D5RD/nLHGHaF65XJII7bFXQuzYM/AF15GAU4voH8VxM1zJm99c01C+3OUi/uyw7ZgF3mDfg7Ucty7h25lFC4bm0zJxRKbcUiQ/HvZz5XsmtEC/21mBmLAzWHdqw3FrC6nRuft2TKbbrpfYZx/xm2MuA/260MsE/86eiso6f4oT02KaqGxMu6ZOWcmbwAhpdERLsL6kD/R6aGOw/bpjZaGPHjwhkWOuVapIhSqaoyq0UGawXORrnTmExa7U/L0vmkjlzGWEhjMBo+gOO+/IkO+rt6DIYJ+R9TuwtF6kehi/VvmH3CscZKcw1AAbylnqFaZF7/xaWqgGEoixO21VecKpxQ1nKKJM2E7Jx351sexu3rQeUh21m04vI8hXswVVKNA7aT7qqzzpXGX5tqc6bGwthFfQ7VgY9UUgDZN4SUYcLLpMn02+bF0m2eINto4p32juos6MHTBJZFhu4GrsgCn01XAtAIfApykxJrXlDyBc6eaoXYByfs2bEbLtjf1hjk3JVfw5fX4I3wr+aunjh9keizB9WTldzngFh+CUa0737EDWWhZhqlq6A+tZfEtbob259nMGNKJPeLHHZCzyNuswDnUFT/FGSMepjsgJ2tRpDvMNH4mOxu0QvnXerRQ8pb9UMefmrknEnIRjUiqRfhrLiNGe1IYClImVxeilrksUovlWPyPRioAEtwYZ+PXY6Al0PD4Spo6SfhWy7npVw0cvNqBXshGLwsfcjI4KelbdC7x0t/iTuWwt/4a+WCshTAWvVjZAJ+L1qU9/K8lhSvBmp+R/wP1xqYUvgTPXf7r06cC6ocAVHglRt91A/4ytwV7T4p5CGaOaqfchIhCLYsKyRF+NtICwibIloHhEf1eWQtfzR9awIC1WexWVTvYItZKVUEbL4KADddvnNEpk4hIX1ZMYS/ycULNAGE4GQgSMiNtIn+RliriTTW0O/DpyR6ldyMfGd8ciF8tUjFcxAwKZGoBahj7M8Wx7fbOTkRKz9xIeg4/mG+Hl3Me8g1Jy9ahNHnCq0ong4LNQtn9D7jHkktUKLo8EkKCifTCN74IXP7npGkI5go3BudWPJDIzT4uKi5yo0YuOUvmW8fTZOLg5yFRZtz+u2AJBSyocdYhtR6L6r6qZyf3I3Q1IoQiLILR4c6eWpfG8oA82qqcWdy9HkRJzFPPVyoUVjPlLDrBZn2b37qjeqyRxk3yWKdqQlsII9KTDIMan/oHub+JWabXF8L/gXBRkqV76P6r6uZ4ujOQ1dLp+/MmFAQq/teSaj0nyN2tptRI/8LNPvzpeQqUGKWjVoJjKv0wkl4g2qwWAEM9ii8fewApkZi/Gmv1GuH7mhaQ4tGOe3DAh4I9L/TEYipEPJb0ltYA7UFFdH0aKhBM8v0k0fN8pccnliF6xk1AQNPAffWtWawQo62jODJyDIAX9SXQXHhP72TKRu96Ol+cl0+gUsACFd39KYz8wJEEyldCob7zANLmjrTqZk3FEFGfj1sFZ2/1HT5+uKInW/An/FuBl0fRH5dtGhuNK3pjn+XjpWadMKmbxtDX+GFqqth178NURRAKIOLAR1YLxkTzQr065n/WE/+LwX2AyH/O4d23WfBGcxe9ynMfhjtLzVgp7z6LRRpJ26mDD+rL8UTG2g/zdVzPCFw8/s6+HdiX7x5ZiAi3rS74+EPYEKaqKWaeekgQ9ifZe8379FUV7mkyTwBwFjlxtmiaOBbrGw1X19q7WsQ8WPVD7RhP2+l675SXFORNd+/SHLIP6b431XctrBIqSSe7RMHX1TBCQ3YLES+McOYHTwCUAjZuJzH9M/c82xo/ETC2GVjK+AOTkjksj31SoHcnnAjJr/XhqAK7k7SSOvf3SAchQRcDYdvmf//sMMelfPyuEpvr/E5x+TzyLdsnw6PI878ECRqLn0bdMyipPDSUUUIyryOShSOR/jDWMlqrzS9+4mvBqaEMWP6TY/CU4C7Zofq4k62smdICcJ2ockM/O0Cw2Fb3DW1e3VwP+H4/JeIsFX6ik/td+FJ1mO/QEl9u2znezR9wtAAEPEMeHi5YMVC7mGZnH8euFgNl0rHmNcNvAiA8pWOUvhPtSpuPBfCj2BbtKF4ZykC8fm5Q0I07fBnxQI2VIc+v66+AG5ArluF87bfUNLfCLUSU9Oqs5ixtic0QVXx/R6I5gQtLuB/j1X7yTX6Dr/4TyWWzWgkZxRScvHRPn1z9fBenbxUXYGhaIE5BK0cXeu1RVXHWFRarOuABiDND+/kxGISrmXXQGmgcMMIUkvA0cIB1Lkj86+O8yTTtV0SSND3NhTPvVUcucq7AFpFzo/PYgxLdlTxPoFQyXKVWcYt6Vb4wSYIjpzcEbTVD6uMZUoLq6W9EYOHnMNEwb0jsQ+tDDoN3LDQKc4ldA7eh7Gj/Sh6pJ/aRFGGWHNovnsqZgEy80TowAqF3rbaHq8hI7BTv6UofQRZgxYO9S5Qg3jW16s+8zY5hngxrMB0KxwB7WIYCfXdzrUa6TRQyiE2uWlCvi4rBGKXFA9THutyu5YYMe4Rgeco8GEI+D6vyRZylw69WVeUIxHq+y/4L08tXsO0e6WygOjiHJkLzjfduXFrLnLjnbr4+qzPX3FTiAtF2qJB+zpYRPn4iZ5jYzAI4QprEqJTtp9pR9sLJfb1F1zGAFnKQYSmo3L2vRE849xManAfy9ugXKryVQG2SPVYI6K+prLU9/DKKuYeENwduFeyDAQOH8IRl/re2ZV09nBGDUGY4RC2ml6p3hbozho/oobbnV2iEOZ7aCwxeomngV74y0MLqdzpFT341eg/vjcTwy8iOa6B8AWQ5l/O0a/AYlif9egWO9XRml5egu3w9azyakPPK23UBif4hlk0FrobfZzbWz4wG+/bx0rF3FBhAHmPackFXDkKKVGzbVHbFNETSXvFKMYcoOmB1cw5B0qYjHxqhYkZN1H0TzXaDu/SxyS8UXTp/lecWazbCG6c40jJAGhxos6GCK4mCN0qunT7lLUc9V4sBpO7emV+uvc4dofgbpsBplwXnbxSNR8ptseJUX4Jq5TUBgvUtsVL/CXuN4nfi/QUh02RO5yn0xIo2+k3uHk46aq2xMZxvXrfUNKvRGM+JHVkqq7go552G8J1h4WtGHI+E9AN4wriwaGYQiNfpmm8JSLoeIOecGRlGFlSXpanM75bAh9dcADguS7Juig3Pwulet6aim+pC8HZh9IK16d9H7huh6qL4Twx/2uv1K+hOEEPwiUmfmh6UsUyycKsoqiOe7u/O2qhIJDgBl3LGlPd64dXyYSRLvfh4JUK2E4qq8Bihy9igVzy6GQFpsZXGWqRBfDoVk6KZX9b/kAkMQLjf5FaNAUvY82MGQBNhvkn0cBplneZ6DJj/Dh0kJTgsiEgRT6V7bD+ycq4C0kuuOMcwNn6LAgiJ84ovfLgQcouMMhzq9sp3y7uOYT2WAo5yyCa1WuO2fgLW11aGyUtLidazzmRvJ0aPMdUioN3+WF911Zbsp2Eqh5SKK73d86pHjSp4dODzIxHYttN7YD7PnSUMIYMO6sUfTck8SrNwg9w0VhL5na3VGn4hHV7vUPK5sgy05VhyXSPPNgrXmSRXcji3+sh4PPXjM/P1IRJzh3uNBhxMZquiA0ZJQQ6hy6G1AWP6cU3Gtw4POSqCZXo+Ttenppx/EJSat07wzgP6pM4riBSTcQADl6TAF8oGMUBZKlx/nwjMPRRs3UubI+ZdZ7+jkfUOxAEO2E4TQyH1sNoIwZgyg0IO4YUzyfYtSOfNOlLoJzn7fwuE+9RKibT6qnaBMUKkk76a32MYReAp7MGjYENbBn5ed2JUlKpMby460MIkYaCkwlURcEPlP5ux6DvOlpl72GbDRMUOIHedYSmLN/G2ebpEIafqccRPpK/TzOrMvSmXXhowpBCDTaDzX5Kv2L0Bhr0pe7Ei9jADMpRVhcAB+FAp/6WXj1AMT/NOfLuDDxvC0upQOdxEVzXVzTCywgZv9RC1zmsvJ8PxPI8sEuk72pZf7KE17REsmhmSckl9QkrMQvgNman6rls5WeXKml/TlDvTAfKF7mgxzTKIu2Tsn5e4Hca8aOJ9ZIEqx4r8o6JvnYc4GK4fmZ/yUvJBW1qnSzj++vjrmiDhe/O8MnK4MPREDBggo0O9TeXvxxbxHDxJ2Fitman9K6UENIzgpzDecvJT56J26eVXiwrvkl4kpAH0HkPm4juUDnNn15YTPrNEMUR81KBSLAK86oR5frpu6imXTNe1+FWGjNZXgzfiPsvyxjHRaE7sHQeJMzSxYVqncsFxMg2TqX40lPVvzL28Z8Xj1GTVFh1GP/tmnDsZxsTmMU5ggEwSpm6dgOsuH06EK3wprAJArebLlcp/ffJ3f6EEJH5u8iLa+gz4U2Zgl5RDqx5YQZKdpGKgGqxHsnZUtQziDGxGs8zsSYwtcLS+iFHWn2wLj6Q/5vmf1/wdIvaK5qlYOvMWvxJ4xURY9T0R+xnSL5HxBY6IY93/SxvSnxWsBk2c3ghRysRl60U/7lW6K4kML5rK9ZVa6CASVIlIN6yWRtlHplrvdXAWYn2ewcNvOSYREI33wwGJ8oANJyjCFrTz0VXGCPR0Qbk2oNVYKYJi3a691i5IEUS1xlmAbyUV0iSr4noanVUq9Q8OWed+YCjJ9C3Yr4sAg/bUSO7vVe4Ojotn+VNOXiDJMcRLAN3EeH/+8bZaCMLACmItTjfk4A2eiajVAPykr3tKRmdPyKVyUkTjRhsrcZ9Is9aOvI1Bk34SJ5ZXoz0k6RyNYnDfR6u50IzqMIMn1YM/Vp0ic0zbBskEamSufv9KjzshLQevDVVNvCdVI3o+X/H4gKlvm71q4Yqif9utpntRBnDVtzpUkmU3DDgJUyIYzxTfYizWZzEXxCCqaEVQTD0T78dH/ojl3R6LifES3QcYdR/WXF1xN7y+SnOl2VbIDCv6IJkzaoARo1dVLEViVqShZwYiPaNuGY66L/bI3fbqJL4hlCbj9CSoylySDuALm/IOWOjxEifE/tGyU632qQmyNfyiZkZE2haXyDrVo+uSxCf9KTcth8jCjw1YsLVoU4nfwg0Sxm+O2PQeSNsB+l9Px0q4E6Bqo/T3Od4ke1yOrSYrTzdZGKbZrGq/tJVpwdvypTds8JpKBfX/4eHhIBFZxzPyAIzzao9zE7ZoT2r6rAQVy5xuIHtDdfKay/RxcSLx4GDJYRkuqswULYu9904Fd+XEeiT3fvG608q3zk9yQ5heezJNDmTBndymk4iltegEjof1PxVO087oqMddkDpUgu7Kz2JAYEr4uLg6HsQ4TZMheQfhYF74y54g6cJZ4B0jz+d0+SyXLQokaPfDuqTZgwoXC8NnkoMTiG9GMZY0LzBw4wUI80j0UIH9dU+pwODZmUxY6Wb0j6VBNa/HNHzAo/J/kltKcZ6NjpV2hj7ZLEu2Acj8ze+pUUme4zVss1O0td/bRzdTUun7MgWzyiHX7+61g3y+Sy2ZU2J3pAB1RMmaHS4SyLpVxc35yUdP2JI0bp2z41+uZNlkMj9dv0isiuOLwcULuv/nUnx2vZKPF9XLVBv4ybIuQD+m08YDO/B+52MpQ2SvOsSGUe2as69XfTjmBX+ffnSnkzeoQyjfTHVbdpgJesieRErBslfDhDlM7KlHIvd+PimYmh59U0YGxXkJDqobOm/V9Rc0eXrogcfdfw5EqeD6fzcTvpMmekPIbGKSLUR8lPBvg9+WK+D624XoKq0hJBsePIwStzkJxZaCV72HprjWgCNV0RDHRLAxGz8lHLlsHxgwxK0ELr876osYMpQZxx0ZqgIBFNaMyFkO7AuuF4f0GF35rlsbxrymClW40CcZQ03h0GD4FMlumsHE0XLI2jKMnk3r/VWCGKAkk0zretmkLMVqGFsdjzWMhczujuEWHJAlxkDrOLx05wTt/Mt8pMF9jI6EA0COXIBM34kiVrXFzuhqoxDZhPy0z8petUgnKH6nvuP85YeNwpwpewYfXFLhv+2SVCYLfPXvZddzT8RlosBQRYf4NBLaIyuWMkWsRJad2/inN/7IT1LrMCmt8e8MRw0kUcWtZ5UnJF2g0aQiu65TRSltOxy7iYntZw+hP8edZsFQFlHGceAUD946nOn5PfRivJsgz1GVemQvm23utdL3n32abs054yioGjmXry4Nc6K6NZ2u/1e4nyv7JNXl6I7B2OWHzKQrXiTyFafYaROQXJQDlp5YQ+qN3YTdn3eCIcCM8JU4tJzwpP1SdvEuB/iTJeUqnWq3yRIq62JPn4uQCm2P6ITE5SISJtOEtji5DT99I9gmqH8D5E7EyeusT1WFnmhjsSCT0eumMa/a+DlN4+XkhzCyt9On+e6NFooSOcqbZogIrUsafMKo8a5qVne+BH+DVQLd9dSTYEjlrq5QKPqbML5g9COPDVinb9o24h6n3gAJZtkFd6m6lntDb8TtSLRX3YMxwEXmDpta11M5sNndq87BPQlEatZ/tp7iv4tqKQSZtF/Wy7wwD33a+xivCAURLRla677U/8XHZCp4UyNKH8oSnNkooezuLJJN5MEtNcUfSShTywh/O75KsLR2VMHVgBKy7gVHkDmWhKo9Zz3T/YsC4XSosbfEO/m9vVneFAfdkL017Lro7eCjozUDr5UfOkHCodAYYYu0Q9+KUf0sBs9xihwoAA9wQGkd9UNTqX88cKYECm2FQN10oES5ijIb3ynOtJB1PWwSj+yQw5Io+r/akoTK02s5HxxIJ50Wcb9NTpltV5wE5GDYXM2++xAQH+i8Tn2xhI9StDwFKPCRgEkG18dKj5GDTCxR5ZcukhPb1lINB3YIY8hkiIevTlvOC9KeUPkhROsaKhjNm4MBUa2DJQok4w+7b9phpkTNDjyoFV2s+tlwMsoQG8/SjVDK1r2RwUY65tmPYHo3kO5O2udkmAb0CsohNv4mwHwmq4OWN7CMwZLq3rhpsLV1AFguncJKFdhVC2ynfJj5LSK68tBkC9/ubcRWyrR8NADkK2GoF0miA53Ddp/hJK0ylrxxz4xsNGoGLK92jDiGWVWTntxPrnihaW/abdF6gV5lDUcjtVMbnn6dMur7OTkpeo6ElMSSneJ3VhhBU5WAF0HU5fGpDOVp4g/BgeayJ4T5Rx+aHq0gPF234sQKR5r5zApMflnD34uT93GJ7macne6j5bH7sVG7/EA82sn9UBQ2aSqsxxLBGRSWmuABfuBKtEgKNlXgnWGsKs7QCUCmAY3mBv51CrXjvrO8Q1Lapu6yXSj93tRiV/Ipdg3PUlct08VdSdRDkzQeHee+0NlBCC+kYLVfmp0XvO9dhB0XNijlqaGeLRDMP6leBmyTTQ+U99O2A0RvJ0W/Xf89n4tNs7zExf2BX0VXRxL2L8cX0Zm0fnGZ86IDlBJ/qZ/rNr1EErznUCxBtV7hoXKsphTELUu4QCNF/AAYD2/HyN4QhtXWMqJxssjQ44YTSJAysdgOJI6dQoMbtsu7zEPUywtaIMEXRgbftVtEs8EO8YBEjOxuUruCKXunBhczjB4cUjbFn7MNyK9CaZawzyUq3JuhPHqn1xbhAWWbTbvhJvhYw0fNsrW0KBzAFwMQy8hg1z5RPn6B84ZXEbKnq+2vgHJdWxX72OLzJYhkoff2WSMlRrz6mGWI5jF1L2k0CXD3ZzWGJXxZVEskr9nzXQ8UE5RoqxtFo5d/DNwJf9PN41gDGNMLp/r2vS756J5HusKNpprTBuFOm5ECKqwlohtwCh0SimT8JiWo8BJtSJ7V3dpPpWBjBBbKKxADxafizAyAwZtjejyv+NVMJnWFHAg0T5ijPYktRpP3DDyAaXWo+5BrLReDrbcunl9INe6qJfuhuliszGvzAN6AmiZV4jm9ABa6k+GASZR1yL7f7aYYGeWONFH5U82KdOxN1BJv6/omOx4FzJN0oii1x8oVC12MS11+gOYusILcta/Hk5BYq0e6KXrfAMIF7o0RbVDOO5t2zN3EKj8aDFMLuTQlYUMrgLL1WbounFBvu9uFMgrbYF9X9UjFU2kX6utOYPq2eG1pW2eY5RGLlL13M9J2oZo/+bOU14f7gi9jk8Y4J18f7zMzvv7HimW4SEBUgXDDdo2lJCGw8S02fxyX9nQfimXAFVNSnFspuGr85ZPkyT1KxXxlUvlqH7IJiyJlGNq/z0iRXSZYNGr5uOnr/j7ki8GWahk7fU+02zNi87S+JG+ZbjN74mJfOtg/OvkkKyy8nX2Yv6JBSHzzirhaTGGknYziKfk/zBb/3QY8BsprS+s7iIZl9eVb5PWbrnNeHFCSa8qDc1BdUnbgJizLCfN3PQV5cUMI+7kEg7sWvM1evQla7ObQgGBoo/99JJJYt+HWrWYRaLwEHg03s7Bbzu9YlBESnzF+m8zeuw7efUR0KRUPbKEhptDVtf2MfO8N/MCcJ5lF8WNwb6XUH5cYRipMwvBaVr8LnJOF6EMTy2ekrJvKWG8S3k/tyCbTTLl0aZE9zX4HqjyIEkVfLl44zomBJBcceTM05hz28C9z6XnuCZgeREGV1IgKfbFfCAL1yZLS+fF/2oXCL5Kp7Ey+qUPt8xIn1s6K2gkv6+UbFh7R7jIOkUxnm1FLUsRDIqnKPw6xSuVNPXXPJsoaP8tYSEMSh07nwpPMeRtTtUVLWLlYgf/GM3LVDdTomFXYI4+qGkTc7qAlhCoUerjh87+KajN7Fh9wXDrd5irqH04UBPcfRq1QQlyouBPgfXFiQEVthYVbsZMpNEeJxy7YslzboK5v0ooAW9krLXea8PhOjH+Ne+CM1n7kIn1L+JpieaUvvMarFEcjx3KilaxYxp8frC43MKRfwSQs7xq0BF+zbuPwnHN8gbfPruyRYab1iYMTihefSDoX4wYm0IEFYLsJIO0BH1DIZNKmKihMN8INyBP0Lz1fE7unh/0r1DgJgkZLhF7Yw+J4m+isvlEmfvKqnUKw+2tKudk8piFp/VfQkQZaSpVCPRvUfbVXOhzn95ZTIDzPiJnZSloOgxH2zrpNZrNDGNog2w7rVVw5nHbQFxUo6+1unyhWSwrBESm1tQe4Hlx+B8YEzXdxCZic6FLks5rv4ktdUzWZET1qPh1OI7iIoKADfslZu1iObFWwxs8gK04l5PM5VH2+LfRCh2M/WCotB3CeTmzVcN/LTiE7SgfUG1wSCwsLcCyC37dZvFkHMZSxZBPaP2/qy+CWUBdbdMkrqBwOg/5uLS1ZZ/6usCydA5kH8HQMNxMCokQ8aB3+JPx1eRznERM9KQhlH0y+uUHP/ps2oxyN9pJXvCC+HOKNsm1tnb8cs7VeHDhq3FOh9gqUaD5oX+lACrS7sPt5O18lopN5LkMVtZr8MquwwhsSnnKkYxdWOkeSGT122lk7vw9avFuLWif4zs85hgu0eq8xlCS62f3OQy5NueyXGge3W6JIW4Zrt8NHFV1pVYbN35oaN2+/X08rdik8zvYNZEKhQ8ba2HCBsbNH3LuwqwWwrraUU1fuvZ+YiriX7oJmsK7+nCMO6Bji0ieAQ9mhZ5jwH42+uc19Swv351TUvN7GOlhmxrPUyoulRCMIQ0DRJ9fg7IkJEnAn0MbwrhucTxhLWHvVgRcDe9GwfHyQOmMSaAngDeYN1H/dPoqer02mJuq5w6pMZRu37ewuRISJwLkaHXTRUN/zgkvJt9nfPNo1vsh7XOe3vJ+fw7vg0IS+T9ur6hBzZyqRvj8WgI8JhSzOBaNn5H3fmmcIloCIdZgPsCcvMM52Rlh1YqbQ9yIlW7SSaWDQMPltxMyi6V6MgtqfSe0VT1QIgqLFnYZvoOpthplCGJ1hzAaupLZTXFuFAHfkeQJNKuaulNCcOHTV5eEQQrUmOr4vXEBupOyIxt7VNXsu593n2V/nvpusTbVvw36roJWuTgGts64JH5NHgP9DvUivzqDK4CgPClSm0zoEd+CKyHoPvsYWbI7Pycrc9Z9Ij1uzkdLmt518VMLH/HqiRqyfNgj5F7tWk8U+syroLhK8p27pJpXMTJicYzr6PQTSQz6sZ94dpHlpMTTMcNjEut0BWNpPOt4kQsQUGXSy4xxR2P1BorA3x0hQw72IinHI7dZr0fXRC57wONAxrfFYnVwLV/2QYqm3iYO3NoiiwPezpa8WT/Eu5eKO7E0bC9q+LOcB6aNUXbwHA9YlbyTSjNSqhU91dUK8iFmuZeaZ9UdW+O8HDj1NPmkAef30wXa/6wUZACb73EgRqMhQs+fXAjRlqZo53hlSCm5lK3HmbgGncAm4a6Nc7VnqK2W1h89bf4f77zvL0bcYLCb+uHy1akp80O8NJ1127hsxiZz1rViNHSGy3FQZOG0nmbumo8Z4fl3OVUIFlgIvIbHocbnd7Dli3/IWpqGMiuuNgPZnSrwi5bUv1dm5GNxq0PrlUYbMWvWZh6Z4F4GHzErim8Nono0oglw7dFUcnBkzfA3KqIBJwXn4BA1E7II0LMLQ9+IlgYBARi8AibcjTei/zebFOQI9XniMx2TgHb2mL2UwSXH9+Uoet3P9i6Sb60gWIvDKo0xpH3uSzQLJNU57WmmvO/P75JVPX14v3qiF0cuRzKgNm9FNnkQeBCcKJ7gwnOLYDfqO8ka4opw/7+j2QKZmbEms+itECmPjnBq2zx8hZvBMijnu/BZN7wHOTo8NAfxkpxSzG9prMB/fj/f+NkhI6oPxKnqBoJRxcl8B61Z1L0wzN5tLBUnDuloOBgIKUWaPGAZ7ZVooCsoJcDIfLdXBB2xkWNnpjUbzGWiTDo8tjtvdwAVltQKTZn62/QXCjNCM/8QIRNoGuPWeTcW7pVXChrwWFgObe1l9frPrBluNk3aYcYRBy6gWlMCn2E1ks+RyX/7zoNwwDyLogMkKokAPlYwMTYSM0JJTYA+DiIjpS61jN2G8iy3j0lEnVk3Ws5y/3DiU3tzoBkwEoRpsNL3M08zVYVDVlCz5C9ANyRueOTVgzXaozdgQC1AjrvdeLyhp21QPE5rF9nExdD2s1KJwmfgRUx2JEx5wYTGj831deYxSspD+YanPLzB7M3GLJyL1iJ+353QAQEAZASKAjFxcmJtAhFjsYY6xliRNmuMqAfP/Jbq3D1TRQ2Eg+ny9oednQVJaCLGjcDMx64ieAUb7Ofhl8BN4Sy16aosn9/h8iON57Cc7XpueNX2GFsRdos1NQdeta+/o5mYdLcLhsCseiJWdyifmtv6O56QhV0B1zgYnDo9kzEks/hhI4aMtYW6/tOag4RzlqEVJ8NLgJbKkkAV3GnvO3x0TsLBz1fjN3ALDpUzTEP9FVaGoXzwvRUYaxG+yyJfovv7+sbdTNT04ah3IM6pkPWAZ6HlMZq+8at/l6s/B3BgFQAHW9dzhZRdfNlFeStNovAs88yVHBiYzjMzg7dqfiXAqrZUBXzFAnUy1Ml+EhjBqiCYmDIzY59kdRm0oWPPgz7U2zl0ws37k9cnvQKsu4Q8i2SmKAn7k1GXG5y+I6WgicbfxH71HhBttYoo2+cKxXEe1jrJJzi/IONtA7cVUovVR5oCAH5OZwwk/zqutHnUQetFJohSxLCnrxRx1AJvk5zBTaJQOwQaYVkl7V8kg0pyBeoKG2iZ57Hn2TSxbspVFUErMc3COce2NEic+EMaqwOTYM1Eez99oCf1g5DT7QJSO5QVFL2P6Ew3EhwIqSv8NLS1Y+GxW/92MCzkZy3xVTT+ohvluM7+SNpKvyM63jZEA+aRC2GrjM75FyF0DeGAtIiNbcIIM+QiEh2z3fbBXk2Cjc5MH6kAFzWM3ANow/3flmdpqb/jmBNtwvzuresZGd6YOdBl+3cDvU74nympp18tjf8MrzfLDSRtn6+LrvCIne3KAKp5pzUvKHWbrjiUjCVfrISlVTGTQJiQrAB9VEtdtpViDEvcA7zsNGMnS6OhX7Mww1HJuI1d4xLjqDvmYjRPrTQKlsfmMB0v0Bsp6n5pzEyZh4IhOSRPE9/BqpT93qtk/DR48wm5IhimqccEbQUoDliWMOwww0/xPtlH/wywfM724tPw48AVmGYRdvDcn+socpAKJcpUM8+OJgMrqjth1j3d4xnYJ+7iBzB5LPr4bWgyoaYKf6HE3/apHjnh47mMoognQbUbtxZJnRJqr9S/TIHhwql9CMjEl97FWjU8FR4XbLD6JF2ruDohYxNYp4slhu9Pg1S2zhfhVh6423c63V03/wXHkg88QLS+dtXUsGToQyJCLZUlu1kbOaYyZ0HO6TIarLqJ3O9L1IwxWUGzaPQaNhvnlCb4+3PQ9Y7Tq0oe+HA79FAJzob7ZZUEpbbEgLDDc9lA4REQ75PVD1TTexU7pfpcwXYb8QrUZ4IWHyyOC0AO1tVcvQdkqJtpbN3mMC3ubxxwdBCHM1qdgEaGlx3d+XEEWsIrY+43/dMKcsrnI7ovMuJAIW0GEm5YwBJHTyMs3LpDyoxRnmbr+AXrs7tj6ZXE6Ejjb3DQhuOg2ayZxZWSJPSN9yl4DJbp/j6biZwkX5FEEY048OvSiZihP9cqHS9MqlvOWSL8oYHPyrmhW7+3lgyhlvK3FkGN5zoiKdbpLSJ6ZnzRHrZTKerXpP1bp47y3H48onoL2QI3Cnt2p0matMA8A3MepIvSUfpclCUCllO6+UnVJvHTJm8afkJzo4tZ07csZeXMnvtXO6Z8DIPJ5d3Hvn7eTobPd467QkroGls90zFcqtkf+uQnndLq0Coi6t/Nb2C1OZ+GVRfAl+j4TctZhOBEZy7eKpzVMQnZlZ412vqwss+z7NTTV4ye9Us1woTj5Q8FQ8wFFe395hDadk664Sem1TAAAA" alt="A nazar bead hanging on a cord below the GNOME top bar, over a desktop" width="900" height="415" loading="lazy">
-      <figcaption>Hanging under the top bar. Only the charm itself takes clicks — everything behind it carries on as normal.</figcaption>
+      <figcaption>Hanging under the top bar, minding its own business.</figcaption>
     </figure>
   </section>
 
-  <section>
-    <h2>Bless a commit</h2>
-    <p class="lede">It sits on the session bus, so anything that can run a command can reach it.</p>
-<pre><span class="c l"># .git/hooks/post-commit</span><span class="l">sudocharm bless "$(git rev-parse --short HEAD)"</span><span class="gap"></span><span class="c l"># or make it earn its keep</span><span class="l">pytest &amp;&amp; sudocharm bless || sudocharm flick 9</span></pre>
-    <p style="margin-top:1.3rem" class="lede">The wrapper is a few lines over <code>gdbus</code>, so nothing
-    needs installing on the far end.</p>
+  <section id="install">
+    <h2>Getting one</h2>
+    <p class="lede">Download the zip from the releases page, then two commands:</p>
+<pre><span class="c l"># from the downloaded zip</span><span class="l">gnome-extensions install --force sudocharm@rahul.local.shell-extension.zip</span><span class="l">gnome-extensions enable sudocharm@rahul.local</span></pre>
+    <p style="margin-top:1.3rem"><strong>Then log out and back in.</strong> GNOME will not pick
+    up a new extension any other way. It catches everyone once, including me.</p>
+    <div class="row">
+      <a class="btn" href="https://github.com/rahulpatwa1303/SudoCharm/releases">Get SudoCharm</a>
+    </div>
+    <p class="platform">Linux only. There is no Mac or Windows version and there is not
+    going to be &mdash; if you are on a Mac, the next paragraph is for you.</p>
   </section>
 
   <section>
-    <h2>How it hangs</h2>
-    <p class="lede">Three coupled systems, integrated every frame: the swing, the cord's
-    elasticity, and the charm's own lag behind the cord.</p>
-<pre class="eq">θ''       = −(g/L)·sin θ − damping·θ' + breeze(t)
-stretch'' = −k·stretch − c·stretch' + ω²·L·0.06
-lag''     = −k₂·(lag − θ) − c₂·lag'</pre>
-    <p style="margin-top:1.3rem"><code>L</code> is the live cord length, so hauling the charm down genuinely
-    slows its period. Gravity is tuned by eye rather than taken from physics — real gravity at screen
-    scale swings far too slowly to read as a small object on a short string. The breeze is three sine
-    waves with periods of 6.7, 10.9 and 17.3 seconds, which do not divide into one another, so the
-    idle drift never visibly repeats.</p>
-    <p>The elastic cord is most of what separates a string from a rod. The charm hangs <em>from</em>
-    the cord rather than being welded to it, which is why a flick makes it whip. The charm on this
-    page runs the same numbers as the one on the desktop.</p>
+    <h2>Where this came from</h2>
+    <p>I saw <a href="https://luckydangle.app/">Lucky Dangle</a>, a lovely little Mac app that
+    hangs a charm from your menu bar, and wanted one on Linux. This is my own build for
+    GNOME &mdash; my code, my artwork, their idea. If you have a Mac, go and buy theirs.</p>
+
+    <p class="lede" style="margin-top:1.7rem">Two questions people keep asking:</p>
+
+    <details>
+      <summary>Is it really a pendulum, or just an animation?</summary>
+      <p>Really a pendulum. The swing, the stretch in the cord and the charm's own lag behind
+      the cord are worked out fresh every frame, which is why a flick makes it whip and why
+      pulling it further down makes it swing slower.</p>
+<pre class="eq">&theta;''       = &minus;(g/L)&middot;sin &theta; &minus; damping&middot;&theta;' + breeze(t)
+stretch'' = &minus;k&middot;stretch &minus; c&middot;stretch' + &omega;&sup2;&middot;L&middot;0.06
+lag''     = &minus;k&#8322;&middot;(lag &minus; &theta;) &minus; c&#8322;&middot;lag'</pre>
+      <p style="margin-top:1.2rem">The idle sway is three slow waves of 6.7, 10.9 and 17.3
+      seconds. Those never line up, so it never repeats itself and never starts to look like
+      a GIF. The charm on this page runs the same numbers as the one on your desktop.</p>
+    </details>
+
+    <details>
+      <summary>Can I make my test suite ask for luck?</summary>
+      <p>You can. It listens on the session bus, so anything that can run a command can give
+      it a nudge.</p>
+<pre><span class="c l"># .git/hooks/post-commit</span><span class="l">sudocharm bless "$(git rev-parse --short HEAD)"</span><span class="gap"></span><span class="c l"># or make it earn its keep</span><span class="l">pytest &amp;&amp; sudocharm bless || sudocharm flick 9</span></pre>
+    </details>
   </section>
 
 </main>
@@ -412,27 +452,27 @@ const ART = {"nazar":"data:image/webp;base64,UklGRvRRAABXRUJQVlA4WAoAAAAQAAAAfwE
  * the artwork begins, so the cord can be drawn into the charm rather than
  * stopping short of it. Pivots are fractions of the same canvas. */
 const CHARMS = [
-  { id:'nazar', name:'Nazar boncuğu', origin:'Turkey', ritual:'Flick it and it spins', hang:0.06,
+  { id:'nazar', claim:'Stares down whatever is staring at you.<sup>*</sup>', name:'Nazar boncuğu', origin:'Turkey', ritual:'it spins', hang:0.06,
     story:'A glass eye worn against the evil eye. Blue on white on blue — it stares back at whatever was staring at you.',
     parts:[{k:'body', img:'nazar'}] },
-  { id:'hamsa', name:'Hamsa', origin:'Middle East & North Africa', ritual:'The eye wakes', hang:0.05,
+  { id:'hamsa', claim:'Keeps watch so you do not have to.<sup>*</sup>', name:'Hamsa', origin:'Middle East & North Africa', ritual:'the eye wakes', hang:0.05,
     story:'An open hand carried for protection and good fortune. The eye in the palm keeps watch so you do not have to.',
     parts:[{k:'body', img:'hamsa'}] },
-  { id:'nimbu', name:'Nimbu-mirchi', origin:'India', ritual:'The old lemon drops off, a fresh one rises', hang:0.02,
+  { id:'nimbu', claim:'Turns away misfortune at the door.<sup>*</sup>', name:'Nimbu-mirchi', origin:'India', ritual:'the old lemon drops and a fresh one rises', hang:0.02,
     story:'Seven chilies and a lemon, hung at the threshold to turn away misfortune. It is replaced every Saturday, because luck goes stale.',
     parts:[{k:'string', img:'nimbu-string'}, {k:'lemon', img:'nimbu-lemon', pivot:'50% 60%'}] },
-  { id:'daruma', name:'Daruma', origin:'Japan', ritual:'Paint one eye for the wish, the other when it lands', hang:0.10,
+  { id:'daruma', claim:'Holds you to your word.<sup>*</sup>', name:'Daruma', origin:'Japan', ritual:'an eye gets painted', hang:0.10,
     story:'A wishing doll for goals that take some grit. Knock it over and it rights itself — seven times down, eight times up.',
     parts:[{k:'body', img:'daruma-body'},
            {k:'eyeL', svg:'43.5,48.2,41.4,45.8', hidden:true},
            {k:'eyeR', svg:'83.8,48.2,81.7,45.9', hidden:true}] },
-  { id:'neko', name:'Maneki-neko', origin:'Japan', ritual:'Three beckons', hang:0.10,
+  { id:'neko', claim:'Waves good fortune in off the street.<sup>*</sup>', name:'Maneki-neko', origin:'Japan', ritual:'it beckons, three times', hang:0.10,
     story:'A beckoning cat that invites good fortune in. The raised paw is a come-here, not a wave — the gesture reads backwards to most of the world.',
     parts:[{k:'body', img:'neko-body'}, {k:'paw', img:'neko-paw', pivot:'54% 64%'}] },
-  { id:'horseshoe', name:'Horseshoe', origin:'Europe', ritual:'A flip and a bounce', hang:0.10,
+  { id:'horseshoe', claim:'Catches luck, and keeps hold of it.<sup>*</sup>', name:'Horseshoe', origin:'Europe', ritual:'it flips', hang:0.10,
     story:'Iron, luck, and an argument that has run for centuries: ends up to hold the luck in, or ends down to pour it over you. Pick a side.',
     parts:[{k:'body', img:'horseshoe'}] },
-  { id:'scarab', name:'Scarab', origin:'Egypt', ritual:'The wing cases part', hang:0.06,
+  { id:'scarab', claim:'Promises things come back around.<sup>*</sup>', name:'Scarab', origin:'Egypt', ritual:'the wing cases part', hang:0.06,
     story:'The beetle that rolls the sun across the sky each morning. Carried as a promise that things come back around.',
     parts:[{k:'body', img:'scarab-body'},
            {k:'wingL', img:'scarab-wing-l', pivot:'50% 31%'},
@@ -563,6 +603,7 @@ function build(next, animate) {
 
   document.getElementById('c-name').textContent = charm.name;
   document.getElementById('c-origin').textContent = charm.origin;
+  document.getElementById('c-claim').innerHTML = charm.claim;
   document.getElementById('c-story').textContent = charm.story;
   document.getElementById('c-ritual').textContent = charm.ritual;
   for (const b of picker.children)
@@ -650,8 +691,9 @@ async function bless() {
 }
 
 function paintCount(n) {
-  document.getElementById('count').textContent =
-    n ? `Called down ${n} time${n === 1 ? '' : 's'} on this page.` : '';
+  document.getElementById('count').textContent = n
+    ? `You have asked this page for luck ${n} time${n === 1 ? '' : 's'}. Noted.`
+    : '';
 }
 
 /* ------------------------------------------------------------------- loop */
@@ -720,7 +762,7 @@ charmEl.addEventListener('pointerdown', e => {
   document.body.classList.add('dragging');
   dragTheta = dragThetaPrev = theta;
   dragTimePrev = performance.now();
-  document.getElementById('hint').textContent = 'Let go mid-swing and it throws.';
+  document.getElementById('hint').textContent = 'Let go while it is moving and it will fly.';
 });
 
 /* On window, not on the charm. A captured pointer retargets its events to the
@@ -784,7 +826,7 @@ requestAnimationFrame(t => { last = t; requestAnimationFrame(frame); });
 
 // If nobody touches it, say so plainly rather than animating an instruction.
 setTimeout(() => {
-  if (!touched) document.getElementById('hint').textContent = 'Go on. It swings.';
+  if (!touched) document.getElementById('hint').textContent = 'Go on, it does not mind.';
 }, 12000);
 
 })();

@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SudoCharm — root-level good luck for your desktop</title>
-<meta name="description" content="A good luck charm that hangs from the top of your screen and sways. A GNOME Shell extension for Linux. It does nothing useful, and that is the entire point.">
+<title>SudoCharm — a lucky charm for your Linux desktop</title>
+<meta name="description" content="A charm on a cord, hanging from the top of your screen. It sways on its own, swings when you pull it, and does nothing useful whatsoever. For Linux, with GNOME.">
 <meta name="theme-color" content="#0b1230">
 <meta property="og:type" content="website">
 <meta property="og:title" content="SudoCharm">
-<meta property="og:description" content="Root-level good luck for your desktop. A good luck charm that hangs from the top of your screen and sways.">
+<meta property="og:description" content="A charm on a cord, hanging from the top of your screen. Pull it and it swings. That is the whole app.">
 <meta property="og:url" content="https://rahulpatwa1303.github.io/SudoCharm/">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 0v9' stroke='%23888' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='21' r='10' fill='%231b4fd0'/%3E%3Ccircle cx='16' cy='21' r='6.4' fill='%23fff'/%3E%3Ccircle cx='16' cy='21' r='3.4' fill='%2360c0e0'/%3E%3Ccircle cx='16' cy='21' r='1.5' fill='%230b1230'/%3E%3C/svg%3E">
@@ -217,8 +217,39 @@ h2 { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2rem); margin-bottom: 1rem; }
 }
 .card h3 { font-size: 1.5rem; margin-bottom: .15rem; }
 .card .origin { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; transition: color .55s ease; }
+/* The promise is set in the display face and given room, because it is the
+   line doing the charming. The story underneath is the quiet part. */
+.card .claim {
+  font-family: var(--serif); font-size: 1.16rem; line-height: 1.35;
+  margin-bottom: .85rem;
+}
+.card .claim sup { color: var(--accent); font-size: .62em; transition: color .55s ease; }
 .card .ritual { margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid var(--rule); font-size: .95rem; color: var(--muted); }
 .card .ritual b { color: var(--ink); font-weight: 600; }
+.fine { margin-top: 1rem; font-size: .82rem; line-height: 1.5; color: var(--muted); transition: color .55s ease; }
+
+/* The engineering, folded away. Anyone who wants it will open it; nobody
+   else has to walk past a differential equation to reach the download. */
+details {
+  border-top: 1px solid var(--rule); padding: .35rem 0;
+  transition: border-color .55s ease;
+}
+details:last-of-type { border-bottom: 1px solid var(--rule); }
+summary {
+  cursor: pointer; padding: .95rem 0; list-style: none;
+  font-family: var(--serif); font-size: 1.13rem;
+  display: flex; align-items: baseline; gap: .7rem;
+}
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: '+'; flex: none; width: 1ch;
+  font: 600 1rem/1 var(--mono); color: var(--accent);
+  transition: color .55s ease;
+}
+details[open] > summary::before { content: '\2013'; }
+summary:hover { color: var(--accent); }
+details > :not(summary) { margin-bottom: 1.05em; }
+details > :last-child { margin-bottom: 1.4rem; }
 
 /* ------------------------------------------------------------------ code */
 pre {
@@ -304,91 +335,100 @@ footer p { margin-bottom: .55em; }
 <main>
 
   <section class="hero">
-    <p class="eyebrow">GNOME Shell extension</p>
+    <p class="eyebrow">A lucky charm for your Linux desktop</p>
     <h1>Root-level good luck for your desktop.</h1>
 
     <!-- Directly under the headline, because on a phone this is the only part
          of the page the visitor can play with without scrolling. -->
-    <p class="pull" id="hint">The one above is the real thing. Pull it.</p>
-    <p class="pick-label" id="pick-label">Hang a different one</p>
+    <p class="pull" id="hint">The one up there is real. Give it a pull.</p>
+    <p class="pick-label" id="pick-label">Seven to choose from</p>
     <div class="picker" id="picker" role="group" aria-labelledby="pick-label"></div>
 
-    <p class="sub">It hangs there over your desktop and sways. Grab it and it swings — the cord
-    stretches while you pull and whips when you let go, because it is an actual pendulum
-    rather than a looping animation. Call it down and it performs a small ritual belonging
-    to that particular charm.</p>
-    <p class="sub" style="margin-top:1.1rem"><strong>It does nothing useful. That is the entire point.</strong></p>
+    <p class="sub">A charm on a cord, hanging from the top of your screen. It sways on its
+    own. Pull it and it swings. Tap it and it does its little thing.</p>
+    <p class="sub" style="margin-top:1.1rem"><strong>That is the whole app. It does nothing
+    useful, and it is not going to start.</strong></p>
     <div class="row">
-      <a class="btn" href="https://github.com/rahulpatwa1303/SudoCharm/releases">Download</a>
+      <a class="btn" href="https://github.com/rahulpatwa1303/SudoCharm/releases">Get SudoCharm</a>
       <a class="btn ghost" href="https://github.com/rahulpatwa1303/SudoCharm">Source</a>
     </div>
-    <p class="platform">GNOME Shell 45–48 · Wayland or X11 · Linux only, with no other platforms planned.</p>
+    <p class="platform">Free, and staying that way &middot; Linux with GNOME 45&ndash;48</p>
   </section>
 
   <section>
-    <h2>Seven charms, seven traditions</h2>
-    <div class="card" id="card" style="margin-top:1.3rem">
-      <h3 id="c-name">Nazar boncuğu</h3>
+    <h2>Pick your luck</h2>
+    <p class="lede" style="margin-top:.8rem">Tap one and it goes up on the cord. The page
+    takes its colour from whatever is hanging.</p>
+    <div class="card" id="card" style="margin-top:1.4rem">
+      <h3 id="c-name">Nazar boncu&#287;u</h3>
       <p class="origin" id="c-origin">Turkey</p>
+      <p class="claim" id="c-claim">Stares down whatever is staring at you.<sup>*</sup></p>
       <p id="c-story"></p>
-      <p class="ritual">Ritual · <b id="c-ritual">Flick it</b></p>
+      <p class="ritual">Tap it and &middot; <b id="c-ritual">it spins</b></p>
     </div>
-    <p class="lede" style="margin-top:1.2rem">Each one is drawn as separate pieces, because the lemon has to
-    fall off and the wing cases have to part. Or hang any emoji you like, treated with the
-    same reverence.</p>
+    <p class="fine">* Effects unverified, unmeasured, and frankly unmeasurable. The swinging,
+    though, is real.</p>
   </section>
 
   <section>
     <h2>The daruma keeps score</h2>
-    <blockquote>Call it down once to make a wish and it paints its left eye. Call it again
-    when the wish lands and it paints the right.</blockquote>
-    <p class="lede" style="margin-top:1.3rem">That state survives reboots, which means the doll on your
-    screen is quietly keeping a record of what you said you would do.</p>
+    <blockquote>Tap it once to make a wish and it paints its left eye. Tap it again when
+    the wish lands and it paints the right.</blockquote>
+    <p class="lede" style="margin-top:1.3rem">It remembers between reboots. So there is now a
+    small wooden doll on your screen, patiently waiting to find out whether you meant it.</p>
   </section>
 
-  <section id="install">
-    <h2>Install</h2>
-    <p class="lede">Download the zip from the releases page, then:</p>
-<pre><span class="c l"># from the downloaded zip</span><span class="l">gnome-extensions install --force sudocharm@rahul.local.shell-extension.zip</span><span class="l">gnome-extensions enable sudocharm@rahul.local</span></pre>
-    <p style="margin-top:1.3rem"><strong>Then log out and back in.</strong> GNOME Shell cannot load a new
-    extension into a running Wayland session. There is no way around it and it catches everyone once.</p>
-    <dl class="keys">
-      <dt>Click</dt><dd>It drops and performs its ritual</dd>
-      <dt>Drag</dt><dd>It swings, and the cord stretches as you pull</dd>
-      <dt>Ctrl-drag</dt><dd>Re-hang it anywhere along the top edge</dd>
-      <dt>Right-click</dt><dd>Switch charms, read where each one comes from, turn off the breeze</dd>
-      <dt>Super+Alt+L</dt><dd>Call it down</dd>
-      <dt>Super+Alt+K</dt><dd>Take it down, or hang it back up</dd>
-    </dl>
+  <section>
+    <h2>It stays out of your way</h2>
+    <p class="lede">It hangs over your windows without taking your clicks. You can work
+    straight through it &mdash; the only thing on screen that notices your mouse is the
+    charm itself.</p>
     <figure>
       <img src="__SHOT__" alt="A nazar bead hanging on a cord below the GNOME top bar, over a desktop" width="900" height="415" loading="lazy">
-      <figcaption>Hanging under the top bar. Only the charm itself takes clicks — everything behind it carries on as normal.</figcaption>
+      <figcaption>Hanging under the top bar, minding its own business.</figcaption>
     </figure>
   </section>
 
-  <section>
-    <h2>Bless a commit</h2>
-    <p class="lede">It sits on the session bus, so anything that can run a command can reach it.</p>
-<pre><span class="c l"># .git/hooks/post-commit</span><span class="l">sudocharm bless "$(git rev-parse --short HEAD)"</span><span class="gap"></span><span class="c l"># or make it earn its keep</span><span class="l">pytest &amp;&amp; sudocharm bless || sudocharm flick 9</span></pre>
-    <p style="margin-top:1.3rem" class="lede">The wrapper is a few lines over <code>gdbus</code>, so nothing
-    needs installing on the far end.</p>
+  <section id="install">
+    <h2>Getting one</h2>
+    <p class="lede">Download the zip from the releases page, then two commands:</p>
+<pre><span class="c l"># from the downloaded zip</span><span class="l">gnome-extensions install --force sudocharm@rahul.local.shell-extension.zip</span><span class="l">gnome-extensions enable sudocharm@rahul.local</span></pre>
+    <p style="margin-top:1.3rem"><strong>Then log out and back in.</strong> GNOME will not pick
+    up a new extension any other way. It catches everyone once, including me.</p>
+    <div class="row">
+      <a class="btn" href="https://github.com/rahulpatwa1303/SudoCharm/releases">Get SudoCharm</a>
+    </div>
+    <p class="platform">Linux only. There is no Mac or Windows version and there is not
+    going to be &mdash; if you are on a Mac, the next paragraph is for you.</p>
   </section>
 
   <section>
-    <h2>How it hangs</h2>
-    <p class="lede">Three coupled systems, integrated every frame: the swing, the cord's
-    elasticity, and the charm's own lag behind the cord.</p>
-<pre class="eq">θ''       = −(g/L)·sin θ − damping·θ' + breeze(t)
-stretch'' = −k·stretch − c·stretch' + ω²·L·0.06
-lag''     = −k₂·(lag − θ) − c₂·lag'</pre>
-    <p style="margin-top:1.3rem"><code>L</code> is the live cord length, so hauling the charm down genuinely
-    slows its period. Gravity is tuned by eye rather than taken from physics — real gravity at screen
-    scale swings far too slowly to read as a small object on a short string. The breeze is three sine
-    waves with periods of 6.7, 10.9 and 17.3 seconds, which do not divide into one another, so the
-    idle drift never visibly repeats.</p>
-    <p>The elastic cord is most of what separates a string from a rod. The charm hangs <em>from</em>
-    the cord rather than being welded to it, which is why a flick makes it whip. The charm on this
-    page runs the same numbers as the one on the desktop.</p>
+    <h2>Where this came from</h2>
+    <p>I saw <a href="https://luckydangle.app/">Lucky Dangle</a>, a lovely little Mac app that
+    hangs a charm from your menu bar, and wanted one on Linux. This is my own build for
+    GNOME &mdash; my code, my artwork, their idea. If you have a Mac, go and buy theirs.</p>
+
+    <p class="lede" style="margin-top:1.7rem">Two questions people keep asking:</p>
+
+    <details>
+      <summary>Is it really a pendulum, or just an animation?</summary>
+      <p>Really a pendulum. The swing, the stretch in the cord and the charm's own lag behind
+      the cord are worked out fresh every frame, which is why a flick makes it whip and why
+      pulling it further down makes it swing slower.</p>
+<pre class="eq">&theta;''       = &minus;(g/L)&middot;sin &theta; &minus; damping&middot;&theta;' + breeze(t)
+stretch'' = &minus;k&middot;stretch &minus; c&middot;stretch' + &omega;&sup2;&middot;L&middot;0.06
+lag''     = &minus;k&#8322;&middot;(lag &minus; &theta;) &minus; c&#8322;&middot;lag'</pre>
+      <p style="margin-top:1.2rem">The idle sway is three slow waves of 6.7, 10.9 and 17.3
+      seconds. Those never line up, so it never repeats itself and never starts to look like
+      a GIF. The charm on this page runs the same numbers as the one on your desktop.</p>
+    </details>
+
+    <details>
+      <summary>Can I make my test suite ask for luck?</summary>
+      <p>You can. It listens on the session bus, so anything that can run a command can give
+      it a nudge.</p>
+<pre><span class="c l"># .git/hooks/post-commit</span><span class="l">sudocharm bless "$(git rev-parse --short HEAD)"</span><span class="gap"></span><span class="c l"># or make it earn its keep</span><span class="l">pytest &amp;&amp; sudocharm bless || sudocharm flick 9</span></pre>
+    </details>
   </section>
 
 </main>
@@ -412,27 +452,27 @@ const ART = __ART__;
  * the artwork begins, so the cord can be drawn into the charm rather than
  * stopping short of it. Pivots are fractions of the same canvas. */
 const CHARMS = [
-  { id:'nazar', name:'Nazar boncuğu', origin:'Turkey', ritual:'Flick it and it spins', hang:0.06,
+  { id:'nazar', claim:'Stares down whatever is staring at you.<sup>*</sup>', name:'Nazar boncuğu', origin:'Turkey', ritual:'it spins', hang:0.06,
     story:'A glass eye worn against the evil eye. Blue on white on blue — it stares back at whatever was staring at you.',
     parts:[{k:'body', img:'nazar'}] },
-  { id:'hamsa', name:'Hamsa', origin:'Middle East & North Africa', ritual:'The eye wakes', hang:0.05,
+  { id:'hamsa', claim:'Keeps watch so you do not have to.<sup>*</sup>', name:'Hamsa', origin:'Middle East & North Africa', ritual:'the eye wakes', hang:0.05,
     story:'An open hand carried for protection and good fortune. The eye in the palm keeps watch so you do not have to.',
     parts:[{k:'body', img:'hamsa'}] },
-  { id:'nimbu', name:'Nimbu-mirchi', origin:'India', ritual:'The old lemon drops off, a fresh one rises', hang:0.02,
+  { id:'nimbu', claim:'Turns away misfortune at the door.<sup>*</sup>', name:'Nimbu-mirchi', origin:'India', ritual:'the old lemon drops and a fresh one rises', hang:0.02,
     story:'Seven chilies and a lemon, hung at the threshold to turn away misfortune. It is replaced every Saturday, because luck goes stale.',
     parts:[{k:'string', img:'nimbu-string'}, {k:'lemon', img:'nimbu-lemon', pivot:'50% 60%'}] },
-  { id:'daruma', name:'Daruma', origin:'Japan', ritual:'Paint one eye for the wish, the other when it lands', hang:0.10,
+  { id:'daruma', claim:'Holds you to your word.<sup>*</sup>', name:'Daruma', origin:'Japan', ritual:'an eye gets painted', hang:0.10,
     story:'A wishing doll for goals that take some grit. Knock it over and it rights itself — seven times down, eight times up.',
     parts:[{k:'body', img:'daruma-body'},
            {k:'eyeL', svg:'43.5,48.2,41.4,45.8', hidden:true},
            {k:'eyeR', svg:'83.8,48.2,81.7,45.9', hidden:true}] },
-  { id:'neko', name:'Maneki-neko', origin:'Japan', ritual:'Three beckons', hang:0.10,
+  { id:'neko', claim:'Waves good fortune in off the street.<sup>*</sup>', name:'Maneki-neko', origin:'Japan', ritual:'it beckons, three times', hang:0.10,
     story:'A beckoning cat that invites good fortune in. The raised paw is a come-here, not a wave — the gesture reads backwards to most of the world.',
     parts:[{k:'body', img:'neko-body'}, {k:'paw', img:'neko-paw', pivot:'54% 64%'}] },
-  { id:'horseshoe', name:'Horseshoe', origin:'Europe', ritual:'A flip and a bounce', hang:0.10,
+  { id:'horseshoe', claim:'Catches luck, and keeps hold of it.<sup>*</sup>', name:'Horseshoe', origin:'Europe', ritual:'it flips', hang:0.10,
     story:'Iron, luck, and an argument that has run for centuries: ends up to hold the luck in, or ends down to pour it over you. Pick a side.',
     parts:[{k:'body', img:'horseshoe'}] },
-  { id:'scarab', name:'Scarab', origin:'Egypt', ritual:'The wing cases part', hang:0.06,
+  { id:'scarab', claim:'Promises things come back around.<sup>*</sup>', name:'Scarab', origin:'Egypt', ritual:'the wing cases part', hang:0.06,
     story:'The beetle that rolls the sun across the sky each morning. Carried as a promise that things come back around.',
     parts:[{k:'body', img:'scarab-body'},
            {k:'wingL', img:'scarab-wing-l', pivot:'50% 31%'},
@@ -563,6 +603,7 @@ function build(next, animate) {
 
   document.getElementById('c-name').textContent = charm.name;
   document.getElementById('c-origin').textContent = charm.origin;
+  document.getElementById('c-claim').innerHTML = charm.claim;
   document.getElementById('c-story').textContent = charm.story;
   document.getElementById('c-ritual').textContent = charm.ritual;
   for (const b of picker.children)
@@ -650,8 +691,9 @@ async function bless() {
 }
 
 function paintCount(n) {
-  document.getElementById('count').textContent =
-    n ? `Called down ${n} time${n === 1 ? '' : 's'} on this page.` : '';
+  document.getElementById('count').textContent = n
+    ? `You have asked this page for luck ${n} time${n === 1 ? '' : 's'}. Noted.`
+    : '';
 }
 
 /* ------------------------------------------------------------------- loop */
@@ -720,7 +762,7 @@ charmEl.addEventListener('pointerdown', e => {
   document.body.classList.add('dragging');
   dragTheta = dragThetaPrev = theta;
   dragTimePrev = performance.now();
-  document.getElementById('hint').textContent = 'Let go mid-swing and it throws.';
+  document.getElementById('hint').textContent = 'Let go while it is moving and it will fly.';
 });
 
 /* On window, not on the charm. A captured pointer retargets its events to the
@@ -784,7 +826,7 @@ requestAnimationFrame(t => { last = t; requestAnimationFrame(frame); });
 
 // If nobody touches it, say so plainly rather than animating an instruction.
 setTimeout(() => {
-  if (!touched) document.getElementById('hint').textContent = 'Go on. It swings.';
+  if (!touched) document.getElementById('hint').textContent = 'Go on, it does not mind.';
 }, 12000);
 
 })();
