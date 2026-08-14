@@ -11,7 +11,12 @@ pleasant object that lives on your monitor.
 
 Seven charms, each from a different tradition, each with its own small ritual.
 
-Repo: `github.com/rahul/sudocharm` · Linux only, no other platforms planned.
+Repo: `github.com/rahulpatwa1303/SudoCharm` · Linux only, no other platforms planned.
+
+> **Built.** `docs/index.html` is the page this brief describes. The source is
+> `site/index.template.html`; `site/build.py` inlines the artwork and writes the
+> single self-contained file. Read this brief for the reasoning, not as work
+> outstanding.
 
 ## The tension in the name, and how to hold it
 

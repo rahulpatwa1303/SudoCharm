@@ -44,8 +44,8 @@ gnome-extensions enable sudocharm@rahul.local
 Or from source:
 
 ```sh
-git clone https://github.com/rahul/sudocharm
-cd sudocharm
+git clone https://github.com/rahulpatwa1303/SudoCharm
+cd SudoCharm
 ./install.sh
 ```
 

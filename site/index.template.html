@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="en" data-charm="nazar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SudoCharm — root-level good luck for your desktop</title>
+<meta name="description" content="A good luck charm that hangs from the top of your screen and sways. A GNOME Shell extension for Linux. It does nothing useful, and that is the entire point.">
+<meta name="theme-color" content="#0b1230">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SudoCharm">
+<meta property="og:description" content="Root-level good luck for your desktop. A good luck charm that hangs from the top of your screen and sways.">
+<meta property="og:url" content="https://rahulpatwa1303.github.io/SudoCharm/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 0v9' stroke='%23888' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='21' r='10' fill='%231b4fd0'/%3E%3Ccircle cx='16' cy='21' r='6.4' fill='%23fff'/%3E%3Ccircle cx='16' cy='21' r='3.4' fill='%2360c0e0'/%3E%3Ccircle cx='16' cy='21' r='1.5' fill='%230b1230'/%3E%3C/svg%3E">
+<style>
+/* ---------------------------------------------------------------- palette
+ * One set of tokens, re-pointed per charm. Only the tokens change; every
+ * consumer transitions, which is what makes the theme swap feel like the
+ * page was re-hung rather than repainted. */
+:root {
+  --paper: #eef1f8;  --ink: #0b1230;  --accent: #1b4fd0;
+  --muted: #5b6484;  --rule: #d3d9ea;  --bar: #0b1230;  --bar-ink: #d7dcee;
+  --card: #ffffff;   --cord: #7d8398;
+  --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', Palatino, serif;
+  --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'DejaVu Sans Mono', Menlo, Consolas, monospace;
+  --bar-h: 34px;
+  color-scheme: light;
+}
+:root[data-charm=hamsa]     { --paper:#e9f2f0; --ink:#062421; --accent:#0d7a70; --muted:#4c6b67; --rule:#cbdfdb; --bar:#062421; --bar-ink:#cfe4e0; }
+:root[data-charm=nimbu]     { --paper:#fbf5e4; --ink:#382806; --accent:#c8371f; --muted:#6d5c30; --rule:#e6dcbe; --bar:#382806; --bar-ink:#efe3c4; }
+:root[data-charm=daruma]    { --paper:#f8ecea; --ink:#2e0c0a; --accent:#a5251c; --muted:#6f4a46; --rule:#e6cdc9; --bar:#2e0c0a; --bar-ink:#efd7d3; }
+:root[data-charm=neko]      { --paper:#f7f6f3; --ink:#241f18; --accent:#a8781f; --muted:#6b6255; --rule:#e2ded4; --bar:#241f18; --bar-ink:#e8e3d8; }
+:root[data-charm=horseshoe] { --paper:#f1edea; --ink:#211816; --accent:#7a4a2c; --muted:#6a5c55; --rule:#ded5cf; --bar:#211816; --bar-ink:#e5dcd6; }
+:root[data-charm=scarab]    { --paper:#e9f1ec; --ink:#06231a; --accent:#0f7a52; --muted:#4d6b5e; --rule:#ccdfd4; --bar:#06231a; --bar-ink:#cfe6da; }
+
+/* dark:start */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper:#080c1c; --ink:#dfe4f4; --accent:#6f9bff; --muted:#8a93b2;
+    --rule:#1c2440; --bar:#05091a; --bar-ink:#aeb7d6;
+    --card:#0f1428; --cord:#59607a; color-scheme: dark;
+  }
+  :root[data-charm=hamsa]     { --paper:#051614; --ink:#d5e7e3; --accent:#3fbfae; --muted:#7d9c96; --rule:#0e2b27; --bar:#03110f; --bar-ink:#a8c6c0; --card:#082019; }
+  :root[data-charm=nimbu]     { --paper:#191204; --ink:#f0e4c6; --accent:#f0703f; --muted:#a2916a; --rule:#33280d; --bar:#120d03; --bar-ink:#d4c395; --card:#221909; }
+  :root[data-charm=daruma]    { --paper:#170705; --ink:#f2dbd7; --accent:#e2604f; --muted:#a58480; --rule:#33130f; --bar:#100403; --bar-ink:#d3aca6; --card:#210b09; }
+  :root[data-charm=neko]      { --paper:#12100d; --ink:#eee9dd; --accent:#e0ad4a; --muted:#9a9184; --rule:#2b271f; --bar:#0c0a08; --bar-ink:#cbc4b4; --card:#1b1813; }
+  :root[data-charm=horseshoe] { --paper:#100b0a; --ink:#eae0d9; --accent:#c88a5c; --muted:#988a81; --rule:#292019; --bar:#0a0706; --bar-ink:#c6b8ae; --card:#191210; }
+  :root[data-charm=scarab]    { --paper:#041310; --ink:#d7ece0; --accent:#35c085; --muted:#7ea08f; --rule:#0d2b21; --bar:#020d0a; --bar-ink:#a8cbb9; --card:#071e17; }
+}
+/* dark:end */
+
+/* ------------------------------------------------------------------ base */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 clamp(16px, 1rem + 0.2vw, 18px)/1.62 var(--sans);
+  transition: background-color .55s ease, color .55s ease;
+  overflow-x: hidden;
+}
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -0.012em; line-height: 1.14; margin: 0; }
+p { margin: 0 0 1.05em; }
+p:last-child { margin-bottom: 0; }
+code, kbd { font-family: var(--mono); font-size: 0.9em; }
+
+:where(a, button):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* -------------------------------------------------------------- top bar
+ * The site navigation is the edge of the screen the charm hangs from.
+ * That is the whole conceit, so it earns being the only fixed chrome. */
+.bar {
+  position: fixed; inset: 0 0 auto 0; height: var(--bar-h); z-index: 40;
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0 max(0.85rem, env(safe-area-inset-left)) 0 max(0.85rem, env(safe-area-inset-right));
+  background: var(--bar); color: var(--bar-ink);
+  font: 500 13px/1 var(--mono); letter-spacing: 0.01em;
+  transition: background-color .55s ease, color .55s ease;
+}
+.bar b { font-weight: 600; letter-spacing: 0.02em; flex: none; }
+.bar nav { margin-left: auto; display: flex; gap: 1.1rem; flex: none; }
+.bar a { text-decoration: none; opacity: .78; white-space: nowrap; }
+.bar a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 3px; }
+.bar .hide-xs { overflow: hidden; white-space: nowrap; }
+@media (max-width: 30rem) { .bar .hide-xs { display: none; } .bar nav { gap: .85rem; } }
+
+/* --------------------------------------------------------------- the rig
+ * Fixed over everything and inert, except the charm itself — the same
+ * arrangement the extension uses on the desktop, for the same reason. */
+.rig { position: fixed; inset: 0; z-index: 30; pointer-events: none; }
+.hook {
+  position: absolute; width: 12px; height: 5px; margin-left: -6px;
+  border-radius: 0 0 6px 6px; background: var(--bar-ink); opacity: .55;
+}
+.pendulum { position: absolute; transform-origin: 50% 0; will-change: transform; }
+.cordline {
+  position: absolute; left: -1px; top: 0; width: 2px;
+  transform-origin: 50% 0; will-change: transform;
+  background: linear-gradient(var(--cord), var(--cord));
+  border-radius: 1px; opacity: .85;
+}
+.bin { position: absolute; left: 0; top: 0; transform-origin: 50% 0; will-change: transform; }
+.charm {
+  display: block; width: 100%; height: 100%; padding: 0; margin: 0;
+  border: 0; background: none; pointer-events: auto;
+  cursor: grab; touch-action: none; -webkit-tap-highlight-color: transparent;
+}
+.charm:active { cursor: grabbing; }
+.rig.dragging .charm { cursor: grabbing; }
+.stack { position: absolute; inset: 0; transform-origin: 50% 50%; }
+.part {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: contain; transform-origin: 50% 50%;
+  -webkit-user-drag: none; user-select: none; pointer-events: none;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.22));
+}
+.part[hidden] { display: none; }
+
+/* ------------------------------------------------------------- structure */
+main {
+  position: relative; z-index: 10;
+  padding: calc(var(--bar-h) + 1rem) 1.15rem 0;
+  max-width: 44rem;
+}
+@media (min-width: 62rem) {
+  :root { --bar-h: 38px; }
+  main { margin-left: max(7vw, calc(50% - 34rem)); padding-right: 2rem; }
+}
+section { padding: 3.4rem 0; border-top: 1px solid var(--rule); transition: border-color .55s ease; }
+section:first-of-type { border-top: 0; }
+h2 { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2rem); margin-bottom: 1rem; }
+.lede { color: var(--muted); transition: color .55s ease; }
+
+/* ----------------------------------------------------------------- hero */
+.hero { padding-top: clamp(9rem, 30vh, 15rem); padding-bottom: 3rem; }
+@media (min-width: 46rem) { .hero { padding-top: clamp(7rem, 22vh, 11rem); } }
+.eyebrow {
+  font: 600 12px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 1.1rem;
+}
+.hero h1 {
+  font-size: clamp(2.35rem, 1.5rem + 4.6vw, 4.2rem);
+  max-width: 15ch; margin-bottom: 1.2rem;
+}
+.hero .sub { font-size: 1.06em; max-width: 34ch; }
+@media (min-width: 46rem) { .hero .sub { max-width: 46ch; } }
+.pull {
+  margin-top: 1.6rem; font: 500 12.5px/1.6 var(--mono); color: var(--muted);
+  display: flex; align-items: baseline; gap: .55rem; max-width: 40ch;
+}
+.pull::before {
+  content: ''; flex: none; width: 22px; height: 1px; position: relative; top: -.32em;
+  background: currentColor; opacity: .5;
+}
+
+/* --------------------------------------------------------------- buttons */
+.row { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 2rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .7rem 1.15rem; border-radius: 2px; text-decoration: none;
+  font: 500 .95rem/1 var(--sans); border: 1px solid var(--accent);
+  background: var(--accent); color: var(--paper);
+  transition: background-color .55s ease, border-color .55s ease, color .55s ease, transform .12s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn.ghost { background: none; color: var(--ink); border-color: var(--rule); }
+.btn.ghost:hover { border-color: var(--accent); }
+.platform { margin-top: .95rem; font-size: .9rem; color: var(--muted); }
+
+/* ---------------------------------------------------------------- picker */
+.picker { display: flex; flex-wrap: wrap; gap: .55rem; margin: 0 0 1.75rem; padding: 0; border: 0; }
+.picker legend { padding: 0; margin-bottom: .8rem; font: 600 12px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.swatch {
+  width: 3.35rem; height: 3.35rem; padding: .3rem; border-radius: 50%; cursor: pointer;
+  border: 1px solid var(--rule); background: var(--card);
+  transition: border-color .3s ease, background-color .55s ease, transform .16s ease;
+}
+.swatch img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.swatch:hover { transform: translateY(-2px); }
+.swatch[aria-pressed=true] { border-color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+
+/* ------------------------------------------------------------ charm card */
+.card {
+  background: var(--card); border: 1px solid var(--rule); border-radius: 3px;
+  padding: 1.5rem 1.4rem; transition: background-color .55s ease, border-color .55s ease;
+}
+.card h3 { font-size: 1.5rem; margin-bottom: .15rem; }
+.card .origin { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; transition: color .55s ease; }
+.card .ritual { margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid var(--rule); font-size: .95rem; color: var(--muted); }
+.card .ritual b { color: var(--ink); font-weight: 600; }
+
+/* ------------------------------------------------------------------ code */
+pre {
+  margin: 1.2rem 0 0; padding: 1rem 1.1rem; overflow-x: auto;
+  background: var(--bar); color: var(--bar-ink); border-radius: 3px;
+  font: 400 13.5px/1.7 var(--mono); transition: background-color .55s ease, color .55s ease;
+}
+pre .c { opacity: .55; }
+figure { margin: 1.6rem 0 0; }
+figure img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); border-radius: 3px; }
+figcaption { margin-top: .65rem; font-size: .87rem; color: var(--muted); }
+
+dl.keys { margin: 1.2rem 0 0; display: grid; grid-template-columns: auto 1fr; gap: .55rem 1.1rem; align-items: baseline; font-size: .96rem; }
+dl.keys dt { font-family: var(--mono); font-size: .85rem; color: var(--accent); transition: color .55s ease; }
+dl.keys dd { margin: 0; }
+
+blockquote {
+  margin: 1.4rem 0 0; padding-left: 1.1rem; border-left: 2px solid var(--accent);
+  font-family: var(--serif); font-size: 1.13rem; line-height: 1.5;
+  transition: border-color .55s ease;
+}
+
+footer {
+  position: relative; z-index: 10; margin-top: 1rem;
+  padding: 2.6rem 1.15rem calc(3rem + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--rule); color: var(--muted);
+  font-size: .9rem; max-width: 44rem;
+  transition: border-color .55s ease, color .55s ease;
+}
+@media (min-width: 62rem) { footer { margin-left: max(7vw, calc(50% - 34rem)); } }
+footer a { text-decoration-color: var(--rule); text-underline-offset: 3px; }
+footer p { margin-bottom: .55em; }
+.count { font-family: var(--mono); font-size: .82rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <b>SudoCharm</b>
+  <span class="hide-xs" style="opacity:.45">Linux · GNOME</span>
+  <nav>
+    <a href="#install">Install</a>
+    <a href="https://github.com/rahulpatwa1303/SudoCharm">GitHub</a>
+  </nav>
+</header>
+
+<div class="rig" id="rig">
+  <div class="hook" id="hook" aria-hidden="true"></div>
+  <div class="pendulum" id="pendulum">
+    <div class="cordline" id="cordline" aria-hidden="true"></div>
+    <div class="bin" id="bin">
+      <button class="charm" id="charm" aria-label="Nazar boncuğu, hanging. Drag to swing it, or activate to perform its ritual.">
+        <span class="stack" id="stack"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <section class="hero">
+    <p class="eyebrow">GNOME Shell extension</p>
+    <h1>Root-level good luck for your desktop.</h1>
+    <p class="sub">It hangs there over your desktop and sways. Grab it and it swings — the cord
+    stretches while you pull and whips when you let go, because it is an actual pendulum
+    rather than a looping animation. Call it down and it performs a small ritual belonging
+    to that particular charm.</p>
+    <p class="sub" style="margin-top:1.1rem"><strong>It does nothing useful. That is the entire point.</strong></p>
+    <p class="pull" id="hint">The one on this page is the real thing. Pull it.</p>
+    <div class="row">
+      <a class="btn" href="https://github.com/rahulpatwa1303/SudoCharm/releases">Download</a>
+      <a class="btn ghost" href="https://github.com/rahulpatwa1303/SudoCharm">Source</a>
+    </div>
+    <p class="platform">GNOME Shell 45–48 · Wayland or X11 · Linux only, with no other platforms planned.</p>
+  </section>
+
+  <section>
+    <fieldset class="picker" id="picker">
+      <legend>Seven charms</legend>
+    </fieldset>
+    <div class="card" id="card">
+      <h3 id="c-name">Nazar boncuğu</h3>
+      <p class="origin" id="c-origin">Turkey</p>
+      <p id="c-story"></p>
+      <p class="ritual">Ritual · <b id="c-ritual">Flick it</b></p>
+    </div>
+    <p class="lede" style="margin-top:1.2rem">Each one is drawn as separate pieces, because the lemon has to
+    fall off and the wing cases have to part. Or hang any emoji you like, treated with the
+    same reverence.</p>
+  </section>
+
+  <section>
+    <h2>The daruma keeps score</h2>
+    <blockquote>Call it down once to make a wish and it paints its left eye. Call it again
+    when the wish lands and it paints the right.</blockquote>
+    <p class="lede" style="margin-top:1.3rem">That state survives reboots, which means the doll on your
+    screen is quietly keeping a record of what you said you would do.</p>
+  </section>
+
+  <section id="install">
+    <h2>Install</h2>
+    <p class="lede">Download the zip from the releases page, then:</p>
+<pre><span class="c"># from the downloaded zip</span>
+gnome-extensions install --force sudocharm@rahul.local.shell-extension.zip
+gnome-extensions enable sudocharm@rahul.local</pre>
+    <p style="margin-top:1.3rem"><strong>Then log out and back in.</strong> GNOME Shell cannot load a new
+    extension into a running Wayland session. There is no way around it and it catches everyone once.</p>
+    <dl class="keys">
+      <dt>Click</dt><dd>It drops and performs its ritual</dd>
+      <dt>Drag</dt><dd>It swings, and the cord stretches as you pull</dd>
+      <dt>Ctrl-drag</dt><dd>Re-hang it anywhere along the top edge</dd>
+      <dt>Right-click</dt><dd>Switch charms, read where each one comes from, turn off the breeze</dd>
+      <dt>Super+Alt+L</dt><dd>Call it down</dd>
+      <dt>Super+Alt+K</dt><dd>Take it down, or hang it back up</dd>
+    </dl>
+    <figure>
+      <img src="__SHOT__" alt="A nazar bead hanging on a cord below the GNOME top bar, over a desktop" width="900" height="415" loading="lazy">
+      <figcaption>Hanging under the top bar. Only the charm itself takes clicks — everything behind it carries on as normal.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Bless a commit</h2>
+    <p class="lede">It sits on the session bus, so anything that can run a command can reach it.</p>
+<pre><span class="c"># .git/hooks/post-commit</span>
+sudocharm bless "$(git rev-parse --short HEAD)"
+
+<span class="c"># or make it earn its keep</span>
+pytest &amp;&amp; sudocharm bless || sudocharm flick 9</pre>
+    <p style="margin-top:1.3rem" class="lede">The wrapper is a few lines over <code>gdbus</code>, so nothing
+    needs installing on the far end.</p>
+  </section>
+
+  <section>
+    <h2>How it hangs</h2>
+    <p class="lede">Three coupled systems, integrated every frame: the swing, the cord's
+    elasticity, and the charm's own lag behind the cord.</p>
+<pre>θ''       = −(g/L)·sin θ − damping·θ' + breeze(t)
+stretch'' = −k·stretch − c·stretch' + ω²·L·0.06
+lag''     = −k₂·(lag − θ) − c₂·lag'</pre>
+    <p style="margin-top:1.3rem"><code>L</code> is the live cord length, so hauling the charm down genuinely
+    slows its period. Gravity is tuned by eye rather than taken from physics — real gravity at screen
+    scale swings far too slowly to read as a small object on a short string. The breeze is three sine
+    waves with periods of 6.7, 10.9 and 17.3 seconds, which do not divide into one another, so the
+    idle drift never visibly repeats.</p>
+    <p>The elastic cord is most of what separates a string from a rod. The charm hangs <em>from</em>
+    the cord rather than being welded to it, which is why a flick makes it whip. The charm on this
+    page runs the same numbers as the one on the desktop.</p>
+  </section>
+
+</main>
+
+<footer>
+  <p><a href="https://github.com/rahulpatwa1303/SudoCharm">Source</a> · <a href="https://github.com/rahulpatwa1303/SudoCharm/releases">Releases</a> · GPL-3.0-or-later</p>
+  <p>The idea comes from <a href="https://luckydangle.app/">Lucky Dangle</a>, a macOS menu bar app, and is
+  used here with admiration. This is an independent implementation for GNOME; the code and the artwork
+  are original. If you are on a Mac, buy theirs.</p>
+  <p class="count" id="count"></p>
+</footer>
+
+<script>
+(() => {
+'use strict';
+
+const ART = __ART__;
+
+/* ------------------------------------------------------------------ charms
+ * Layer order is paint order. `hang` is how far down its own square canvas
+ * the artwork begins, so the cord can be drawn into the charm rather than
+ * stopping short of it. Pivots are fractions of the same canvas. */
+const CHARMS = [
+  { id:'nazar', name:'Nazar boncuğu', origin:'Turkey', ritual:'Flick it and it spins', hang:0.06,
+    story:'A glass eye worn against the evil eye. Blue on white on blue — it stares back at whatever was staring at you.',
+    parts:[{k:'body', img:'nazar'}] },
+  { id:'hamsa', name:'Hamsa', origin:'Middle East & North Africa', ritual:'The eye wakes', hang:0.05,
+    story:'An open hand carried for protection and good fortune. The eye in the palm keeps watch so you do not have to.',
+    parts:[{k:'body', img:'hamsa'}] },
+  { id:'nimbu', name:'Nimbu-mirchi', origin:'India', ritual:'The old lemon drops off, a fresh one rises', hang:0.02,
+    story:'Seven chilies and a lemon, hung at the threshold to turn away misfortune. It is replaced every Saturday, because luck goes stale.',
+    parts:[{k:'string', img:'nimbu-string'}, {k:'lemon', img:'nimbu-lemon', pivot:'50% 60%'}] },
+  { id:'daruma', name:'Daruma', origin:'Japan', ritual:'Paint one eye for the wish, the other when it lands', hang:0.10,
+    story:'A wishing doll for goals that take some grit. Knock it over and it rights itself — seven times down, eight times up.',
+    parts:[{k:'body', img:'daruma-body'},
+           {k:'eyeL', svg:'43.5,48.2,41.4,45.8', hidden:true},
+           {k:'eyeR', svg:'83.8,48.2,81.7,45.9', hidden:true}] },
+  { id:'neko', name:'Maneki-neko', origin:'Japan', ritual:'Three beckons', hang:0.10,
+    story:'A beckoning cat that invites good fortune in. The raised paw is a come-here, not a wave — the gesture reads backwards to most of the world.',
+    parts:[{k:'body', img:'neko-body'}, {k:'paw', img:'neko-paw', pivot:'54% 64%'}] },
+  { id:'horseshoe', name:'Horseshoe', origin:'Europe', ritual:'A flip and a bounce', hang:0.10,
+    story:'Iron, luck, and an argument that has run for centuries: ends up to hold the luck in, or ends down to pour it over you. Pick a side.',
+    parts:[{k:'body', img:'horseshoe'}] },
+  { id:'scarab', name:'Scarab', origin:'Egypt', ritual:'The wing cases part', hang:0.06,
+    story:'The beetle that rolls the sun across the sky each morning. Carried as a promise that things come back around.',
+    parts:[{k:'body', img:'scarab-body'},
+           {k:'wingL', img:'scarab-wing-l', pivot:'50% 31%'},
+           {k:'wingR', img:'scarab-wing-r', pivot:'50% 31%'}] },
+];
+
+/* The daruma's pupils are two circles at measured positions on the 128 grid,
+ * cheaper to build here than to ship as two more images. */
+const eyeSVG = s => {
+  const [cx, cy, hx, hy] = s.split(',');
+  return 'data:image/svg+xml,' + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">` +
+    `<circle cx="${cx}" cy="${cy}" r="6.5" fill="#141110"/>` +
+    `<circle cx="${hx}" cy="${hy}" r="1.4" fill="#fff" opacity=".5"/></svg>`);
+};
+
+/* --------------------------------------------------------------- constants
+ * Lifted from pendulum.js. Changing these here and not there is how the page
+ * stops being an honest demo. */
+const GRAVITY = 2600, DAMPING = 0.55;
+const FREE_SWING = 1.05, MAX_SWING = 1.5, FLICK_CAP = 6.5;
+const BREEZE = [[2.1, 6.7, 0], [1.3, 10.9, 1.3], [0.7, 17.3, 2.6]];
+const STRETCH_K = 150, STRETCH_C = 11, SLACK = 0.18, CENTRIFUGAL = 0.06, RETURN_SPEED = 2600;
+const LAG_K = 95, LAG_C = 8.5, MAX_LAG = 0.55;
+
+const clamp = (v, lo, hi) => v < lo ? lo : v > hi ? hi : v;
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('sudocharm.' + k); return v === null ? d : +v; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('sudocharm.' + k, v); } catch {} },
+};
+
+const rig = document.getElementById('rig');
+const hook = document.getElementById('hook');
+const pend = document.getElementById('pendulum');
+const cord = document.getElementById('cordline');
+const bin = document.getElementById('bin');
+const charmEl = document.getElementById('charm');
+const stack = document.getElementById('stack');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+
+let charm = CHARMS[0], parts = {};
+let size = 120, cordRest = 78, anchorX = 0, anchorY = 0;
+let theta = 0.06, omega = 0, ceiling = FREE_SWING;
+let stretch = 0, stretchVel = 0, lag = 0, lagVel = 0, drop = 0, dropTarget = 0;
+let time = 0, last = 0, dragging = false, blessing = false, touched = false;
+let dragPointer = null, dragTheta = 0, dragThetaPrev = 0, dragTimePrev = 0, moved = false;
+
+/* --------------------------------------------------------------- geometry */
+function layout() {
+  const w = innerWidth, h = innerHeight;
+  const bar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bar-h')) || 34;
+  size = clamp(Math.min(w, h) * 0.18, 96, 154);
+  cordRest = clamp(h * 0.09, 58, 108);
+  anchorX = Math.round(w * (w < 640 ? 0.74 : 0.8));
+  anchorY = bar;
+  pend.style.left = anchorX + 'px';
+  pend.style.top = anchorY + 'px';
+  hook.style.left = anchorX + 'px';
+  hook.style.top = (anchorY - 1) + 'px';
+  cord.style.height = cordRest + 'px';
+  bin.style.width = size + 'px';
+  bin.style.height = size + 'px';
+}
+
+/* Past this the cord resists rather than stops. A hard cap reads as broken:
+ * the charm halts while the cursor carries on without it. */
+const softStretch = () => Math.max(innerHeight * 0.55, cordRest * 6 + size * 2);
+function rubberBand(raw) {
+  const floor = -cordRest * SLACK;
+  if (raw <= floor) return floor;
+  const soft = softStretch();
+  return raw <= soft ? raw : soft + (raw - soft) * 0.3;
+}
+
+/* ------------------------------------------------------------------ build */
+function build(next, animate) {
+  charm = next;
+  document.documentElement.dataset.charm = charm.id;
+  stack.replaceChildren();
+  parts = {};
+  for (const p of charm.parts) {
+    const el = document.createElement('img');
+    el.className = 'part';
+    el.src = p.img ? ART[p.img] : eyeSVG(p.svg);
+    el.alt = '';
+    el.decoding = 'async';
+    if (p.pivot) el.style.transformOrigin = p.pivot;
+    if (p.hidden) el.hidden = true;
+    stack.append(el);
+    parts[p.k] = el;
+  }
+  if (charm.id === 'daruma') {
+    const st = store.get('daruma', 0);
+    if (st >= 1) parts.eyeL.hidden = false;
+    if (st >= 2) parts.eyeR.hidden = false;
+  }
+  charmEl.setAttribute('aria-label',
+    charm.name + ', hanging. Drag to swing it, or activate to perform its ritual.');
+
+  document.getElementById('c-name').textContent = charm.name;
+  document.getElementById('c-origin').textContent = charm.origin;
+  document.getElementById('c-story').textContent = charm.story;
+  document.getElementById('c-ritual').textContent = charm.ritual;
+  for (const b of picker.children)
+    b.setAttribute('aria-pressed', String(b.dataset.id === charm.id));
+
+  // A newly hung charm should settle, not appear.
+  if (animate && !reduced.matches) { omega += 1.9; ceiling = MAX_SWING; }
+}
+
+/* ---------------------------------------------------------------- rituals */
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const anim = (el, frames, ms, opts = {}) =>
+  el.animate(frames, { duration: reduced.matches ? 1 : ms, easing: 'cubic-bezier(.34,.06,.2,1)', ...opts });
+
+async function ritual() {
+  switch (charm.id) {
+    case 'nazar':
+      stack.style.transformStyle = 'preserve-3d';
+      anim(stack, [{ transform: 'rotateY(0)' }, { transform: 'rotateY(360deg)' }], 900,
+        { easing: 'cubic-bezier(.5,0,.3,1)' });
+      return 900;
+    case 'hamsa':
+      anim(stack, [{ transform: 'scale(1)', filter: 'brightness(1)' },
+                   { transform: 'scale(1.09)', filter: 'brightness(1.35)', offset: .35 },
+                   { transform: 'scale(1)', filter: 'brightness(1)' }], 780);
+      return 780;
+    case 'nimbu': {
+      const lemon = parts.lemon;
+      anim(lemon, [{ transform: 'none', opacity: 1 },
+                   { transform: 'translateY(90%) rotate(38deg)', opacity: 0 }], 460,
+        { easing: 'cubic-bezier(.5,0,.9,.5)' });
+      await wait(480);
+      anim(lemon, [{ transform: 'translateY(-55%) scale(.7)', opacity: 0 },
+                   { transform: 'none', opacity: 1 }], 480);
+      return 500;
+    }
+    case 'daruma': {
+      let st = store.get('daruma', 0);
+      if (st >= 2) { st = 0; parts.eyeL.hidden = true; parts.eyeR.hidden = true; await wait(220); }
+      const eye = st === 0 ? parts.eyeL : parts.eyeR;
+      eye.hidden = false;
+      anim(eye, [{ transform: 'scale(.2)', opacity: 0 }, { transform: 'none', opacity: 1 }], 420);
+      store.set('daruma', st + 1);
+      return 620;
+    }
+    case 'neko': {
+      const f = [{ transform: 'rotate(0)' }, { transform: 'rotate(-27deg)', offset: .5 }, { transform: 'rotate(0)' }];
+      for (let i = 0; i < 3; i++) { anim(parts.paw, f, 300, { easing: 'ease-in-out' }); await wait(310); }
+      return 60;
+    }
+    case 'horseshoe':
+      stack.style.transformStyle = 'preserve-3d';
+      anim(stack, [{ transform: 'rotateX(0) translateY(0)' },
+                   { transform: 'rotateX(180deg) translateY(-14%)', offset: .45 },
+                   { transform: 'rotateX(360deg) translateY(0)' }], 860,
+        { easing: 'cubic-bezier(.4,0,.3,1)' });
+      return 860;
+    case 'scarab': {
+      const open = [{ transform: 'rotate(0)' }, { transform: 'rotate(-34deg)' }];
+      anim(parts.wingL, open, 420, { fill: 'forwards' });
+      anim(parts.wingR, open.map(f => ({ transform: f.transform.replace('-', '') })), 420, { fill: 'forwards' });
+      await wait(700);
+      anim(parts.wingL, [...open].reverse(), 380, { fill: 'forwards' });
+      anim(parts.wingR, [...open].reverse().map(f => ({ transform: f.transform.replace('-', '') })), 380, { fill: 'forwards' });
+      return 400;
+    }
+  }
+  return 400;
+}
+
+async function bless() {
+  if (blessing) return;
+  blessing = true;
+  const n = store.get('blessed', 0) + 1;
+  store.set('blessed', n);
+  paintCount(n);
+
+  dropTarget = Math.round(size * 0.42);
+  omega = clamp(omega + (theta >= 0 ? 1.4 : -1.4), -FLICK_CAP, FLICK_CAP);
+  ceiling = MAX_SWING;
+  const dwell = await ritual();
+  await wait(dwell);
+  dropTarget = 0;
+  blessing = false;
+}
+
+function paintCount(n) {
+  document.getElementById('count').textContent =
+    n ? `Called down ${n} time${n === 1 ? '' : 's'} on this page.` : '';
+}
+
+/* ------------------------------------------------------------------- loop */
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = clamp((now - last) / 1000, 0, 0.05);
+  last = now;
+  if (!dt) return;
+  time += dt;
+
+  if (Math.abs(dropTarget - drop) > 0.4) drop += (dropTarget - drop) * Math.min(1, dt * 7);
+
+  const L = Math.max(20, cordRest + drop + stretch + size / 2);
+
+  if (!dragging) {
+    let force = -(GRAVITY / L) * Math.sin(theta) - DAMPING * omega;
+    if (!reduced.matches)
+      for (const [amp, period, phase] of BREEZE)
+        force += amp * Math.sin(2 * Math.PI * time / period + phase);
+
+    omega = clamp(omega + force * dt, -FLICK_CAP, FLICK_CAP);
+
+    /* The ceiling starts wherever it was let go and only ever tightens. Do
+     * not recompute it from the current angle: it would equal the angle, the
+     * limit test would pass on the first frame after release, and the bounce
+     * would eat the momentum — a pulled charm sags instead of swinging. */
+    const next = theta + omega * dt;
+    if (Math.abs(next) > ceiling) { theta = Math.sign(next) * ceiling; omega *= -0.3; }
+    else theta = next;
+    ceiling = Math.max(FREE_SWING, Math.min(ceiling, Math.abs(theta)));
+
+    const pull = Math.min(CENTRIFUGAL * omega * omega * L, 500);
+    const acc = -STRETCH_K * stretch - STRETCH_C * stretchVel + pull;
+    stretchVel = clamp(stretchVel + acc * dt, -RETURN_SPEED, RETURN_SPEED);
+    stretch = Math.max(stretch + stretchVel * dt, -cordRest * SLACK);
+    if (stretch <= -cordRest * SLACK && stretchVel < 0) stretchVel = 0;
+  }
+
+  // Runs while dragging too — it is what makes a flick whip.
+  lagVel += (-LAG_K * (lag - theta) - LAG_C * lagVel) * dt;
+  lag += lagVel * dt;
+  const behind = clamp(lag - theta, -MAX_LAG, MAX_LAG);
+
+  const live = cordRest + drop + stretch;
+  pend.style.transform = `rotate(${theta}rad)`;
+  cord.style.transform = `scaleY(${Math.max(0.02, (live + size * charm.hang + 4) / cordRest)})`;
+  bin.style.transform = `translate(-50%, ${live}px) rotate(${behind}rad)`;
+}
+
+/* ------------------------------------------------------------------ input
+ * setPointerCapture is the browser's version of the problem the extension
+ * has on Wayland: the hit area is small, a drag leaves it within a few
+ * pixels, and without a capture the motion events go somewhere else and the
+ * drag silently freezes while still believing it is a drag. */
+charmEl.addEventListener('pointerdown', e => {
+  if (e.button !== undefined && e.button !== 0) return;
+  e.preventDefault();
+  dragging = true; moved = false; touched = true;
+  dragPointer = e.pointerId;
+  try { charmEl.setPointerCapture(e.pointerId); } catch {}
+  rig.classList.add('dragging');
+  dragTheta = dragThetaPrev = theta;
+  dragTimePrev = performance.now();
+  document.getElementById('hint').textContent = 'Let go mid-swing and it throws.';
+});
+
+/* On window, not on the charm. A captured pointer retargets its events to the
+ * charm and they bubble here anyway, so this works either way — and it still
+ * works if the capture was refused. */
+addEventListener('pointermove', e => {
+  if (!dragging || e.pointerId !== dragPointer) return;
+  const dx = e.clientX - anchorX, dy = Math.max(1, e.clientY - anchorY);
+  if (!moved && Math.hypot(dx, dy - cordRest) > 4) moved = true;
+
+  theta = clamp(Math.atan2(dx, dy), -MAX_SWING, MAX_SWING);
+  stretch = rubberBand(Math.hypot(dx, dy) - cordRest - drop - size / 2);
+
+  const t = performance.now(), dt = (t - dragTimePrev) / 1000;
+  if (dt > 0.004) {
+    omega = clamp((theta - dragThetaPrev) / dt, -FLICK_CAP, FLICK_CAP);
+    dragThetaPrev = theta; dragTimePrev = t;
+  }
+});
+
+function endDrag(e) {
+  if (!dragging || (e && e.pointerId !== dragPointer)) return;
+  dragging = false; dragPointer = null;
+  rig.classList.remove('dragging');
+  ceiling = MAX_SWING;          // full headroom, or it bounces on frame one
+  if (!moved) bless();
+}
+addEventListener('pointerup', endDrag);
+addEventListener('pointercancel', endDrag);
+
+// Keyboard: the button is real, so Enter and Space already arrive as clicks.
+charmEl.addEventListener('click', e => { if (e.detail === 0) bless(); });
+
+/* ----------------------------------------------------------------- picker */
+const picker = document.getElementById('picker');
+for (const c of CHARMS) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'swatch';
+  b.dataset.id = c.id;
+  b.title = c.name;
+  b.setAttribute('aria-pressed', String(c.id === charm.id));
+  const img = document.createElement('img');
+  img.src = ART[c.parts[0].img];
+  img.alt = c.name;
+  img.loading = 'lazy';
+  b.append(img);
+  b.addEventListener('click', () => { if (c.id !== charm.id) build(c, true); });
+  picker.append(b);
+}
+
+/* ------------------------------------------------------------------ start */
+addEventListener('resize', layout, { passive: true });
+addEventListener('orientationchange', layout);
+layout();
+build(CHARMS[0], false);
+paintCount(store.get('blessed', 0));
+requestAnimationFrame(t => { last = t; requestAnimationFrame(frame); });
+
+// If nobody touches it, say so plainly rather than animating an instruction.
+setTimeout(() => {
+  if (!touched) document.getElementById('hint').textContent = 'Go on. It swings.';
+}, 12000);
+
+})();
+</script>
+</body>
+</html>

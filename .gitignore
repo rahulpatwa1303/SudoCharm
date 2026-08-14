@@ -12,3 +12,7 @@ __pycache__/
 
 # built packages
 dist/
+
+# derived from icons/ by site/build.py; the same bytes ship in docs/index.html
+site/art.json
+site/artifact.html
