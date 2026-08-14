@@ -95,9 +95,17 @@ export const CHARMS = [
         story: 'A beckoning cat that invites good fortune in. The raised paw is a ' +
                'come-here, not a wave — the gesture reads backwards to most of the world.',
         ritual: 'Beckon',
+        /* The paw is listed FIRST, so it is drawn behind the body.
+         *
+         * The artwork is a whole cat plus a severed foreleg — the body was
+         * meant to come with a bare right shoulder for the paw to sit on, and
+         * did not. Over the body, that leg lies across the cat's chest with the
+         * cut end showing as a pink oval in mid-air. Behind it, the body hides
+         * the cut, only the raised paw clears the shoulder, and the beckon
+         * swings the forearm out from behind exactly as a real one does. */
         parts: [
+            {key: 'paw', file: 'neko-paw.svg', pivot: [0.54, 0.59]},
             {key: 'body', file: 'neko-body.svg'},
-            {key: 'paw', file: 'neko-paw.svg', pivot: [0.54, 0.64]},
         ],
         hangPivot: [0.5, 0.1],
         cord: {rope: '#8e1420'},

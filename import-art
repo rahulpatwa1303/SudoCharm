@@ -39,7 +39,7 @@ PLACEMENT = {
     "nimbu-lemon":       (0.64,  0.34,   0.50),
     "daruma-eye-l":      (0.37,  0.20,   0.38),
     "daruma-eye-r":      (0.37,  0.20,   0.62),
-    "neko-paw":          (0.24,  0.42,   0.72),
+    "neko-paw":          (0.19,  0.42,   0.72),
     "scarab-wing-l":     (0.30,  0.62,   0.40),
     "scarab-wing-r":     (0.30,  0.62,   0.60),
 }
