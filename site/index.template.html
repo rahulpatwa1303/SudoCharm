@@ -96,24 +96,10 @@ code, kbd { font-family: var(--mono); font-size: 0.9em; }
  * arrangement the extension uses on the desktop, for the same reason. */
 .rig { position: fixed; inset: 0; z-index: 30; pointer-events: none; }
 
-/* The shelf the charm hangs in on a narrow screen.
- *
- * On a phone the charm has to stay put — it is the demo, and scrolling it away
- * hides the only thing worth playing with. But a charm fixed over running text
- * is a charm sitting on top of what you are trying to read. So it gets its own
- * band at the top, painted in the page colour, and the article scrolls under
- * it. Pull the charm out of the band and it is over the page, which is fine:
- * that only happens because someone dragged it there.
- *
- * The fade is a mask rather than a gradient background, because gradients do
- * not transition and this colour has to change with the charm. */
-.shelf {
-  position: fixed; inset: 0 0 auto 0; height: var(--shelf-h, 0px); z-index: 20;
-  pointer-events: none; background: var(--paper);
-  -webkit-mask-image: linear-gradient(#000 calc(100% - 52px), transparent 100%);
-  mask-image: linear-gradient(#000 calc(100% - 52px), transparent 100%);
-  transition: background-color .55s ease;
-}
+/* Nothing sits behind the charm — no panel, no band, no scrim. It hangs in
+ * the corner over whatever the page is showing, which is exactly what it does
+ * over your windows. Anything painted behind it would be a backdrop the real
+ * thing does not have. */
 body.dragging { user-select: none; }
 .hook {
   position: absolute; width: 12px; height: 5px; margin-left: -6px;
@@ -146,16 +132,18 @@ body.dragging { user-select: none; }
 /* ------------------------------------------------------------- structure */
 main {
   position: relative; z-index: 10;
-  padding: calc(var(--shelf-h, 15rem) + 0.5rem) 1.15rem 0;
+  /* Enough clearance that the headline starts below the hanging charm rather
+     than behind it. Everything further down is free to scroll past it. */
+  padding: calc(var(--top-gap, 11rem) + .5rem) 1.15rem 0;
   max-width: 44rem;
 }
 @media (min-width: 62rem) {
   :root { --bar-h: 38px; }
-  main { margin-left: max(7vw, calc(50% - 34rem)); padding-right: 2rem; }
-  /* Wide enough that the charm hangs in the margin beside the text rather
-     than over it, so it needs no shelf and can swing the full height. */
-  .shelf { display: none; }
-  main { padding-top: calc(var(--bar-h) + 1rem); }
+  main {
+    margin-left: max(7vw, calc(50% - 34rem));
+    padding-right: 2rem;
+    padding-top: calc(var(--bar-h) + 1rem);
+  }
 }
 section { padding: 3.4rem 0; border-top: 1px solid var(--rule); transition: border-color .55s ease; }
 section:first-of-type { border-top: 0; }
@@ -278,8 +266,6 @@ footer p { margin-bottom: .55em; }
     <a href="https://github.com/rahulpatwa1303/SudoCharm">GitHub</a>
   </nav>
 </header>
-
-<div class="shelf" aria-hidden="true"></div>
 
 <div class="rig" id="rig">
   <div class="hook" id="hook" aria-hidden="true"></div>
@@ -487,13 +473,15 @@ function layout() {
   const bar = parseFloat(getComputedStyle(root).getPropertyValue('--bar-h')) || 34;
   const wide = w >= WIDE;
 
-  /* On a phone the charm is the hero: bigger, and hanging in the middle of its
-   * own shelf. On a wide screen it hangs in the margin beside the text, near
-   * where the extension's default anchor puts it on a desktop. */
+  /* It hangs in the top corner at every width, over the page, with nothing
+   * behind it — the same place and the same manners as on a desktop, where
+   * the extension's own default anchor is 0.86 across. On a phone it is
+   * smaller and on a shorter cord, so it keeps to the corner instead of
+   * swinging across the column. */
   size = wide ? clamp(Math.min(w, h) * 0.18, 96, 154)
-              : clamp(w * 0.33, 104, 168);
-  cordRest = wide ? clamp(h * 0.09, 58, 108) : clamp(h * 0.075, 46, 84);
-  anchorX = Math.round(w * (wide ? 0.8 : 0.5));
+              : clamp(w * 0.23, 78, 108);
+  cordRest = wide ? clamp(h * 0.09, 58, 108) : clamp(h * 0.055, 38, 66);
+  anchorX = Math.round(w * (wide ? 0.8 : 0.84));
   anchorY = bar;
 
   pend.style.left = anchorX + 'px';
@@ -504,10 +492,9 @@ function layout() {
   bin.style.width = size + 'px';
   bin.style.height = size + 'px';
 
-  // Deep enough to hold the charm at rest with a little room to sway, plus
-  // the height of the fade at the bottom edge.
-  root.style.setProperty('--shelf-h',
-    Math.round(bar + cordRest + size + size * 0.1 + 52) + 'px');
+  // Where the page's first line may start: clear of the charm at rest.
+  root.style.setProperty('--top-gap',
+    Math.round(bar + cordRest + size) + 'px');
 }
 
 /* Mobile browsers resize the viewport as the address bar hides and comes back.
