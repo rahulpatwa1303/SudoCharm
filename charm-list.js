@@ -19,9 +19,19 @@
 /* hangPivot is where a charm hangs from inside its own artwork, as a fraction
  * of its box. It is the knot: the cord is drawn to exactly that point and the
  * charm turns about it, so the two cannot come apart however hard it swings.
+ *
  * Measure it off the art — the centre of the ring or the drilled hole — not by
- * eye. Charms with neither (the daruma, the neko) take a value a little inside
- * the outline, so the end of the cord is covered. */
+ * eye. Charms with neither take a value a little inside the outline, so the end
+ * of the cord is covered.
+ *
+ * `cord` is what this charm hangs by: the rope's colour, and optionally the
+ * beads strung on it, named from icons/beads/. The list is the strand itself,
+ * bottom-up — not a pattern to repeat — so three names means three beads, and
+ * that stays three however far the cord is pulled. A charm with no list simply
+ * hangs on its cord.
+ *
+ * Only the nazar has beads so far, and its rope colour is taken straight off
+ * the photograph the pendant was cut from. */
 
 export const CHARMS = [
     {
@@ -33,7 +43,8 @@ export const CHARMS = [
         ritual: 'Flick it',
         parts: [{key: 'body', file: 'nazar.svg'}],
         // Centre of the hole drilled through the glass, measured off the art.
-        hangPivot: [0.5, 0.157],
+        hangPivot: [0.5, 0.097],
+        cord: {rope: '#0922b0', beads: ['glass-blue', 'pearl', 'glass-blue']},
     },
     {
         id: 'hamsa',
@@ -45,6 +56,7 @@ export const CHARMS = [
         parts: [{key: 'body', file: 'hamsa.svg'}],
         // Centre of the ring at the top, so the cord threads it.
         hangPivot: [0.5, 0.085],
+        cord: {rope: '#4a3b21'},
     },
     {
         id: 'nimbu',
@@ -58,6 +70,7 @@ export const CHARMS = [
             {key: 'lemon', file: 'nimbu-lemon.svg', pivot: [0.5, 0.6]},
         ],
         hangPivot: [0.5, 0.02],
+        cord: {rope: '#b9a888'},
     },
     {
         id: 'daruma',
@@ -73,6 +86,7 @@ export const CHARMS = [
             {key: 'eyeR', file: 'daruma-eye-r.svg', hidden: true},
         ],
         hangPivot: [0.5, 0.1],
+        cord: {rope: '#7d1b16'},
     },
     {
         id: 'neko',
@@ -86,6 +100,7 @@ export const CHARMS = [
             {key: 'paw', file: 'neko-paw.svg', pivot: [0.54, 0.64]},
         ],
         hangPivot: [0.5, 0.1],
+        cord: {rope: '#8e1420'},
     },
     {
         id: 'horseshoe',
@@ -96,6 +111,7 @@ export const CHARMS = [
         ritual: 'Flip it',
         parts: [{key: 'body', file: 'horseshoe.svg'}],
         hangPivot: [0.5, 0.1],
+        cord: {rope: '#3b2d20'},
     },
     {
         id: 'scarab',
@@ -111,6 +127,7 @@ export const CHARMS = [
             {key: 'wingR', file: 'scarab-wing-r.svg', pivot: [0.5, 0.31]},
         ],
         hangPivot: [0.5, 0.12],
+        cord: {rope: '#123a6b'},
     },
     {
         id: 'emoji',
@@ -119,7 +136,10 @@ export const CHARMS = [
         story: 'Any emoji you like, treated with exactly the same reverence as the rest.',
         ritual: 'Give it a spin',
         parts: [],
-        hangPivot: [0.5, 0.06],
+        // No loop to hang from — a glyph is just centred in its box, so the
+        // cord runs a little further in and ends behind it.
+        hangPivot: [0.5, 0.12],
+        cord: {rope: '#6b4f2a'},
     },
 ];
 

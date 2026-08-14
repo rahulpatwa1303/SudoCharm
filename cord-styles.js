@@ -18,10 +18,11 @@
  * The values are the enum in the gschema; changing one means changing both.
  */
 
-export const CORD_STYLES = ['thread', 'rounded', 'twist'];
+export const CORD_STYLES = ['thread', 'rounded', 'twist', 'beads'];
 
 export const CORD_STYLE_LABELS = {
     thread: 'Thread — a fine waxed line',
     rounded: 'Cord — round leather, lit down one side',
     twist: 'Twist — twisted rope',
+    beads: 'Beads — wooden beads threaded on a cord',
 };

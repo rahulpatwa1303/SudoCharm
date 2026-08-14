@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+"""check-svg — render charm SVGs the way the shell does and check the rules.
+
+The shell loads these through St.Icon -> Gio.icon_new_for_string -> librsvg, so
+that is what this renders with. A file a browser is happy with can still fail
+here, which is the whole reason this script exists.
+
+Usage:  ./check-svg [icons/nazar.svg ...]      (default: every icons/*.svg)
+"""
+import sys, glob, re
+import gi
+gi.require_version("GdkPixbuf", "2.0")
+from gi.repository import GdkPixbuf
+
+CANVAS = 128
+SIZE = 50                      # what it is actually drawn at
+
+# Pieces that hang from the cord must carry the loop; pieces that move during a
+# ritual must not. See SVG-BRIEF.md.
+HANGING = {"nazar", "hamsa", "horseshoe", "nimbu-string", "daruma-body",
+           "neko-body", "scarab-body"}
+BANNED = re.compile(r"<style|<filter|<script|<text|\bclass=|xlink:href=\"http|"
+                    r"feGaussianBlur|feDropShadow|@import")
+
+fails = warns = 0
+
+
+def check(path):
+    global fails, warns
+    name = path.split("/")[-1].rsplit(".", 1)[0]
+    src = open(path, encoding="utf-8").read()
+    problems, notes = [], []
+
+    if 'viewBox="0 0 128 128"' not in src:
+        problems.append('viewBox must be exactly "0 0 128 128"')
+
+    bad = BANNED.findall(src)
+    if bad:
+        problems.append(f"librsvg-unsafe constructs: {sorted(set(bad))}")
+
+    ids = re.findall(r'\bid="([^"]+)"', src)
+    if len(ids) != len(set(ids)):
+        problems.append("duplicate id attributes in one file")
+
+    # Does librsvg actually accept it, and at the size it is really drawn?
+    px = None
+    try:
+        px = GdkPixbuf.Pixbuf.new_from_file_at_size(path, SIZE, SIZE)
+    except Exception as e:
+        problems.append(f"librsvg refused it: {e}")
+
+    if px is not None:
+        w, h = px.get_width(), px.get_height()
+        pixels, stride, chans = px.get_pixels(), px.get_rowstride(), px.get_n_channels()
+        if chans < 4:
+            problems.append("no alpha channel — the background is not transparent")
+        else:
+            def alpha(x, y):
+                return pixels[y * stride + x * chans + 3]
+
+            if not any(alpha(x, y) > 8 for y in range(h) for x in range(w)):
+                problems.append("renders completely empty")
+
+            # The loop has to reach the top edge, or the cord stops short of it.
+            top = next((y for y in range(h)
+                        if any(alpha(x, y) > 24 for x in range(w))), None)
+            if name in HANGING:
+                if top is None or top > 1:
+                    problems.append(
+                        f"hanging piece: first ink at y={top} of {h}; the loop's "
+                        f"top must touch y=0")
+                else:
+                    # the loop's hole should be open at the hang point (64,8)
+                    hx, hy = round(0.5 * w), round(8 / CANVAS * h)
+                    if alpha(hx, hy) > 200:
+                        notes.append(
+                            f"the loop's hole looks filled in at (64,8) — the "
+                            f"cord's last bead sits there and should show through")
+
+    status = "FAIL" if problems else ("warn" if notes else "ok")
+    print(f"{status:>4}  {path}")
+    for p in problems:
+        print(f"        ! {p}")
+    for n in notes:
+        print(f"        - {n}")
+    if problems:
+        fails += 1
+    elif notes:
+        warns += 1
+
+
+targets = sys.argv[1:] or sorted(glob.glob("icons/*.svg"))
+for t in targets:
+    check(t)
+
+print(f"\n{len(targets)} checked, {fails} failing, {warns} with warnings")
+sys.exit(1 if fails else 0)

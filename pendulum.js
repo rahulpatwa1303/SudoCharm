@@ -111,6 +111,35 @@ const MAX_LAG = 0.55;        // radians of lead or lag
 const BOW = 0.045;
 const MAX_BOW = 0.16;        // fraction of cord length
 
+/* The bow does not snap to where the swing says it should be — the strand has
+ * its own weight, so it overshoots and rings down. That is what makes a beaded
+ * cord read as beads rather than as a painted stripe: stop the charm dead and
+ * the beads keep going for a moment, then swing back past centre before they
+ * settle. Underdamped on purpose; BOW_C is what stops it wobbling forever. */
+const BOW_K = 130;
+const BOW_C = 9;
+
+/* The beads are threaded on the cord, so as well as riding its curve sideways
+ * they slide ALONG it. Haul the charm down and they lag behind and ride up the
+ * cord; let go and they chase it back down, overshoot, and knock to a stop.
+ *
+ * Driven by how fast the drawn cord is actually changing length, which covers
+ * a drag, the snap back, and a bless paying the cord out — all three are the
+ * same thing as far as a bead sliding on a string is concerned. Underdamped,
+ * because the bounce is the entire point. */
+const SLIDE_DRIVE = 0.055;   // pixels of lag per pixel/sec of cord change
+const SLIDE_K = 105;
+const SLIDE_C = 6.5;
+
+/* How far the pointer may wander before a press stops being a click.
+ *
+ * Without this the charm cannot be clicked at all. A press and release over one
+ * spot still delivers motion events — no hand is perfectly still, and taking
+ * the grab can synthesise one by itself — so the first of them marked the press
+ * as a drag, and the release then found _dragMoved already true and skipped the
+ * ritual every time. The charm looked inert: clicking it did nothing at all. */
+const TAP_SLOP = 6;          // pixels
+
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
 class Pendulum {
@@ -124,6 +153,17 @@ class Pendulum {
         this._omega = 0;
         this._time = 0;
         this._lastFrame = GLib.get_monotonic_time();
+
+        // How far the cord is bowed, and how fast that is changing. A spring,
+        // so the strand overshoots and rings rather than tracking the swing.
+        this._bow = 0;
+        this._bowVel = 0;
+
+        // How far the beads have slid along the cord, and how fast. Threaded
+        // on it, so they lag when it lengthens and chase when it shortens.
+        this._slide = 0;
+        this._slideVel = 0;
+        this._lastDrawn = null;
 
         // Cord stretch, and the charm's own angle as it lags behind the cord.
         this._stretch = 0;
@@ -198,7 +238,7 @@ class Pendulum {
         this._pendulum.set_pivot_point(0.5, 0);
         this._layer.add_child(this._pendulum);
 
-        this._cord = new Cord(this._settings.get_string('cord-style'));
+        this._cord = new Cord(this._settings.get_string('cord-style'), this._ext.path);
         this._pendulum.add_child(this._cord.actor);
 
         this._charmBin = new St.Widget({
@@ -254,6 +294,8 @@ class Pendulum {
         // come apart the moment it swings.
         this._hangY = def.hangPivot[1];
         this._charmBin.set_pivot_point(def.hangPivot[0], this._hangY);
+        // A charm hanging on a cord borrowed from another one looks wrong.
+        this._cord.setPalette(def.cord);
         if (this._mon)      // not on the first build; _syncGeometry lays out
             this._layoutPendulum();
 
@@ -544,11 +586,30 @@ class Pendulum {
         this._charmBin.rotation_angle_z = -lag * 180 / Math.PI;
 
         // The cord's middle trails the swing. Both its ends are pinned, so
-        // this only ever bends it — the charm stays on the end of it.
+        // this only ever bends it — the charm stays on the end of it. The bow
+        // chases its target through a spring rather than being set outright,
+        // which is where the beads get their bounce.
         const drawn = this._cordLen + this._drop + this._stretch
             + this._size * this._hangY;
-        this._cord.setBow(clamp(-this._omega * BOW * drawn,
-            -MAX_BOW * drawn, MAX_BOW * drawn));
+        const want = clamp(-this._omega * BOW * drawn,
+            -MAX_BOW * drawn, MAX_BOW * drawn);
+        this._bowVel += (-BOW_K * (this._bow - want) - BOW_C * this._bowVel) * dt;
+        this._bow = clamp(this._bow + this._bowVel * dt,
+            -MAX_BOW * drawn * 1.6, MAX_BOW * drawn * 1.6);
+        this._cord.setBow(this._bow);
+
+        /* The beads slide along the cord. The cord getting longer under them —
+         * a pull, or a bless paying it out — leaves them behind, so they ride
+         * up it; when it shortens again they chase the charm back down and
+         * overshoot. Capped so they can never be thrown off either end. */
+        const lenVel = dt > 0 ? (drawn - (this._lastDrawn ?? drawn)) / dt : 0;
+        this._lastDrawn = drawn;
+        const slideWant = clamp(lenVel * SLIDE_DRIVE, -this._size, this._size);
+        this._slideVel +=
+            (-SLIDE_K * (this._slide - slideWant) - SLIDE_C * this._slideVel) * dt;
+        this._slide = clamp(this._slide + this._slideVel * dt,
+            -this._size * 0.5, Math.max(0, drawn - this._size * 0.35));
+        this._cord.setSlide(this._slide);
 
         this._followHitArea();
     }
@@ -583,6 +644,8 @@ class Pendulum {
         this._dragging = true;
         this._dragMoved = false;
         this._pressTime = this._time;
+        const [pressX, pressY] = global.get_pointer();
+        this._pressAt = [pressX, pressY];
         this._lastTheta = this._theta;
         this._lastSample = GLib.get_monotonic_time();
 
@@ -650,7 +713,16 @@ class Pendulum {
         if (type === Clutter.EventType.MOTION ||
             type === Clutter.EventType.TOUCH_UPDATE) {
             const [px, py] = global.get_pointer();
-            this._dragMoved = true;
+
+            /* Below the slop this is still a click, not a drag. Swallow the
+             * motion rather than acting on it, so a click cannot nudge the
+             * charm a pixel sideways on its way to performing the ritual. */
+            if (!this._dragMoved) {
+                const [ax, ay] = this._pressAt ?? [px, py];
+                if (Math.hypot(px - ax, py - ay) < TAP_SLOP)
+                    return Clutter.EVENT_STOP;
+                this._dragMoved = true;
+            }
             this._motionCount = (this._motionCount ?? 0) + 1;
 
             if (this._rehanging) {

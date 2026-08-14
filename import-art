@@ -34,6 +34,7 @@ MARGIN = 0.04         # keep a little air so nothing touches the canvas edge
 # vector art so replacement layers land where the rituals expect them.
 PLACEMENT = {
     # layer                top    height   hcentre
+    "nazar":             (0.00,  1.00,   0.50),
     "nimbu-string":      (0.00,  0.66,   0.50),
     "nimbu-lemon":       (0.64,  0.34,   0.50),
     "daruma-eye-l":      (0.37,  0.20,   0.38),
@@ -107,7 +108,11 @@ def place(name, im):
 
     top, height, hcentre = PLACEMENT.get(name, (MARGIN, 1 - 2 * MARGIN, 0.50))
     target_h = CANVAS * height
-    target_w = CANVAS * (1 - 2 * MARGIN)
+    # A layer that asks for the whole canvas height gets the whole width too.
+    # The margin exists so an irregular silhouette does not touch the edge; a
+    # round pendant that is the entire charm has nothing to clear, and insetting
+    # it just shrinks the glass for no reason.
+    target_w = CANVAS * (1.0 if height >= 1.0 else (1 - 2 * MARGIN))
     scale = min(target_w / im.width, target_h / im.height)
     im = im.resize((max(1, round(im.width * scale)),
                     max(1, round(im.height * scale))), Image.LANCZOS)

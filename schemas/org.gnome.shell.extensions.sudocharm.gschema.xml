@@ -31,11 +31,12 @@
     </key>
 
     <key name="cord-style" type="s">
-      <default>'rounded'</default>
+      <default>'beads'</default>
       <choices>
         <choice value="thread"/>
         <choice value="rounded"/>
         <choice value="twist"/>
+        <choice value="beads"/>
       </choices>
       <summary>How the cord it hangs from is drawn</summary>
     </key>

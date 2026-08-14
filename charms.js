@@ -274,8 +274,18 @@ export function playRitual(charm, ctx = {}) {
                 mode: Clutter.AnimationMode.EASE_IN_OUT_SINE,
             }),
         });
-        open(parts.wingL, -34);
-        open(parts.wingR, 34);
+        /* Signs matter and are easy to get backwards. Both elytra hinge on the
+         * SAME point, (64,40) on the 128 grid — the top of the shell — so they
+         * are not mirror images of one another under rotation. The left one has
+         * to turn its tail further LEFT and the right one further RIGHT, which
+         * is a positive angle on the left and a negative one on the right.
+         *
+         * Inverted, they sweep across each other into a closed X instead of
+         * opening: at a third of the way through the beetle is *narrower* than
+         * at rest, with the two wings stacked over the midline. That reads as
+         * the shell clamping shut, which is the opposite of the ritual. */
+        open(parts.wingL, 34);
+        open(parts.wingR, -34);
         sparkle(5);
         return 1300;
     }

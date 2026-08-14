@@ -67,9 +67,9 @@ everyone once.
 Take it down and the bare hook stays under the top bar. Click the hook to hang
 the charm up again.
 
-Sizes, cord length, what it hangs by — a fine thread, a round leather cord, or
-twisted rope — how strong the breeze is and how fast a flick rings down are all
-in the preferences:
+Sizes, cord length, what it hangs by — wooden beads, a fine thread, a round
+leather cord, or twisted rope — how strong the breeze is and how fast a flick
+rings down are all in the preferences:
 
 ```sh
 gnome-extensions prefs sudocharm@rahul.local
@@ -160,14 +160,44 @@ the code.
 tracked actor makes the compositor recompute its input region, and the charm
 never stops moving, so following it every frame would mean recomputing forever.
 
-**Each charm hangs from a different point in its own artwork** — the nazar from
-the hole drilled through its glass at 0.157, the nimbu from the very top of its
-string at 0.02. That point is `hangPivot`, and two things have to agree on it:
-the cord is drawn to exactly there, and the charm rotates about exactly there.
-Get either wrong and the two come apart the moment it swings — the charm's lag
-walks its hole sideways off the end of the cord, and the cord's tip pokes out
-from behind the artwork. It looks fine at rest, which is what makes it easy to
-ship.
+**A charm hangs from a point inside its own artwork, and two things have to
+agree on it** — the cord is drawn to exactly there, and the charm rotates about
+exactly there. Get either wrong and the two come apart the moment it swings: the
+charm's lag walks its hole sideways off the end of the cord, and the cord's tip
+pokes out from behind the artwork. It looks fine at rest, which is what makes it
+easy to ship. Earlier art had each piece hanging from a different height and the
+code guessing one constant for all of them; every piece now carries the same
+moulded loop with its hole at (64, 8) on the 128 grid, so `hangPivot` is one
+number and the guessing is gone.
+
+**The beads belong to the cord, not to the charm.** Painted into the artwork
+they would be rigid with it, and the charm lags behind the cord by up to
+`MAX_LAG` — about 31 degrees — so at the fast part of a swing a painted bead
+column would point a third of a right angle off the cord threaded through it.
+
+**There are as many beads as there are, and they ride by the charm.** The first
+attempt spaced them evenly along the whole cord, which looks right until you
+pull it: the cord gets longer, so the count goes up, beads appear out of nowhere
+mid-strand, and every colour shifts as the repeating pattern re-indexes under a
+new length. A strand is a fixed number of beads threaded on a string. They are
+placed a measured distance back from the charm instead, so pulling the cord
+moves them rather than breeding them.
+
+**What they do have of their own is movement *along* the cord.** Sideways they
+ride its curve, because both its ends are pinned — the top to the hook, the
+bottom to the charm's own hole — and giving them a sway of their own would drag
+the lowest one off the charm it is threaded through. But a bead slides on a
+string: the cord lengthening under it leaves it behind, and when it shortens the
+bead chases the charm back down and overshoots. That is the `SLIDE_*` spring,
+driven by how fast the drawn cord is changing length, which covers a drag, the
+snap back, and a bless paying it out with the same three lines.
+
+**Both elytra hinge on the same point, so they are not mirror images under
+rotation.** The scarab's wing cases share a hinge at the top of the shell; the
+left one has to turn its tail further left and the right one further right,
+which is a *positive* angle on one and a *negative* one on the other. Inverted,
+they sweep across each other into a closed X — a third of the way through the
+beetle is narrower than at rest, which reads as the shell clamping shut.
 
 **The cord is drawn in Cairo, not styled as a widget.** A rectangle only has
 clean edges while it is upright. Rotated — which is to say, whenever anyone is

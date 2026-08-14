@@ -33,15 +33,55 @@ import {CORD_STYLES} from './cord-styles.js';
 /* Repainting is not free, so it only happens when the drawing would actually
  * differ. Below this, a change in the bow is not worth a new texture. */
 const BOW_EPSILON = 0.35;
+const SLIDE_EPSILON = 0.25;
 
 export class Cord {
-    constructor(style = 'rounded') {
+    constructor(style = 'rounded', path = null) {
+        // Where icons/beads/ lives, so a bead can be loaded by name. NOT
+        // _path: that is the method below that draws the cord's centre line,
+        // and a field of the same name silently replaces it — the cord then
+        // stops being drawn at all, beads and rope together.
+        this._dir = path;
+        this._surfaces = new Map();
         this.actor = new St.DrawingArea({reactive: false});
         this._repaintId = this.actor.connect('repaint', () => this._repaint());
 
         this._style = CORD_STYLES.includes(style) ? style : 'rounded';
         this._length = 0;
         this._bow = 0;
+        this._slide = 0;
+        this._slot = 64;
+        this._rope = [0.42, 0.31, 0.17];
+        this._beadNames = [];
+    }
+
+    /** What this charm hangs by: rope colour, and the beads strung on it. */
+    setPalette(cord) {
+        if (!cord)
+            return;
+        const hex = cord.rope ?? '#6b4f2a';
+        this._rope = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255);
+        this._beadNames = cord.beads ?? [];
+        this.actor.queue_repaint();
+    }
+
+    /* Beads are photographs, loaded once and kept. Cairo will happily scale one
+     * down to the four or five pixels it is actually drawn at, and that reads as
+     * polished stone in a way a flat disc never quite does. A missing file is
+     * not worth failing over — the drawn fallback below covers it. */
+    _beadSurface(name) {
+        if (this._surfaces.has(name))
+            return this._surfaces.get(name);
+        let surf = null;
+        try {
+            if (this._dir)
+                surf = Cairo.ImageSurface.createFromPNG(
+                    `${this._dir}/icons/beads/${name}.png`);
+        } catch (e) {
+            console.error(`SudoCharm: bead '${name}' — ${e}`);
+        }
+        this._surfaces.set(name, surf);
+        return surf;
     }
 
     /**
@@ -52,6 +92,7 @@ export class Cord {
      */
     layout(slot, length) {
         this._length = Math.max(1, length);
+        this._slot = slot;
         this.actor.set_position(0, 0);
         // Tall enough for the round cap at the bottom, which the charm covers
         // anyway; wide enough that a full bow cannot be clipped.
@@ -72,6 +113,15 @@ export class Cord {
         if (Math.abs(bow - this._bow) < BOW_EPSILON)
             return;
         this._bow = bow;
+        this.actor.queue_repaint();
+    }
+
+    /** How far the beads have slid up the cord, in pixels. Positive moves the
+     *  group away from the charm, towards the hook. */
+    setSlide(slide) {
+        if (Math.abs(slide - this._slide) < SLIDE_EPSILON)
+            return;
+        this._slide = slide;
         this.actor.queue_repaint();
     }
 
@@ -99,6 +149,8 @@ export class Cord {
             this._thread(cr, x, len, bow);
         else if (this._style === 'twist')
             this._twist(cr, x, len, bow);
+        else if (this._style === 'beads')
+            this._beads(cr, x, len, bow);
         else
             this._rounded(cr, x, len, bow);
 
@@ -126,12 +178,134 @@ export class Cord {
         return bow * (3 * u * u * t + 0.85 * 3 * u * t * t);
     }
 
+    /** A point on the centre line. The y control points sit at 0.35 and 0.72 of
+     *  the length, so y is not simply t·len and has to be evaluated too. */
+    _pointAt(t, x, len, bow) {
+        const u = 1 - t;
+        const y = 3 * u * u * t * (0.35 * len) +
+                  3 * u * t * t * (0.72 * len) +
+                  t * t * t * len;
+        return [x + this._offsetAt(t, bow), y];
+    }
+
+    /* A table of the curve sampled by arc length, so a bead can be placed a
+     * given number of pixels back from the charm. Walking the arc rather than
+     * stepping the curve's parameter matters: the cubic is not uniformly
+     * parameterised, so equal steps in t bunch up at one end. */
+    _arcTable(x, len, bow) {
+        const STEPS = 96;
+        const pts = [];
+        let prev = this._pointAt(0, x, len, bow);
+        let run = 0;
+        pts.push({d: 0, p: prev});
+        for (let i = 1; i <= STEPS; i++) {
+            const p = this._pointAt(i / STEPS, x, len, bow);
+            run += Math.hypot(p[0] - prev[0], p[1] - prev[1]);
+            pts.push({d: run, p});
+            prev = p;
+        }
+        return {pts, total: run};
+    }
+
+    /** The point `back` pixels up the cord from the charm end of it. */
+    _backFromEnd(table, back) {
+        const want = Math.max(0, Math.min(table.total, table.total - back));
+        let i = table.pts.length - 1;
+        while (i > 0 && table.pts[i].d > want)
+            i--;
+        return table.pts[i].p;
+    }
+
+    /* Where the beads sit, bottom-up, measured back from the charm.
+     *
+     * Fixed in number and anchored to the charm end — NOT spaced out to fill
+     * the cord. Filling it means the count changes with the cord's length, so
+     * pulling the charm down spawns new beads out of nowhere and shifts every
+     * colour along the strand as the pattern re-indexes. They are threaded on
+     * a cord; there are as many as there are, and they ride down by the charm.
+     *
+     * `slide` is how far the group has been thrown along the cord by the
+     * charm's own acceleration — see the slide spring in pendulum.js. */
+    _beadCentres(x, len, bow, r, slide) {
+        const table = this._arcTable(x, len, bow);
+        const gap = r * 2.02;                     // just touching, as strung
+        const out = [];
+        for (let i = 0; i < this._beadNames.length; i++) {
+            // The lowest bead rests against the charm's loop; the ones above
+            // stack on it. Beads further up the group get a little more of the
+            // slide, because the ones below them are held up by the charm.
+            const back = r * 0.55 + i * gap + slide * (0.55 + 0.22 * i);
+            out.push(this._backFromEnd(table, Math.max(0, back)));
+        }
+        return out;
+    }
+
+    /* Beads threaded on a cord. Drawn as flat discs with an inset highlight
+     * rather than with a real gradient: at this size a bead is a few pixels
+     * across, and three stacked circles read as round there while costing
+     * nothing.
+     *
+     * They stay ON the curve sideways, so they inherit its bow — both its ends
+     * are pinned, the top to the hook and the bottom to the charm's own hole,
+     * and the middle is what swings. What the beads have of their own is
+     * movement ALONG the cord: they are threaded on it and slide. */
+    _beads(cr, x, len, bow) {
+        const rope = this._rope;
+        const names = this._beadNames;
+
+        // A charm with no beads named simply hangs on its cord.
+        if (!names.length) {
+            this._rounded(cr, x, len, bow);
+            return;
+        }
+
+        // Beads grow with the charm rather than staying a fixed size, so a big
+        // charm does not end up on a strand of grit.
+        const r = Math.max(2.5, Math.min(10, this._slot * 0.075));
+
+        this._stroke(cr, x, len, bow, r * 0.78, 0, 0, 0, 0.30);
+        this._stroke(cr, x, len, bow, r * 0.42, rope[0], rope[1], rope[2], 1);
+
+        const centres = this._beadCentres(x, len, bow, r, this._slide);
+        for (let i = 0; i < centres.length; i++) {
+            const [bx, by] = centres[i];
+            const surf = this._beadSurface(names[i]);
+
+            if (surf) {
+                const w = surf.getWidth(), h = surf.getHeight();
+                cr.save();
+                cr.translate(bx - r, by - r);
+                cr.scale(2 * r / w, 2 * r / h);
+                cr.setSourceSurface(surf, 0, 0);
+                cr.paint();
+                cr.restore();
+                continue;
+            }
+
+            // No artwork for it: a lit disc in the rope's own colour.
+            const lit = rope.map(v => Math.min(1, v + 0.20));
+            const hot = rope.map(v => Math.min(1, v + 0.45));
+            cr.arc(bx, by, r + 0.5, 0, 2 * Math.PI);
+            cr.setSourceRGBA(0, 0, 0, 0.30);
+            cr.fill();
+            cr.arc(bx, by, r, 0, 2 * Math.PI);
+            cr.setSourceRGBA(rope[0], rope[1], rope[2], 1);
+            cr.fill();
+            cr.arc(bx - r * 0.22, by - r * 0.26, r * 0.72, 0, 2 * Math.PI);
+            cr.setSourceRGBA(lit[0], lit[1], lit[2], 1);
+            cr.fill();
+            cr.arc(bx - r * 0.34, by - r * 0.38, r * 0.28, 0, 2 * Math.PI);
+            cr.setSourceRGBA(hot[0], hot[1], hot[2], 0.85);
+            cr.fill();
+        }
+    }
+
     /* A fine waxed thread. The dark halo is what lets 2px survive: the charm
      * hangs over whatever wallpaper the user happens to have, and a bare thread
      * this thin disappears into a bright sky. */
     _thread(cr, x, len, bow) {
         this._stroke(cr, x, len, bow, 3.4, 0, 0, 0, 0.28);
-        this._stroke(cr, x, len, bow, 1.8, 0.27, 0.20, 0.13, 1);
+        this._stroke(cr, x, len, bow, 1.8, ...this._rope, 1);
         this._stroke(cr, x, len * 0.92, bow, 0.6, 1, 1, 1, 0.20);
     }
 
@@ -139,7 +313,7 @@ export class Cord {
      * soft shadow under it and a single lit edge, so it reads as round. */
     _rounded(cr, x, len, bow) {
         this._stroke(cr, x, len, bow, 4.6, 0, 0, 0, 0.26);
-        this._stroke(cr, x, len, bow, 3.2, 0.42, 0.31, 0.17, 1);
+        this._stroke(cr, x, len, bow, 3.2, ...this._rope, 1);
         this._stroke(cr, x - 0.85, len * 0.96, bow, 1.0, 1, 0.93, 0.78, 0.28);
     }
 
@@ -147,7 +321,7 @@ export class Cord {
      * marks are clipped to the cord so they cannot spill past its edges. */
     _twist(cr, x, len, bow) {
         this._stroke(cr, x, len, bow, 5.0, 0, 0, 0, 0.28);
-        this._stroke(cr, x, len, bow, 3.6, 0.40, 0.29, 0.16, 1);
+        this._stroke(cr, x, len, bow, 3.6, ...this._rope, 1);
 
         cr.save();
         this._path(cr, x, len, bow);
