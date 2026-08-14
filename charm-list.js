@@ -67,7 +67,10 @@ export const CHARMS = [
         ritual: 'Replace the lemon',
         parts: [
             {key: 'string', file: 'nimbu-string.svg'},
-            {key: 'lemon', file: 'nimbu-lemon.svg', pivot: [0.5, 0.6]},
+            // The lemon's own centre on the shared canvas. It sits low, so a
+            // pivot taken from higher up swings it bodily through the air
+            // instead of tumbling it where it hangs.
+            {key: 'lemon', file: 'nimbu-lemon.svg', pivot: [0.5, 0.87]},
         ],
         // The brass ring's hole, measured off the art. It is a little left of
         // the bunch's own centre because the ring is, so the chilies hang

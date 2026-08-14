@@ -107,6 +107,13 @@ function px(charm, units) {
  * This is why the rituals looked dead. The scarab's wing cases, the nazar's
  * spin, the neko's beckon, the horseshoe's flip and the daruma's nudge are all
  * rotations, and every one of them was quietly animating nothing.
+ *
+ * One thing to know when mixing this with ease(): a turn SETS the property to
+ * its final value when its timeline finishes. Undoing a turn from some other
+ * animation's onComplete is therefore a race, and the turn tends to win — the
+ * nimbu's lemon was left permanently at 140 degrees that way, which threw it
+ * bodily out of place because it turns about a point above itself. Undo a turn
+ * in its own onDone, which runs after that final assignment.
  */
 function turn(actor, prop, from, to, opts = {}) {
     const {duration = 300, mode = Clutter.AnimationMode.LINEAR,
@@ -172,10 +179,19 @@ export function playRitual(charm, ctx = {}) {
         // The old lemon drops away; a fresh one rises into its place.
         const lemon = parts.lemon;
         const drop = px(charm, 70);
-        // The tumble is a rotation, so it runs on its own timeline; the fall
-        // and the fade ease perfectly well alongside it.
+        /* The tumble is a rotation, so it runs on its own timeline; the fall
+         * and the fade ease perfectly well alongside it.
+         *
+         * It must undo itself in its OWN completion handler. Clearing the angle
+         * from the fall's onComplete instead is a race that the rotation wins:
+         * turn() sets the angle to its final value when its timeline finishes,
+         * so whichever of the two lands second decides, and the lemon was being
+         * left permanently at 140 degrees. Since it turns about a point above
+         * itself that threw the fresh lemon up and out to one side, where it
+         * stayed until the next bless put it back. */
         turn(lemon, 'rotation_angle_z', 0, 140, {
             duration: 520, mode: Clutter.AnimationMode.EASE_IN_QUAD,
+            onDone: () => { lemon.rotation_angle_z = 0; },
         });
         lemon.ease({
             translation_y: drop,
@@ -184,7 +200,6 @@ export function playRitual(charm, ctx = {}) {
             mode: Clutter.AnimationMode.EASE_IN_QUAD,
             onComplete: () => {
                 lemon.translation_y = -px(charm, 24);
-                lemon.rotation_angle_z = 0;
                 lemon.ease({
                     translation_y: 0,
                     opacity: 255,
