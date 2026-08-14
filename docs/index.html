@@ -696,9 +696,13 @@ function frame(now) {
   const behind = clamp(lag - theta, -MAX_LAG, MAX_LAG);
 
   const live = cordRest + drop + stretch;
-  pend.style.transform = `rotate(${theta}rad)`;
+  /* Negated, both of them. Theta is positive when the charm is to the right,
+   * but a rotation is positive clockwise and this hangs *below* its pivot —
+   * think of a clock hand at six o'clock, which moves left as it goes
+   * clockwise. Render theta directly and every drag comes out mirrored. */
+  pend.style.transform = `rotate(${-theta}rad)`;
   cord.style.transform = `scaleY(${Math.max(0.02, (live + size * charm.hang + 4) / cordRest)})`;
-  bin.style.transform = `translate(-50%, ${live}px) rotate(${behind}rad)`;
+  bin.style.transform = `translate(-50%, ${live}px) rotate(${-behind}rad)`;
 }
 
 /* ------------------------------------------------------------------ input

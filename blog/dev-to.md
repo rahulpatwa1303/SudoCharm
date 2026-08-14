@@ -201,15 +201,23 @@ anyone else's machine.
 
 ## Two small physics traps
 
-**Clutter rotates the opposite way to intuition.** A child hanging below the pivot
-moves *left* for a positive `rotation_angle_z`. Get this backwards and every
-interaction is mirrored — you pull right, it swings left — and it is not the kind
-of thing you spot by reading the code. I worked it out by rotating a probe actor
-and printing where it landed. The renderer now negates:
+**Anything hanging below its pivot rotates the wrong way.** A positive
+`rotation_angle_z` moves a child *below* the pivot to the **left**. This is not a
+Clutter quirk, which is what I first assumed — it is just what rotation does when
+the pivot is overhead. Think of a clock hand at six o'clock: as it goes
+clockwise, it travels left. Get it backwards and every interaction is mirrored —
+you pull right, it swings left. The renderer negates:
 
 ```js
 this._pendulum.rotation_angle_z = -this._theta * 180 / Math.PI;
 ```
+
+I am confident about the "not a Clutter quirk" part because I later wrote a web
+version of the same pendulum, checked the drag angle against `Math.atan2`, saw it
+agree to three decimal places, and shipped it mirrored. CSS `rotate()` does
+exactly the same thing. Comparing the angle to the angle you computed only proves
+your arithmetic; it says nothing about which direction that angle draws. The
+test has to ask where the charm *ended up on screen*.
 
 **A swing limit must not be recomputed from the current angle.** The charm has a
 ceiling on how far it may swing, which starts wherever you let go and tightens as
