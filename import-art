@@ -35,8 +35,8 @@ MARGIN = 0.04         # keep a little air so nothing touches the canvas edge
 PLACEMENT = {
     # layer                top    height   hcentre
     "nazar":             (0.00,  1.00,   0.50),
-    "nimbu-string":      (0.00,  0.66,   0.50),
-    "nimbu-lemon":       (0.64,  0.34,   0.50),
+    "nimbu-string":      (0.00,  0.64,   0.50),
+    "nimbu-lemon":       (0.74,  0.26,   0.50),
     "daruma-eye-l":      (0.37,  0.20,   0.38),
     "daruma-eye-r":      (0.37,  0.20,   0.62),
     "neko-paw":          (0.19,  0.42,   0.72),

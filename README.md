@@ -201,6 +201,13 @@ A share that began before the extension was enabled is not noticed. That is
 worth accepting rather than polling something forever, because the extension is
 enabled at login and the call starts later.
 
+**One charm is not the end of its own cord.** The nimbu-mirchi hangs by the
+brass ring on its chilies and the lemon is tied on *below* them, so the cord has
+to carry past the hanging point and out the other side. That is `cord.tail` in
+charm-list.js, a fraction of the charm's box. Being drawn behind the charm like
+the rest of the cord, it runs down among the chilies and only shows in the gap
+beneath them, which is exactly where a real one would be visible.
+
 **The beads belong to the cord, not to the charm.** Painted into the artwork
 they would be rigid with it, and the charm lags behind the cord by up to
 `MAX_LAG` — about 31 degrees — so at the fast part of a swing a painted bead

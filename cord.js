@@ -49,6 +49,7 @@ export class Cord {
         this._style = CORD_STYLES.includes(style) ? style : 'rounded';
         this._length = 0;
         this._bow = 0;
+        this._tail = 0;
         this._slide = 0;
         this._slot = 64;
         this._rope = [0.42, 0.31, 0.17];
@@ -90,13 +91,17 @@ export class Cord {
      * @param {number} slot   width of the pendulum; the cord hangs down its middle
      * @param {number} length distance from the hook to the charm's hang point
      */
-    layout(slot, length) {
+    layout(slot, length, tail = 0) {
         this._length = Math.max(1, length);
+        this._tail = Math.max(0, tail);
         this._slot = slot;
         this.actor.set_position(0, 0);
         // Tall enough for the round cap at the bottom, which the charm covers
-        // anyway; wide enough that a full bow cannot be clipped.
-        this.actor.set_size(Math.max(8, slot), Math.round(this._length) + 4);
+        // anyway; wide enough that a full bow cannot be clipped; and long
+        // enough for a tail, where one charm carries the cord on past its own
+        // hanging point to something tied below it.
+        this.actor.set_size(Math.max(8, slot),
+            Math.round(this._length + this._tail) + 4);
         this.actor.queue_repaint();
     }
 
@@ -154,7 +159,33 @@ export class Cord {
         else
             this._rounded(cr, x, len, bow);
 
+        if (this._tail > 0)
+            this._drawTail(cr, x, len, bow);
+
         cr.$dispose();
+    }
+
+    /* Some charms are not the end of the cord. The nimbu-mirchi hangs by the
+     * brass ring on its chilies and the lemon is tied on below them, so the
+     * cord has to carry on past the hanging point and out the other side.
+     *
+     * Drawn behind the charm, like the rest of the cord, so it runs down among
+     * the chilies and only shows in the gap beneath them. It leaves the curve
+     * along the same tangent the bow ends on, then straightens, so a hard swing
+     * does not put a kink where the two meet. */
+    _drawTail(cr, x, len, bow) {
+        const tail = this._tail;
+        const cxp = x - bow * 0.28;
+        const draw = (width, r, g, b, a) => {
+            cr.moveTo(x, len);
+            cr.curveTo(cxp, len + tail * 0.45, x, len + tail * 0.75,
+                       x, len + tail);
+            cr.setLineWidth(width);
+            cr.setSourceRGBA(r, g, b, a);
+            cr.stroke();
+        };
+        draw(3.0, 0, 0, 0, 0.28);
+        draw(1.7, ...this._rope, 1);
     }
 
     /** The cord's centre line. Both ends stay pinned however far it bows, so

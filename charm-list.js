@@ -69,8 +69,14 @@ export const CHARMS = [
             {key: 'string', file: 'nimbu-string.svg'},
             {key: 'lemon', file: 'nimbu-lemon.svg', pivot: [0.5, 0.6]},
         ],
-        hangPivot: [0.5, 0.02],
-        cord: {rope: '#b9a888'},
+        // The brass ring's hole, measured off the art. It is a little left of
+        // the bunch's own centre because the ring is, so the chilies hang
+        // slightly to one side of the cord exactly as they do in the picture.
+        hangPivot: [0.465, 0.038],
+        // `tail` carries the cord on PAST the hanging point, down to where the
+        // lemon is tied — this is the only charm that is not the end of its
+        // own cord. Given as a fraction of the charm's box.
+        cord: {rope: '#b9a888', tail: 0.78},
     },
     {
         id: 'daruma',

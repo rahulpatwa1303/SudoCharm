@@ -180,6 +180,7 @@ class Pendulum {
         // Where in its own box the charm hangs from, as a fraction of its
         // height — the knot the cord ties to. Per charm; _buildCharm sets it.
         this._hangY = 0.06;
+        this._cordTail = 0;
 
         // Whether the screen is being captured, and the handles that say so.
         this._shared = false;
@@ -300,6 +301,8 @@ class Pendulum {
         // to run to that point and the charm has to turn about it, or the two
         // come apart the moment it swings.
         this._hangY = def.hangPivot[1];
+        // How far past the hanging point the cord carries on, if at all.
+        this._cordTail = Math.max(0, (def.cord?.tail ?? 0) - this._hangY);
         this._charmBin.set_pivot_point(def.hangPivot[0], this._hangY);
         // A charm hanging on a cord borrowed from another one looks wrong.
         this._cord.setPalette(def.cord);
@@ -356,7 +359,8 @@ class Pendulum {
         // Drawn to the charm's own hang point, which is some way inside its
         // box; the charm is painted over that last stretch. This does not
         // change the pendulum length, only what is drawn.
-        this._cord.layout(size, cord + size * this._hangY);
+        this._cord.layout(size, cord + size * this._hangY,
+            size * this._cordTail);
 
         this._charmBin.set_position(0, Math.round(cord));
         this._charmBin.set_size(size, size);
