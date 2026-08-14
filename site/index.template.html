@@ -114,7 +114,7 @@ body.dragging { user-select: none; }
   background: linear-gradient(var(--cord), var(--cord));
   border-radius: 1px; opacity: .85;
 }
-.bin { position: absolute; left: 0; top: 0; transform-origin: 50% 0; will-change: transform; }
+.bin { position: absolute; left: 0; top: 0; transform-origin: var(--hang-x, 50%) 0; will-change: transform; }
 .charm {
   display: block; width: 100%; height: 100%; padding: 0; margin: 0;
   border: 0; background: none; pointer-events: auto;
@@ -368,6 +368,10 @@ footer p { margin-bottom: .55em; }
     </div>
     <p class="fine">* Effects unverified, unmeasured, and frankly unmeasurable. The swinging,
     though, is real.</p>
+    <p class="lede" style="margin-top:1.6rem">You also get to pick what it hangs by &mdash;
+    a fine thread, a round leather cord, twisted rope, or wooden beads &mdash; along with how
+    big it is, how long the cord runs, and how much of a breeze it gets. None of it matters.
+    All of it is adjustable.</p>
   </section>
 
   <section>
@@ -379,13 +383,16 @@ footer p { margin-bottom: .55em; }
   </section>
 
   <section>
-    <h2>It stays out of your way</h2>
-    <p class="lede">It hangs over your windows without taking your clicks. You can work
-    straight through it &mdash; the only thing on screen that notices your mouse is the
-    charm itself.</p>
+    <h2>It knows when to leave</h2>
+    <p class="lede">Start a screen share, a recording or a remote session and it takes
+    itself down &mdash; charm, cord and hook &mdash; then hangs itself back up the moment
+    you stop. Delightful on your own desktop; less so behind your head in a stand-up.</p>
+    <p class="lede" style="margin-top:1.2rem">The rest of the time it hangs over your windows
+    without taking your clicks. You can work straight through it &mdash; the only thing on
+    screen that notices your mouse is the charm itself.</p>
     <figure>
-      <img src="__SHOT__" alt="A nazar bead hanging on a cord below the GNOME top bar, over a desktop" width="900" height="415" loading="lazy">
-      <figcaption>Hanging under the top bar, minding its own business.</figcaption>
+      <img src="__SHOT__" alt="A nazar bead hanging on a beaded cord below the GNOME top bar, over a desktop" width="872" height="430" loading="lazy">
+      <figcaption>Hanging under the top bar on a string of wooden beads, minding its own business.</figcaption>
     </figure>
   </section>
 
@@ -452,27 +459,27 @@ const ART = __ART__;
  * the artwork begins, so the cord can be drawn into the charm rather than
  * stopping short of it. Pivots are fractions of the same canvas. */
 const CHARMS = [
-  { id:'nazar', claim:'Stares down whatever is staring at you.<sup>*</sup>', name:'Nazar boncuğu', origin:'Turkey', ritual:'it spins', hang:0.06,
+  { id:'nazar', claim:'Stares down whatever is staring at you.<sup>*</sup>', name:'Nazar boncuğu', origin:'Turkey', ritual:'it spins', hang:0.097,
     story:'A glass eye worn against the evil eye. Blue on white on blue — it stares back at whatever was staring at you.',
     parts:[{k:'body', img:'nazar'}] },
-  { id:'hamsa', claim:'Keeps watch so you do not have to.<sup>*</sup>', name:'Hamsa', origin:'Middle East & North Africa', ritual:'the eye wakes', hang:0.05,
+  { id:'hamsa', claim:'Keeps watch so you do not have to.<sup>*</sup>', name:'Hamsa', origin:'Middle East & North Africa', ritual:'the eye wakes', hang:0.085,
     story:'An open hand carried for protection and good fortune. The eye in the palm keeps watch so you do not have to.',
     parts:[{k:'body', img:'hamsa'}] },
-  { id:'nimbu', claim:'Turns away misfortune at the door.<sup>*</sup>', name:'Nimbu-mirchi', origin:'India', ritual:'the old lemon drops and a fresh one rises', hang:0.02,
+  { id:'nimbu', claim:'Turns away misfortune at the door.<sup>*</sup>', name:'Nimbu-mirchi', origin:'India', ritual:'the old lemon drops and a fresh one rises', hang:0.038, hangX:0.465,
     story:'Seven chilies and a lemon, hung at the threshold to turn away misfortune. It is replaced every Saturday, because luck goes stale.',
-    parts:[{k:'string', img:'nimbu-string'}, {k:'lemon', img:'nimbu-lemon', pivot:'50% 60%'}] },
+    parts:[{k:'string', img:'nimbu-string'}, {k:'lemon', img:'nimbu-lemon', pivot:'50% 87%'}] },
   { id:'daruma', claim:'Holds you to your word.<sup>*</sup>', name:'Daruma', origin:'Japan', ritual:'an eye gets painted', hang:0.10,
     story:'A wishing doll for goals that take some grit. Knock it over and it rights itself — seven times down, eight times up.',
     parts:[{k:'body', img:'daruma-body'},
            {k:'eyeL', svg:'43.5,48.2,41.4,45.8', hidden:true},
            {k:'eyeR', svg:'83.8,48.2,81.7,45.9', hidden:true}] },
-  { id:'neko', claim:'Waves good fortune in off the street.<sup>*</sup>', name:'Maneki-neko', origin:'Japan', ritual:'it beckons, three times', hang:0.10,
+  { id:'neko', claim:'Waves good fortune in off the street.<sup>*</sup>', name:'Maneki-neko', origin:'Japan', ritual:'it beckons, three times', hang:0.076,
     story:'A beckoning cat that invites good fortune in. The raised paw is a come-here, not a wave — the gesture reads backwards to most of the world.',
-    parts:[{k:'body', img:'neko-body'}, {k:'paw', img:'neko-paw', pivot:'54% 64%'}] },
+    parts:[{k:'body', img:'neko-body'}, {k:'paw', img:'neko-paw', pivot:'40.1% 63.9%'}] },
   { id:'horseshoe', claim:'Catches luck, and keeps hold of it.<sup>*</sup>', name:'Horseshoe', origin:'Europe', ritual:'it flips', hang:0.10,
     story:'Iron, luck, and an argument that has run for centuries: ends up to hold the luck in, or ends down to pour it over you. Pick a side.',
     parts:[{k:'body', img:'horseshoe'}] },
-  { id:'scarab', claim:'Promises things come back around.<sup>*</sup>', name:'Scarab', origin:'Egypt', ritual:'the wing cases part', hang:0.06,
+  { id:'scarab', claim:'Promises things come back around.<sup>*</sup>', name:'Scarab', origin:'Egypt', ritual:'the wing cases part', hang:0.095,
     story:'The beetle that rolls the sun across the sky each morning. Carried as a promise that things come back around.',
     parts:[{k:'body', img:'scarab-body'},
            {k:'wingL', img:'scarab-wing-l', pivot:'50% 31%'},
@@ -598,6 +605,7 @@ function build(next, animate) {
     if (st >= 1) parts.eyeL.hidden = false;
     if (st >= 2) parts.eyeR.hidden = false;
   }
+  bin.style.setProperty('--hang-x', ((charm.hangX ?? 0.5) * 100) + '%');
   charmEl.setAttribute('aria-label',
     charm.name + ', hanging. Drag to swing it, or activate to perform its ritual.');
 
@@ -744,7 +752,8 @@ function frame(now) {
    * clockwise. Render theta directly and every drag comes out mirrored. */
   pend.style.transform = `rotate(${-theta}rad)`;
   cord.style.transform = `scaleY(${Math.max(0.02, (live + size * charm.hang + 4) / cordRest)})`;
-  bin.style.transform = `translate(-50%, ${live}px) rotate(${-behind}rad)`;
+  const hx = (charm.hangX ?? 0.5) * 100;
+  bin.style.transform = `translate(${-hx}%, ${live}px) rotate(${-behind}rad)`;
 }
 
 /* ------------------------------------------------------------------ input

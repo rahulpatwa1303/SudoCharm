@@ -32,7 +32,7 @@ LAYERS = [
 
 # 384px covers a charm drawn at up to 154 CSS px on a 2x display.
 CHARM_PX = 384
-SHOT_PX = 900
+SHOT_PX = 872
 
 
 def encode(im, fmt='WEBP', **kw):
