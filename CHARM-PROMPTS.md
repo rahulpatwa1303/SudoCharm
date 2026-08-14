@@ -197,37 +197,86 @@ Save it twice, as `daruma-eye-l.png` and `daruma-eye-r.png`.
 
 ## Maneki-neko — 2 pieces
 
+The last batch failed here and it is worth knowing why before regenerating. The
+body was asked for with a bare shoulder and came back as a **complete cat with
+both forelegs** — one down the chest on the viewer's left, one resting on the
+koban on the viewer's right. A raised paw laid on top of that gives the cat
+three front legs, and there is no placement or layer order that hides it:
+
+| paw over the body | the severed end shows as a pink oval hanging in mid-air |
+| --- | --- |
+| paw behind the body | no stump, but the arm passes behind the head — it reads as a hand floating by the face, and slides under it as it moves |
+
+So the absence has to be real. The wording below is blunt about it on purpose,
+and **the one thing to check before importing** is that the viewer's-left
+shoulder is genuinely empty.
+
+Sides are given as *you look at the picture*, never as the cat's own left and
+right, because that is the other way round and is what gets confused.
+
 ### `neko-body.png`
 
-> A seated white maneki-neko cat facing forward: rounded body, upright
-> pointed ears with pink inner ears, wide friendly eyes, whiskers, a red
-> collar with a gold bell, and a red-and-gold bib. Its left paw rests flat
-> on an oval gold koban coin at its side. **Its right shoulder is bare — no
-> right foreleg and no raised paw at all**, the shoulder drawn smooth and
-> complete as if the arm were simply absent. Glossy painted ceramic. At the
-> top centre a small hanging loop moulded into the charm itself, a closed
-> ring in the same material with its hole clearly open, no more than 10% of
-> the total height, its top touching the top edge of the frame. Clean
-> illustrated icon, front view, soft directional shading with a subtle rim
-> light, rich saturated colour, smooth gradients, crisp silhouette, readable
-> at 76px, centred, transparent background, no drop shadow, no text, no
-> background scenery, one object only, square 1024×1024.
+> A seated maneki-neko lucky cat figurine facing forward, glossy white porcelain
+> with fine gold outlines. Large amber eyes with bright highlights, small gold
+> eyebrow flicks, a pink nose, a smiling red mouth, gold whiskers, and upright
+> pointed ears with red inner ears. A red collar patterned with gold flowers,
+> with a large gold bell hanging at the throat. Red cherry blossoms and gold
+> cloud scrollwork on its haunches, and hind paws with gold toe lines at the
+> bottom. A large upright oval gold koban coin, engraved with a sakura, rests
+> against its chest on the RIGHT-HAND SIDE OF THE PICTURE, with one white paw
+> resting flat on top of the coin holding it there.
+>
+> **The other foreleg — the one on the LEFT-HAND SIDE OF THE PICTURE — must be
+> completely absent.** No leg, no paw, no raised arm, no shoulder joint, no
+> hint of one. Draw that whole side as a smooth unbroken finished curve of
+> white porcelain, exactly as though the figurine had been sculpted with only
+> one front leg and the other side left plain. Do not raise a paw there. Do not
+> rest a second paw anywhere. Do not suggest an arm behind the body. That space
+> must be empty porcelain, because a separate raised arm is placed onto it
+> afterwards and anything drawn there will collide with it.
+>
+> At the top centre a small hanging loop moulded into the figurine itself, a
+> closed ring in white porcelain with a thin gold rim and its hole clearly open,
+> no more than 10% of the total height, its top touching the top edge of the
+> frame. Clean illustrated icon, front view, soft directional shading with a
+> subtle rim light, rich saturated colour, smooth gradients, crisp silhouette,
+> readable at 76px, centred, transparent background, no drop shadow, no text,
+> no background scenery, one object only, no cord and no beads, square
+> 1024×1024.
 
 ### `neko-paw.png`
 
-> One cat foreleg and paw alone, cut off at the shoulder — glossy white
-> ceramic with a pink paw pad, bent at the elbow and raised, the paw curled
-> forward and down in the maneki-neko beckoning gesture. Nothing else in the
-> frame: no cat, no body, no collar, no coin, no beads. Clean illustrated
-> icon, front view, soft directional shading with a subtle rim light, rich
-> saturated colour, smooth gradients, crisp silhouette, readable at 76px,
-> centred, transparent background, no drop shadow, no text, square
-> 1024×1024.
+The arm is drawn **in front of** the body, so its cut end lands on the bare
+shoulder. That end must be plain white — a pink cross-section reads as a
+severed limb, which is exactly how the last one looked.
 
-The paw is drawn to sit on the bare shoulder, so match its ceramic white and
-its lighting to the body — generate the body first and describe it back.
+> A single cat foreleg and paw alone, cut off at the shoulder, raised in the
+> maneki-neko beckoning gesture — the upper arm rising up and to the LEFT, bent
+> at the elbow, the paw at the top curled forward and slightly down with a soft
+> pink pad and gold toe lines. Glossy white porcelain with fine gold outlines
+> and soft cool-grey shading, matching a white porcelain cat exactly.
+>
+> It must read as a plump, rounded, chubby ceramic limb — thick and heavy the
+> whole way, never a thin stick with a ball on the end. The paw is noticeably
+> wider than the arm.
+>
+> Where it is cut off at the shoulder, the cut end is **plain white porcelain,
+> shaded like the rest of the limb — no pink, no red, no cross-section, no
+> wound, no visible join.** That end is covered by the body when assembled.
+>
+> Nothing else in the frame: no cat, no head, no body, no collar, no bell, no
+> coin, no loop. Clean illustrated icon, front view, soft directional shading
+> with a subtle rim light, rich saturated colour, smooth gradients, crisp
+> silhouette, readable at 76px, transparent background, no drop shadow, no
+> text, square 1024×1024.
 
----
+### Check both before importing
+
+1. Is the **left-hand side of the body picture** genuinely bare porcelain, with
+   no leg and no paw? If not, the image is unusable — regenerate it.
+2. Does the body have exactly **one** front paw, on the koban?
+3. Is the paw's cut end **white**, with no pink?
+4. Is the loop's hole actually open, so you can see through it?
 
 ## Scarab — 3 pieces
 
