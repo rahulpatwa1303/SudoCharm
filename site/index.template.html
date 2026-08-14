@@ -95,6 +95,26 @@ code, kbd { font-family: var(--mono); font-size: 0.9em; }
  * Fixed over everything and inert, except the charm itself — the same
  * arrangement the extension uses on the desktop, for the same reason. */
 .rig { position: fixed; inset: 0; z-index: 30; pointer-events: none; }
+
+/* The shelf the charm hangs in on a narrow screen.
+ *
+ * On a phone the charm has to stay put — it is the demo, and scrolling it away
+ * hides the only thing worth playing with. But a charm fixed over running text
+ * is a charm sitting on top of what you are trying to read. So it gets its own
+ * band at the top, painted in the page colour, and the article scrolls under
+ * it. Pull the charm out of the band and it is over the page, which is fine:
+ * that only happens because someone dragged it there.
+ *
+ * The fade is a mask rather than a gradient background, because gradients do
+ * not transition and this colour has to change with the charm. */
+.shelf {
+  position: fixed; inset: 0 0 auto 0; height: var(--shelf-h, 0px); z-index: 20;
+  pointer-events: none; background: var(--paper);
+  -webkit-mask-image: linear-gradient(#000 calc(100% - 52px), transparent 100%);
+  mask-image: linear-gradient(#000 calc(100% - 52px), transparent 100%);
+  transition: background-color .55s ease;
+}
+body.dragging { user-select: none; }
 .hook {
   position: absolute; width: 12px; height: 5px; margin-left: -6px;
   border-radius: 0 0 6px 6px; background: var(--bar-ink); opacity: .55;
@@ -126,12 +146,16 @@ code, kbd { font-family: var(--mono); font-size: 0.9em; }
 /* ------------------------------------------------------------- structure */
 main {
   position: relative; z-index: 10;
-  padding: calc(var(--bar-h) + 1rem) 1.15rem 0;
+  padding: calc(var(--shelf-h, 15rem) + 0.5rem) 1.15rem 0;
   max-width: 44rem;
 }
 @media (min-width: 62rem) {
   :root { --bar-h: 38px; }
   main { margin-left: max(7vw, calc(50% - 34rem)); padding-right: 2rem; }
+  /* Wide enough that the charm hangs in the margin beside the text rather
+     than over it, so it needs no shelf and can swing the full height. */
+  .shelf { display: none; }
+  main { padding-top: calc(var(--bar-h) + 1rem); }
 }
 section { padding: 3.4rem 0; border-top: 1px solid var(--rule); transition: border-color .55s ease; }
 section:first-of-type { border-top: 0; }
@@ -139,20 +163,20 @@ h2 { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2rem); margin-bottom: 1rem; }
 .lede { color: var(--muted); transition: color .55s ease; }
 
 /* ----------------------------------------------------------------- hero */
-.hero { padding-top: clamp(9rem, 30vh, 15rem); padding-bottom: 3rem; }
-@media (min-width: 46rem) { .hero { padding-top: clamp(7rem, 22vh, 11rem); } }
+.hero { padding-top: .75rem; padding-bottom: 3rem; }
+@media (min-width: 62rem) { .hero { padding-top: clamp(7rem, 22vh, 11rem); } }
 .eyebrow {
   font: 600 12px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase;
   color: var(--muted); margin-bottom: 1.1rem;
 }
 .hero h1 {
   font-size: clamp(2.35rem, 1.5rem + 4.6vw, 4.2rem);
-  max-width: 15ch; margin-bottom: 1.2rem;
+  max-width: 15ch; margin-bottom: 1.25rem; text-wrap: balance;
 }
 .hero .sub { font-size: 1.06em; max-width: 34ch; }
 @media (min-width: 46rem) { .hero .sub { max-width: 46ch; } }
 .pull {
-  margin-top: 1.6rem; font: 500 12.5px/1.6 var(--mono); color: var(--muted);
+  margin: 0 0 1.7rem; font: 500 12.5px/1.6 var(--mono); color: var(--muted);
   display: flex; align-items: baseline; gap: .55rem; max-width: 40ch;
 }
 .pull::before {
@@ -174,11 +198,21 @@ h2 { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2rem); margin-bottom: 1rem; }
 .btn.ghost:hover { border-color: var(--accent); }
 .platform { margin-top: .95rem; font-size: .9rem; color: var(--muted); }
 
-/* ---------------------------------------------------------------- picker */
-.picker { display: flex; flex-wrap: wrap; gap: .55rem; margin: 0 0 1.75rem; padding: 0; border: 0; }
-.picker legend { padding: 0; margin-bottom: .8rem; font: 600 12px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+/* ----------------------------------------------------------------- picker
+ * A grid rather than a wrapping row: seven items wrapping at phone width
+ * break 5 and 2, which looks like an accident. Four and three does not. */
+.pick-label {
+  margin: 0 0 .75rem; font: 600 12px/1 var(--mono);
+  letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+  transition: color .55s ease;
+}
+.picker {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: .55rem; max-width: 21rem; margin: 0 0 2rem;
+}
+@media (min-width: 34rem) { .picker { grid-template-columns: repeat(7, 1fr); max-width: 31rem; } }
 .swatch {
-  width: 3.35rem; height: 3.35rem; padding: .3rem; border-radius: 50%; cursor: pointer;
+  width: 100%; aspect-ratio: 1; padding: .34rem; border-radius: 50%; cursor: pointer;
   border: 1px solid var(--rule); background: var(--card);
   transition: border-color .3s ease, background-color .55s ease, transform .16s ease;
 }
@@ -245,6 +279,8 @@ footer p { margin-bottom: .55em; }
   </nav>
 </header>
 
+<div class="shelf" aria-hidden="true"></div>
+
 <div class="rig" id="rig">
   <div class="hook" id="hook" aria-hidden="true"></div>
   <div class="pendulum" id="pendulum">
@@ -262,12 +298,18 @@ footer p { margin-bottom: .55em; }
   <section class="hero">
     <p class="eyebrow">GNOME Shell extension</p>
     <h1>Root-level good luck for your desktop.</h1>
+
+    <!-- Directly under the headline, because on a phone this is the only part
+         of the page the visitor can play with without scrolling. -->
+    <p class="pull" id="hint">The one above is the real thing. Pull it.</p>
+    <p class="pick-label" id="pick-label">Hang a different one</p>
+    <div class="picker" id="picker" role="group" aria-labelledby="pick-label"></div>
+
     <p class="sub">It hangs there over your desktop and sways. Grab it and it swings — the cord
     stretches while you pull and whips when you let go, because it is an actual pendulum
     rather than a looping animation. Call it down and it performs a small ritual belonging
     to that particular charm.</p>
     <p class="sub" style="margin-top:1.1rem"><strong>It does nothing useful. That is the entire point.</strong></p>
-    <p class="pull" id="hint">The one on this page is the real thing. Pull it.</p>
     <div class="row">
       <a class="btn" href="https://github.com/rahulpatwa1303/SudoCharm/releases">Download</a>
       <a class="btn ghost" href="https://github.com/rahulpatwa1303/SudoCharm">Source</a>
@@ -276,10 +318,8 @@ footer p { margin-bottom: .55em; }
   </section>
 
   <section>
-    <fieldset class="picker" id="picker">
-      <legend>Seven charms</legend>
-    </fieldset>
-    <div class="card" id="card">
+    <h2>Seven charms, seven traditions</h2>
+    <div class="card" id="card" style="margin-top:1.3rem">
       <h3 id="c-name">Nazar boncuğu</h3>
       <p class="origin" id="c-origin">Turkey</p>
       <p id="c-story"></p>
@@ -439,13 +479,23 @@ let time = 0, last = 0, dragging = false, blessing = false, touched = false;
 let dragPointer = null, dragTheta = 0, dragThetaPrev = 0, dragTimePrev = 0, moved = false;
 
 /* --------------------------------------------------------------- geometry */
+const WIDE = 62 * 16;      // matches the desktop breakpoint in the stylesheet
+
 function layout() {
   const w = innerWidth, h = innerHeight;
-  const bar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bar-h')) || 34;
-  size = clamp(Math.min(w, h) * 0.18, 96, 154);
-  cordRest = clamp(h * 0.09, 58, 108);
-  anchorX = Math.round(w * (w < 640 ? 0.74 : 0.8));
+  const root = document.documentElement;
+  const bar = parseFloat(getComputedStyle(root).getPropertyValue('--bar-h')) || 34;
+  const wide = w >= WIDE;
+
+  /* On a phone the charm is the hero: bigger, and hanging in the middle of its
+   * own shelf. On a wide screen it hangs in the margin beside the text, near
+   * where the extension's default anchor puts it on a desktop. */
+  size = wide ? clamp(Math.min(w, h) * 0.18, 96, 154)
+              : clamp(w * 0.33, 104, 168);
+  cordRest = wide ? clamp(h * 0.09, 58, 108) : clamp(h * 0.075, 46, 84);
+  anchorX = Math.round(w * (wide ? 0.8 : 0.5));
   anchorY = bar;
+
   pend.style.left = anchorX + 'px';
   pend.style.top = anchorY + 'px';
   hook.style.left = anchorX + 'px';
@@ -453,6 +503,24 @@ function layout() {
   cord.style.height = cordRest + 'px';
   bin.style.width = size + 'px';
   bin.style.height = size + 'px';
+
+  // Deep enough to hold the charm at rest with a little room to sway, plus
+  // the height of the fade at the bottom edge.
+  root.style.setProperty('--shelf-h',
+    Math.round(bar + cordRest + size + size * 0.1 + 52) + 'px');
+}
+
+/* Mobile browsers resize the viewport as the address bar hides and comes back.
+ * Relaying out on that would resize and reposition the charm every time the
+ * page is scrolled, which reads as the thing glitching. Only a real change of
+ * width, or a height change too large to be browser chrome, counts. */
+let lastW = 0, lastH = 0;
+function maybeLayout() {
+  if (innerWidth === lastW && Math.abs(innerHeight - lastH) < 140)
+    return;
+  lastW = innerWidth;
+  lastH = innerHeight;
+  layout();
 }
 
 /* Past this the cord resists rather than stops. A hard cap reads as broken:
@@ -642,6 +710,7 @@ charmEl.addEventListener('pointerdown', e => {
   dragPointer = e.pointerId;
   try { charmEl.setPointerCapture(e.pointerId); } catch {}
   rig.classList.add('dragging');
+  document.body.classList.add('dragging');
   dragTheta = dragThetaPrev = theta;
   dragTimePrev = performance.now();
   document.getElementById('hint').textContent = 'Let go mid-swing and it throws.';
@@ -669,6 +738,7 @@ function endDrag(e) {
   if (!dragging || (e && e.pointerId !== dragPointer)) return;
   dragging = false; dragPointer = null;
   rig.classList.remove('dragging');
+  document.body.classList.remove('dragging');
   ceiling = MAX_SWING;          // full headroom, or it bounces on frame one
   if (!moved) bless();
 }
@@ -697,9 +767,10 @@ for (const c of CHARMS) {
 }
 
 /* ------------------------------------------------------------------ start */
-addEventListener('resize', layout, { passive: true });
-addEventListener('orientationchange', layout);
+addEventListener('resize', maybeLayout, { passive: true });
+addEventListener('orientationchange', () => setTimeout(layout, 120));
 layout();
+lastW = innerWidth; lastH = innerHeight;
 build(CHARMS[0], false);
 paintCount(store.get('blessed', 0));
 requestAnimationFrame(t => { last = t; requestAnimationFrame(frame); });
