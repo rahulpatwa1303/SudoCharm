@@ -30,6 +30,16 @@
       <summary>Length of the cord it hangs from, in pixels</summary>
     </key>
 
+    <key name="cord-style" type="s">
+      <default>'rounded'</default>
+      <choices>
+        <choice value="thread"/>
+        <choice value="rounded"/>
+        <choice value="twist"/>
+      </choices>
+      <summary>How the cord it hangs from is drawn</summary>
+    </key>
+
     <key name="anchor" type="d">
       <default>0.86</default>
       <range min="0.0" max="1.0"/>

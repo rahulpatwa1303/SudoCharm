@@ -13,9 +13,14 @@ import Gdk from 'gi://Gdk';
 import Gio from 'gi://Gio';
 import GObject from 'gi://GObject';
 
-import {ExtensionPreferences} from 'resource:///org/gnome/shell/extensions/prefs.js';
+/* Note the capitals and the /js/. The all-lowercase
+ * resource:///org/gnome/shell/extensions/prefs.js is a path that does not
+ * exist — importing it fails the whole module, and the only symptom is the
+ * shell's generic "Something's gone wrong" dialog. */
+import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-import {CHARMS} from './charms.js';
+import {CHARMS} from './charm-list.js';
+import {CORD_STYLES, CORD_STYLE_LABELS} from './cord-styles.js';
 
 export default class SudoCharmPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
@@ -92,6 +97,26 @@ export default class SudoCharmPreferences extends ExtensionPreferences {
             'Size', 'Pixels across.', 32, 220, 4));
         hangGroup.add(this._spin(settings, 'cord-length',
             'Cord length', 'How far below the top bar it hangs.', 8, 400, 4));
+
+        const cordModel = new Gtk.StringList();
+        for (const s of CORD_STYLES)
+            cordModel.append(CORD_STYLE_LABELS[s]);
+
+        const cordRow = new Adw.ComboRow({
+            title: 'Cord',
+            subtitle: 'What it hangs by.',
+            model: cordModel,
+            selected: Math.max(0,
+                CORD_STYLES.indexOf(settings.get_string('cord-style'))),
+        });
+        cordRow.connect('notify::selected', row =>
+            settings.set_string('cord-style', CORD_STYLES[row.selected]));
+        settings.connect('changed::cord-style', () => {
+            const i = CORD_STYLES.indexOf(settings.get_string('cord-style'));
+            if (i >= 0 && i !== cordRow.selected)
+                cordRow.selected = i;
+        });
+        hangGroup.add(cordRow);
 
         const anchorRow = new Adw.SpinRow({
             title: 'Position along the top edge',

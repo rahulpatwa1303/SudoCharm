@@ -67,8 +67,9 @@ everyone once.
 Take it down and the bare hook stays under the top bar. Click the hook to hang
 the charm up again.
 
-Sizes, cord length, how strong the breeze is and how fast a flick rings down are
-all in the preferences:
+Sizes, cord length, what it hangs by — a fine thread, a round leather cord, or
+twisted rope — how strong the breeze is and how fast a flick rings down are all
+in the preferences:
 
 ```sh
 gnome-extensions prefs sudocharm@rahul.local
@@ -159,10 +160,22 @@ the code.
 tracked actor makes the compositor recompute its input region, and the charm
 never stops moving, so following it every frame would mean recomputing forever.
 
-**Each charm's art starts partway down its own canvas** — measured, the deepest
-is the horseshoe at 0.094 — so the cord is drawn past the top of the charm's box
-and painted over. Without that it visibly fails to reach the charm and the whole
-thing looks detached.
+**Each charm hangs from a different point in its own artwork** — the nazar from
+the hole drilled through its glass at 0.157, the nimbu from the very top of its
+string at 0.02. That point is `hangPivot`, and two things have to agree on it:
+the cord is drawn to exactly there, and the charm rotates about exactly there.
+Get either wrong and the two come apart the moment it swings — the charm's lag
+walks its hole sideways off the end of the cord, and the cord's tip pokes out
+from behind the artwork. It looks fine at rest, which is what makes it easy to
+ship.
+
+**The cord is drawn in Cairo, not styled as a widget.** A rectangle only has
+clean edges while it is upright. Rotated — which is to say, whenever anyone is
+actually looking at it — the compositor gives it no antialiasing, and a 4px cord
+with 1px light and dark side borders stair-steps into a dashed twig. Drawing it
+by hand also buys the bow: a cord has weight, so its middle trails through the
+fast part of a swing while both its ends stay pinned. That curve is most of what
+separates a cord from a rod.
 
 There is deliberately no scroll handler. The grabbable area is invisible and
 sits over other windows, and swallowing scroll there would stop the page

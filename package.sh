@@ -11,7 +11,9 @@ UUID="$(python3 -c "import json;print(json.load(open('metadata.json'))['uuid'])"
 mkdir -p dist
 
 EXTRA=()
-for f in pendulum.js charms.js sudocharm README.md; do EXTRA+=(--extra-source="$f"); done
+for f in pendulum.js charms.js charm-list.js cord.js cord-styles.js sudocharm README.md; do
+  EXTRA+=(--extra-source="$f")
+done
 EXTRA+=(--extra-source=icons)
 
 gnome-extensions pack \

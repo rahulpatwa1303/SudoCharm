@@ -36,6 +36,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {CHARMS, charmById, buildCharm, playRitual} from './charms.js';
+import {Cord} from './cord.js';
 
 const DBUS_PATH = '/org/gnome/shell/extensions/sudocharm';
 const DBUS_IFACE = `
@@ -103,12 +104,12 @@ const LAG_K = 95;
 const LAG_C = 8.5;
 const MAX_LAG = 0.55;        // radians of lead or lag
 
-/* How far the cord is drawn past the top of the charm's box, as a fraction of
- * the charm size. Every charm's artwork starts some way down its own 128px
- * canvas — measured, the deepest is the horseshoe at 0.094 — so a cord that
- * stops at the box edge visibly fails to reach the charm and the whole thing
- * looks detached. The charm is painted over the overlap. */
-const CORD_OVERLAP = 0.13;
+/* How hard the cord bows away from the direction it is travelling, per radian
+ * per second, as a fraction of its own length — a cord has weight, so its
+ * middle trails while its ends are pinned. Straight at rest, most curved
+ * through the fast part of a swing. Set BOW to 0 for a rigid cord. */
+const BOW = 0.045;
+const MAX_BOW = 0.16;        // fraction of cord length
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
@@ -136,6 +137,10 @@ class Pendulum {
         this._drop = 0;
         this._dropTarget = 0;
 
+        // Where in its own box the charm hangs from, as a fraction of its
+        // height — the knot the cord ties to. Per charm; _buildCharm sets it.
+        this._hangY = 0.06;
+
         this._destroyed = false;
         this._clockId = 0;
         this._blocked = false;
@@ -160,6 +165,8 @@ class Pendulum {
         for (const key of ['charm-size', 'cord-length', 'anchor'])
             this._watch(key, () => { this._buildCharm(); this._syncGeometry(); });
         this._watch('visible', () => this._syncVisible());
+        this._watch('cord-style',
+            () => this._cord.setStyle(this._settings.get_string('cord-style')));
 
         this._monitorsId = Main.layoutManager.connect('monitors-changed',
             () => this._syncGeometry());
@@ -191,16 +198,17 @@ class Pendulum {
         this._pendulum.set_pivot_point(0.5, 0);
         this._layer.add_child(this._pendulum);
 
-        this._cord = new St.Widget({style_class: 'sudocharm-cord'});
-        this._pendulum.add_child(this._cord);
+        this._cord = new Cord(this._settings.get_string('cord-style'));
+        this._pendulum.add_child(this._cord.actor);
 
         this._charmBin = new St.Widget({
             layout_manager: new Clutter.BinLayout(),
             reactive: false,
         });
-        // Pivots where the cord meets it, so the charm's lag reads as swinging
-        // from the cord end rather than spinning about its own middle.
-        this._charmBin.set_pivot_point(0.5, 0);
+        // Pivoted at the charm's own hang point by _buildCharm, so its lag
+        // reads as swinging from the knot rather than spinning about its
+        // middle — and so the cord's end and the knot never come apart.
+        this._charmBin.set_pivot_point(0.5, this._hangY);
         this._pendulum.add_child(this._charmBin);
 
         // The only two rectangles on the screen that take a click: the charm
@@ -239,6 +247,15 @@ class Pendulum {
             this._settings.get_string('emoji'));
         this._charmBin.add_child(this._charm.actor);
         this._applyDaruma();
+
+        // Charms hang from different heights in their own artwork — the scarab
+        // from 0.12 of the way down, the nimbu string from 0.02. The cord has
+        // to run to that point and the charm has to turn about it, or the two
+        // come apart the moment it swings.
+        this._hangY = def.hangPivot[1];
+        this._charmBin.set_pivot_point(def.hangPivot[0], this._hangY);
+        if (this._mon)      // not on the first build; _syncGeometry lays out
+            this._layoutPendulum();
 
         if (this._menu) {
             this._menu.destroy();
@@ -287,10 +304,10 @@ class Pendulum {
         this._pendulum.set_position(Math.round(this._anchorX - size / 2), this._anchorY);
         this._pendulum.set_size(size, cord + size);
 
-        // Drawn past the charm box and painted over; see CORD_OVERLAP. This
-        // does not change the pendulum length, only what is drawn.
-        this._cord.set_position(Math.round(size / 2 - 2), 0);
-        this._cord.set_size(4, Math.round(cord + size * CORD_OVERLAP));
+        // Drawn to the charm's own hang point, which is some way inside its
+        // box; the charm is painted over that last stretch. This does not
+        // change the pendulum length, only what is drawn.
+        this._cord.layout(size, cord + size * this._hangY);
 
         this._charmBin.set_position(0, Math.round(cord));
         this._charmBin.set_size(size, size);
@@ -525,6 +542,13 @@ class Pendulum {
         // Negated: Clutter turns the opposite way to our sign convention.
         this._pendulum.rotation_angle_z = -this._theta * 180 / Math.PI;
         this._charmBin.rotation_angle_z = -lag * 180 / Math.PI;
+
+        // The cord's middle trails the swing. Both its ends are pinned, so
+        // this only ever bends it — the charm stays on the end of it.
+        const drawn = this._cordLen + this._drop + this._stretch
+            + this._size * this._hangY;
+        this._cord.setBow(clamp(-this._omega * BOW * drawn,
+            -MAX_BOW * drawn, MAX_BOW * drawn));
 
         this._followHitArea();
     }
@@ -954,6 +978,13 @@ class Pendulum {
         this._menu?.destroy();
         this._menu = null;
         this._menuManager = null;
+
+        try {
+            this._cord?.destroy();
+        } catch (e) {
+            console.error(`SudoCharm: cord teardown — ${e}`);
+        }
+        this._cord = null;
 
         for (const area of [this._hitCharm, this._hitHook]) {
             try {

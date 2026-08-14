@@ -39,7 +39,7 @@ const HOT_DIR = '.hot';
 /* Every file that participates in a reload. A module imported by a copy
  * resolves its own relative imports inside that copy's directory, so charms.js
  * has to come along or the copy would import nothing. */
-const IMPL_FILES = ['pendulum.js', 'charms.js'];
+const IMPL_FILES = ['pendulum.js', 'charms.js', 'charm-list.js', 'cord.js', 'cord-styles.js'];
 
 export default class SudoCharmExtension extends Extension {
     /* Loading is asynchronous, so enable/disable can interleave with an import

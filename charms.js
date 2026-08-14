@@ -7,7 +7,10 @@
  * any later version. See the LICENSE file for the full text.
  */
 
-/* charms.js — charm definitions, actor construction, and rituals.
+/* charms.js — charm actor construction and rituals.
+ *
+ * The charm definitions themselves are in charm-list.js and re-exported here;
+ * see the comment there for why they are kept apart.
  *
  * Every charm is a stack of full-canvas 128x128 SVG layers. Because each layer
  * shares the same canvas, an animated part (a lemon, an eye, a paw) already sits
@@ -33,117 +36,8 @@ function artFile(path, file) {
     return `${path}/icons/${file}`;
 }
 
-export const CHARMS = [
-    {
-        id: 'nazar',
-        name: 'Nazar boncuğu',
-        origin: 'Turkey',
-        story: 'A glass eye worn against the evil eye. Blue on white on blue — ' +
-               'it stares back at whatever was staring at you. Flick it and it spins.',
-        ritual: 'Flick it',
-        parts: [{key: 'body', file: 'nazar.svg'}],
-        hangPivot: [0.5, 0.06],
-    },
-    {
-        id: 'hamsa',
-        name: 'Hamsa',
-        origin: 'Middle East & North Africa',
-        story: 'An open hand carried for protection and good fortune. The eye in ' +
-               'the palm keeps watch so you do not have to.',
-        ritual: 'Wake the eye',
-        parts: [{key: 'body', file: 'hamsa.svg'}],
-        hangPivot: [0.5, 0.05],
-    },
-    {
-        id: 'nimbu',
-        name: 'Nimbu-mirchi',
-        origin: 'India',
-        story: 'Seven chilies and a lemon, hung at the threshold to turn away ' +
-               'misfortune. It is replaced every Saturday, because luck goes stale.',
-        ritual: 'Replace the lemon',
-        parts: [
-            {key: 'string', file: 'nimbu-string.svg'},
-            {key: 'lemon', file: 'nimbu-lemon.svg', pivot: [0.5, 0.6]},
-        ],
-        hangPivot: [0.5, 0.02],
-    },
-    {
-        id: 'daruma',
-        name: 'Daruma',
-        origin: 'Japan',
-        story: 'A wishing doll for goals that take some grit. You paint one eye ' +
-               'when you make the wish, and the other when you get there. ' +
-               'Knock it over and it rights itself — seven times down, eight times up.',
-        ritual: 'Paint an eye',
-        parts: [
-            {key: 'body', file: 'daruma-body.svg'},
-            {key: 'eyeL', file: 'daruma-eye-l.svg', hidden: true},
-            {key: 'eyeR', file: 'daruma-eye-r.svg', hidden: true},
-        ],
-        hangPivot: [0.5, 0.1],
-    },
-    {
-        id: 'neko',
-        name: 'Maneki-neko',
-        origin: 'Japan',
-        story: 'A beckoning cat that invites good fortune in. The raised paw is a ' +
-               'come-here, not a wave — the gesture reads backwards to most of the world.',
-        ritual: 'Beckon',
-        parts: [
-            {key: 'body', file: 'neko-body.svg'},
-            {key: 'paw', file: 'neko-paw.svg', pivot: [0.54, 0.64]},
-        ],
-        hangPivot: [0.5, 0.1],
-    },
-    {
-        id: 'horseshoe',
-        name: 'Horseshoe',
-        origin: 'Europe',
-        story: 'Iron, luck, and an argument that has run for centuries: ends up to ' +
-               'hold the luck in, or ends down to pour it over you. Pick a side.',
-        ritual: 'Flip it',
-        parts: [{key: 'body', file: 'horseshoe.svg'}],
-        hangPivot: [0.5, 0.1],
-    },
-    {
-        id: 'scarab',
-        name: 'Scarab',
-        origin: 'Egypt',
-        story: 'The beetle that rolls the sun across the sky each morning. Carried ' +
-               'as a promise that things come back around.',
-        ritual: 'Spread its wings',
-        // Body first: the elytra lie on top of it and part to reveal it.
-        parts: [
-            {key: 'body', file: 'scarab-body.svg'},
-            {key: 'wingL', file: 'scarab-wing-l.svg', pivot: [0.5, 0.31]},
-            {key: 'wingR', file: 'scarab-wing-r.svg', pivot: [0.5, 0.31]},
-        ],
-        hangPivot: [0.5, 0.12],
-    },
-    {
-        id: 'emoji',
-        name: 'Your own',
-        origin: 'Wherever you found it',
-        story: 'Any emoji you like, treated with exactly the same reverence as the rest.',
-        ritual: 'Give it a spin',
-        parts: [],
-        hangPivot: [0.5, 0.06],
-    },
-];
+export {CHARMS, charmById} from './charm-list.js';
 
-export function charmById(id) {
-    return CHARMS.find(c => c.id === id) ?? CHARMS[0];
-}
-
-/**
- * Build a charm actor at a given pixel size.
- *
- * @param {object} def   charm definition from CHARMS
- * @param {number} size  edge length in pixels
- * @param {string} path  extension directory, for resolving icon files
- * @param {string} emoji glyph to use when def.id === 'emoji'
- * @returns {{actor: St.Widget, parts: object, def: object, size: number}}
- */
 export function buildCharm(def, size, path, emoji) {
     const actor = new St.Widget({
         layout_manager: new Clutter.BinLayout(),
