@@ -1,144 +1,108 @@
-# I hung a good luck charm from the top of my screen
+# My animations finished right on time. They just never happened.
 
-### It does nothing useful. That turned out to be the hard part.
+### What a useless good luck charm taught me about the bugs that don't announce themselves
 
-*Originally published on [dev.to](https://dev.to/) — this version is lighter on
-code.*
+*A shorter, lighter version of [a post on dev.to](https://dev.to/) — that one has
+the code.*
 
 ---
 
-There is a Mac app called [Lucky Dangle](https://luckydangle.app/) that hangs a
-small charm from your menu bar. It has no features. You cannot configure it into
-usefulness. It just hangs there, and sways, and you can flick it.
+There is a good luck charm hanging from the top of my screen.
 
-I saw it, wanted it, and I run Linux.
+It sways. I can grab it and flick it, and the cord stretches while I pull and
+whips when I let go. Tap it and it does a small thing belonging to whichever
+charm is hanging — the scarab's wing cases open, the beckoning cat beckons three
+times, the horseshoe flips over.
 
-So now there is [SudoCharm](https://github.com/rahulpatwa1303/SudoCharm), which
-hangs a nazar bead from the top edge of my screen on a cord. Or a daruma doll, or
-a nimbu-mirchi, or four others — seven charms, each from a different tradition,
-each with its own small ritual. Click the daruma and it paints one eye; click it
-again when the wish lands and it paints the other. That state survives reboots,
-which means the doll on my screen is quietly keeping score of things I said I
-would do.
+Except it didn't. None of those had ever happened, on any machine, for the entire
+life of the project.
 
-None of this is useful. I want to be clear about that up front, because the
-uselessness is not an apology. It is the specification.
+No errors. Nothing in the log. The animations were starting. They were
+*completing*, on schedule, to the millisecond. The thing they were animating
+simply never moved.
 
-## Why a toy is harder than it looks
+It turns out the animation helper I was using cannot animate a rotation on those
+objects. It builds the transition, runs the clock, reports success, and
+interpolates precisely nothing. Fade the same object in the same frame and it
+works perfectly — so you cannot even conclude that animation is broken. Four
+fifths of it works.
 
-The pendulum maths took an afternoon. Three coupled systems, integrated every
-frame: the swing, the cord's elasticity, and the charm's own lag behind the cord.
+I had written five of these little rituals. I had watched all five of them not
+work. And every single time I concluded my angles must be wrong, because the
+system kept telling me the animation had run.
 
-```
-θ''       = −(g/L)·sin θ − damping·θ' + breeze(t)
-stretch'' = −k·stretch − c·stretch' + ω²·L·0.06
-lag''     = −k₂·(lag − θ) − c₂·lag'
-```
+## The pattern
 
-Two decisions in there matter more than the equations do.
+That is not a hard bug. It is a *quiet* one, and this small useless project
+turned out to be full of them.
 
-**Gravity is a lie.** Real gravity, at screen scale, swings far too slowly to
-read as a small object on a short string — it looks like a wrecking ball filmed
-from a helicopter. The number in the code is 2600 px/s², chosen by eye until it
-looked like a keyring.
+**The drag that froze.** Pull the charm and it followed my cursor for about
+twenty pixels, then stopped dead while the cursor kept going — still convinced it
+was being dragged. I diagnosed it wrong three times. I found a distance limit and
+removed it: correct change, no effect. I blamed a safety check and disproved it. I
+added a pointer grab, which was genuinely necessary and changed nothing visible.
 
-**The breeze must not loop.** It is three sine waves with periods of 6.7, 10.9
-and 17.3 seconds. Those do not divide into one another, so the idle drift never
-visibly repeats. A looping sway is the single thing that makes an object like
-this feel cheap — your eye finds the loop in about fifteen seconds and then it is
-a GIF, not a thing.
+The real answer needed two things to be true at once, and fixing either one alone
+produced an identical result. That is *why* I got it wrong three times: every one
+of my fixes was right, and every outcome looked the same.
 
-The third piece is the one that sells it. The charm hangs *from* the cord rather
-than being welded to it, so it lags behind and then catches up. That is why a
-flick makes it whip. Take that spring out and you have a rod with a picture on
-the end.
+**The test that agreed with itself.** Pull it right, it swung left. Everything
+mirrored. I had a test for the drag angle, and it passed — it compared the angle
+against the formula I had used to compute the angle. To three decimal places.
+Every time. It will always pass, because it is checking my arithmetic against my
+arithmetic. It cannot see which direction that angle actually *draws*.
 
-All of that was the easy afternoon. Everything after it was the desktop.
+The test that works asks a much stupider question: which side of the anchor did
+the charm end up on? Left or right. That's it.
 
-## The part where I was confidently wrong
+**The one that broke everything else.** For a while, clicking a window in the
+overview stopped selecting it, and the Show Apps button did nothing. Neither has
+anything to do with a charm on a string. An abandoned copy of my own code was
+throwing an exception about eight times a second inside the compositor's frame
+loop, which is enough to take the rest of the desktop down with it. It looked
+exactly like an unrelated bug in GNOME.
 
-For it to work at all, the charm has to draw over every window and take none of
-your clicks. On Wayland, an ordinary application cannot do both — painting above
-other people's windows *and* passing input through them is the compositor's
-privilege to grant. So this is a GNOME Shell extension rather than an app, and it
-gets to ask the compositor for exactly the arrangement it needs: a monitor-sized
-layer that is drawn but absent from the input region, plus two small rectangles —
-the charm and its hook — that are the only pixels on the screen that take a
-click.
-
-That worked immediately. Then dragging broke, and it cost me more time than
-everything else in the project put together.
-
-The symptom: grab the charm, pull, and it follows your cursor for about twenty
-pixels before stopping dead while the cursor carries on without it. It still
-thinks it is being dragged.
-
-I diagnosed it wrong three times. I found a distance cap and removed it — a good
-change that fixed nothing. I suspected a watchdog and disproved it. I added a
-pointer grab, which was genuinely necessary and changed nothing visible.
-
-The real answer needed both halves at once. On Wayland, once the pointer moves
-over an ordinary window, its motion events go to that application and not to the
-shell — so a handler listening on the stage simply stops hearing anything. A
-Clutter grab fixes the routing. But a Clutter grab then delivers events to the
-grabbed actor's subtree, so the stage-level handler stops firing for a *second*
-reason. Two mechanisms, either one enough to break it, and fixing one alone
-leaves the symptom exactly as it was.
-
-There is a version of this article where I present that as an insight. It was
-not. It was a long stretch of being certain.
+I twice decided it had stopped, because I checked a quiet minute of the log and
+saw nothing. It had not stopped.
 
 ## What actually fixed it
 
-Not thinking harder. A counter.
+Not thinking harder. Two small tools, each under an hour to write, both written
+far too late.
 
-I wrote a tiny script that prints one line while you drag:
+The first boots the whole thing in a nested desktop and takes a photograph. That
+one tool catches the entire category of bug that never raises an error and never
+appears in a log — a cord that stops short of the charm, a charm pinned sideways,
+artwork hanging a few pixels off its own pivot, five animations doing nothing at
+all. You cannot read those out of the source. You have to look.
 
-```
-dragging=true grab=stage motions=142 theta=0.61 stretch=88
-charm=(1204,318) pointer=(1210,322) lagBehindPointer=7
-```
+The second prints one line while I drag, and the useful part is a counter: how
+many motion events have actually arrived. If it climbs while the angle stays
+frozen, my maths is wrong. If it stays frozen, the events aren't reaching me at
+all. From the outside those two look identical — the charm just sits there — and
+every wrong answer I gave was a guess about which one I was staring at.
 
-That `motions=` field is the whole thing. If it climbs while the angle stays
-frozen, my maths is wrong. If it stays frozen, the events are not arriving at
-all. From the outside those two states are identical — the charm sits there
-either way — and every wrong answer I gave was a guess about which one I was
-looking at.
+## The thing worth keeping
 
-I wrote a second tool for the same reason: it boots the extension in a nested
-GNOME Shell under Xvfb and photographs it. That one catches the whole class of
-bug that never raises an error and never appears in a log — a cord that stops
-short of the charm, a charm pinned sideways against its swing limit, artwork
-hanging a few pixels off its own pivot. You cannot read those out of the source.
-You have to look.
+Every bug here is the same bug in a different coat.
 
-Both tools took under an hour to write. I wrote them near the end. Written at
-the start, they would have saved nearly all of it.
+The animation reported success. The drag reported that it was dragging. The angle
+test reported that the angle was correct. The abandoned code reported nothing
+while it broke the desktop. In each case the system told me something true and
+completely useless, and I kept listening to it instead of going and looking.
 
-That is the only real lesson I got out of a good luck charm: **when you cannot
-see the failure, stop reasoning and go build the smallest thing that shows it to
-you.** I know this. I have known it for years. I still argued with a bead
-for days.
+**When you cannot see the failure, stop reasoning and go build the smallest thing
+that shows it to you.**
 
-## It also has a D-Bus interface, because of course it does
-
-The one concession to usefulness is that it sits on the session bus, so anything
-that can run a command can reach it:
-
-```sh
-# .git/hooks/post-commit
-sudocharm bless "$(git rev-parse --short HEAD)"
-
-pytest && sudocharm bless || sudocharm flick 9
-```
-
-Every developer I have shown this to finds it funnier than it deserves.
+I have known that for years. I write it in code review. A bead on a string made
+me learn it again.
 
 ---
 
-SudoCharm is GPL-3.0, GNOME Shell 45–48, Wayland or X11, Linux only, with no
-other platforms planned. Source and releases:
+The charm is called SudoCharm. It is free, it is GPL-3.0, it runs on Linux with
+GNOME, and it does nothing useful whatsoever — that part is deliberate.
 **[github.com/rahulpatwa1303/SudoCharm](https://github.com/rahulpatwa1303/SudoCharm)**
 
-The idea is Lucky Dangle's, and is used here with admiration. The code and the
-artwork are mine. If you are on a Mac, buy theirs.
+The idea comes from [Lucky Dangle](https://luckydangle.app/), a lovely little Mac
+app that does the same thing on a menu bar. The code and artwork here are mine.
+If you have a Mac, go and buy theirs.

@@ -9,14 +9,20 @@ two. Medium has an "import a story" flow that sets this for you.
 
 ## Read before posting
 
-A few lines in the drafts are claims about me rather than about the code, and I
-should make sure they are true before they go out under my name:
+Both drafts now open on the same hook: every rotation animation in the extension
+had never once run, silently, for the life of the project. That is true and it is
+the best thing in either post — `ease()` builds a transition for
+`rotation-angle-z` whose interval has no value type, so it interpolates nothing
+and reports success. `turn()` in `charms.js` is the fix.
 
-- dev.to says the physics "was an afternoon" and the tools were written late.
-- Medium says "every developer I have shown this to finds it funnier than it
-  deserves" — that should be true of actual people, or it should go.
-- Both say the drag cost more time than everything else. It did, but check the
-  phrasing still reads as honest rather than as a humblebrag.
+Before either goes out under my name:
+
+- The dev.to post says the drag "cost more time than everything else" and that
+  the tools were written late. Check that still reads as honest rather than as a
+  humblebrag.
+- Neither draft claims a number of days any more. Do not add one back unless it
+  is true.
+- The Medium version says "I write it in code review." Only keep that if I do.
 
 ---
 
@@ -39,29 +45,33 @@ Two things to sort out first:
 
 ## Show HN
 
-Title — HN strips marketing, so keep it flat:
+HN strips marketing, so keep the title flat. Two options — the first sells the
+thing, the second sells the story. Post whichever matches what you want back:
 
 > Show HN: SudoCharm – a good luck charm that hangs from your GNOME top bar
 
-Link to the repo, not the article. Then post the first comment yourself:
+> Show HN: Every animation in my GNOME extension had never once run
+
+Link the repo for the first, the article for the second. Then post the first
+comment yourself:
 
 > I saw Lucky Dangle, a Mac menu bar app that hangs a charm from your menu bar,
-> and wanted it on Linux. This is an independent GNOME Shell implementation —
-> the code and artwork are mine, the idea is theirs.
+> and wanted it on Linux. Independent GNOME implementation — the code and artwork
+> are mine, the idea is theirs.
 >
 > It is a real pendulum rather than a looping animation: the swing, the cord's
-> elasticity and the charm's lag behind the cord are integrated every frame, so
-> a flick makes it whip and a longer cord genuinely swings slower. Seven charms,
-> each with a small ritual — the daruma paints one eye when you make a wish and
-> the other when it lands, and that survives reboots.
+> elasticity and the charm's lag behind the cord are integrated every frame, so a
+> flick makes it whip and a longer cord genuinely swings slower. Seven charms,
+> each with a small ritual. The daruma paints one eye when you make a wish and
+> the other when it lands, and remembers between reboots.
 >
-> The interesting part technically was input. It has to draw over every window
-> and take none of your clicks, which on Wayland an ordinary application cannot
-> do — so it is a shell extension with a monitor-sized layer outside the input
-> region plus two small tracked hit areas. Dragging then broke in a way I
-> diagnosed wrong three times; write-up here if that is your kind of thing: [link]
+> The interesting part technically was everything that failed quietly. Rotations
+> animated by `ease()` complete on schedule without ever changing the angle, so
+> five of those rituals had never run and never errored. Dragging silently
+> freezes on Wayland once the pointer leaves the hit area, for two independent
+> reasons that each look identical from outside. Write-up: [link]
 >
-> Linux only, GNOME 45–48, no other platforms planned.
+> Linux only, GNOME 45–48, GPL-3.0.
 
 Expect the top comment to be about whether the name is a good joke. It is fine.
 
@@ -119,46 +129,51 @@ Attach a GIF of the swing.
 
 ## X
 
-> Spent a week making a good luck charm swing correctly on my Linux desktop.
+> Every animation in this thing had never once run. No errors, no warnings —
+> they were starting and completing on schedule and moving nothing at all.
 >
-> It does nothing useful. The cord stretches when you pull it and whips when you
-> let go, because it is an actual pendulum rather than a looping animation.
->
-> Seven charms, each with a ritual. GPL-3.0.
+> It is a good luck charm that hangs off my desktop and does nothing useful.
+> Fixing it taught me more than anything useful has this year.
 
 Reply with the article link — a bare repo link performs badly there.
 
 ## LinkedIn
 
-Only worth it for the debugging lesson, and only if it is the honest version.
-Nobody needs another post about a swinging bead, but the point underneath it
-travels:
+Only worth posting for the lesson, and only the honest version:
 
-> I lost more time to one bug on a hobby project than to anything at work this
-> month, and the cause was that I kept reasoning about behaviour I could not
-> observe.
+> Every animation in a side project of mine had never once run. Not on any
+> machine, not once, for the life of the project.
 >
-> A charm hanging from my desktop would not drag correctly. I diagnosed it wrong
-> three times — each fix was defensible, each one changed nothing.
+> No errors. Nothing in the logs. The animations were starting. They were
+> completing, on schedule, to the millisecond. The value they were animating
+> simply never changed — the helper I was using cannot animate that particular
+> property and reports success anyway.
 >
-> What ended it was not thinking harder. It was a counter. I added one number to
-> a debug line: how many motion events had actually arrived. If it climbed while
-> the angle stayed frozen, my maths was wrong. If it stayed frozen, the events
-> were not arriving at all. From the outside those two states look identical,
-> and every wrong answer I gave was a guess about which one I was looking at.
+> I had written five of those animations. I had watched all five not work. Every
+> single time I concluded my own numbers must be wrong, because the system kept
+> telling me the animation had run.
 >
-> The tool took under an hour. I wrote it near the end.
+> That project had three bugs with the same shape. The animation reported
+> success. The drag reported that it was dragging. My test reported that the
+> angle was correct — it was comparing my arithmetic against my arithmetic, so it
+> agreed with me all the way off a cliff.
 >
-> When you cannot see the failure, stop reasoning and go build the smallest
-> thing that shows it to you.
+> What fixed all of it was not thinking harder. It was two small tools, an hour
+> each, that showed me the actual screen and the actual event count. I wrote them
+> far too late.
+>
+> When you cannot see the failure, stop reasoning and go build the smallest thing
+> that shows it to you.
 
 ## Assets to have ready
 
 - **A GIF of the swing.** Nothing else sells this, and every one of the above is
   weaker without it. Grab it, pull it well out, let go, and let it settle —
   about four seconds.
-- `docs/hanging.png` — the existing screenshot, for anywhere a still will do.
-- `docs/charms.png` — the lineup of seven, good as a second image.
+- `docs/hanging.png` — freshly shot on a stock desktop with the current art and
+  the beaded cord. Safe to post; the desktop icons are cropped out.
+- `docs/charms.png` — the lineup of seven. **Stale — still the old artwork.**
+  Reshoot before using it anywhere.
 - The landing page, once GitHub Pages is on: `docs/` on `main`.
 
 ## Order
