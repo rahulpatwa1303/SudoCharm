@@ -92,6 +92,43 @@ function px(charm, units) {
  * @param {object} [ctx]     {darumaState, onDarumaAdvance, sparkle}
  * @returns {number} how long the ritual runs, in milliseconds
  */
+/* Rotations have to be animated by hand.
+ *
+ * ease() cannot do them on these actors. It creates a transition for
+ * rotation-angle-z, the transition starts and completes on schedule, and the
+ * angle sits at zero the whole way through — the interval it builds comes out
+ * with no value type, so there is nothing to interpolate between.
+ *
+ * Measured rather than guessed: easing opacity on the same actor in the same
+ * frame goes 255 to 98 exactly as asked, while the angle beside it never
+ * leaves 0, and assigning that angle directly works fine. So a timeline that
+ * sets it each frame does what ease() only appeared to.
+ *
+ * This is why the rituals looked dead. The scarab's wing cases, the nazar's
+ * spin, the neko's beckon, the horseshoe's flip and the daruma's nudge are all
+ * rotations, and every one of them was quietly animating nothing.
+ */
+function turn(actor, prop, from, to, opts = {}) {
+    const {duration = 300, mode = Clutter.AnimationMode.LINEAR,
+           delay = 0, onDone} = opts;
+    const timeline = Clutter.Timeline.new_for_actor(actor, Math.max(1, duration));
+    timeline.set_progress_mode(mode);
+    if (delay)
+        timeline.set_delay(delay);
+
+    actor[prop] = from;
+    timeline.connect('new-frame', () => {
+        actor[prop] = from + (to - from) * timeline.get_progress();
+    });
+    timeline.connect('completed', () => {
+        actor[prop] = to;
+        timeline.stop();
+        onDone?.();
+    });
+    timeline.start();
+    return timeline;
+}
+
 export function playRitual(charm, ctx = {}) {
     const {parts, def} = charm;
     const sparkle = ctx.sparkle ?? (() => {});
@@ -101,12 +138,10 @@ export function playRitual(charm, ctx = {}) {
     case 'emoji': {
         // A flick: two fast rotations about the vertical axis, then a wobble.
         const body = parts.body;
-        body.rotation_angle_y = 0;
-        body.ease({
-            rotation_angle_y: 720,
+        turn(body, 'rotation_angle_y', 0, 720, {
             duration: 900,
             mode: Clutter.AnimationMode.EASE_OUT_QUINT,
-            onComplete: () => {
+            onDone: () => {
                 body.rotation_angle_y = 0;
                 sparkle(3);
             },
@@ -137,9 +172,13 @@ export function playRitual(charm, ctx = {}) {
         // The old lemon drops away; a fresh one rises into its place.
         const lemon = parts.lemon;
         const drop = px(charm, 70);
+        // The tumble is a rotation, so it runs on its own timeline; the fall
+        // and the fade ease perfectly well alongside it.
+        turn(lemon, 'rotation_angle_z', 0, 140, {
+            duration: 520, mode: Clutter.AnimationMode.EASE_IN_QUAD,
+        });
         lemon.ease({
             translation_y: drop,
-            rotation_angle_z: 140,
             opacity: 0,
             duration: 520,
             mode: Clutter.AnimationMode.EASE_IN_QUAD,
@@ -156,12 +195,10 @@ export function playRitual(charm, ctx = {}) {
             },
         });
         // The string swings from losing and regaining the weight.
-        parts.string.ease({
-            rotation_angle_z: -9,
+        turn(parts.string, 'rotation_angle_z', 0, -9, {
             duration: 300,
             mode: Clutter.AnimationMode.EASE_OUT_SINE,
-            onComplete: () => parts.string.ease({
-                rotation_angle_z: 0,
+            onDone: () => turn(parts.string, 'rotation_angle_z', -9, 0, {
                 duration: 700,
                 mode: Clutter.AnimationMode.EASE_OUT_ELASTIC,
             }),
@@ -174,12 +211,10 @@ export function playRitual(charm, ctx = {}) {
         // 1 -> paint the right eye (a wish fulfilled)
         // 2 -> a fresh doll, both eyes blank again
         const state = ctx.darumaState ?? 0;
-        const nudge = () => charm.actor.ease({
-            rotation_angle_z: -8,
+        const nudge = () => turn(charm.actor, 'rotation_angle_z', 0, -8, {
             duration: 180,
             mode: Clutter.AnimationMode.EASE_OUT_SINE,
-            onComplete: () => charm.actor.ease({
-                rotation_angle_z: 0,
+            onDone: () => turn(charm.actor, 'rotation_angle_z', -8, 0, {
                 duration: 900,
                 mode: Clutter.AnimationMode.EASE_OUT_ELASTIC,
             }),
@@ -223,15 +258,13 @@ export function playRitual(charm, ctx = {}) {
                 sparkle(4);
                 return;
             }
-            paw.ease({
-                rotation_angle_z: 26,
+            turn(paw, 'rotation_angle_z', 0, 26, {
                 duration: 200,
                 mode: Clutter.AnimationMode.EASE_IN_OUT_SINE,
-                onComplete: () => paw.ease({
-                    rotation_angle_z: 0,
+                onDone: () => turn(paw, 'rotation_angle_z', 26, 0, {
                     duration: 200,
                     mode: Clutter.AnimationMode.EASE_IN_OUT_SINE,
-                    onComplete: beckon,
+                    onDone: beckon,
                 }),
             });
         };
@@ -241,8 +274,10 @@ export function playRitual(charm, ctx = {}) {
 
     case 'horseshoe': {
         const body = parts.body;
+        turn(body, 'rotation_angle_z', 0, 360, {
+            duration: 460, mode: Clutter.AnimationMode.EASE_OUT_QUAD,
+        });
         body.ease({
-            rotation_angle_z: 360,
             translation_y: -px(charm, 26),
             duration: 460,
             mode: Clutter.AnimationMode.EASE_OUT_QUAD,
@@ -263,12 +298,10 @@ export function playRitual(charm, ctx = {}) {
         // Elytra part like doors and swing closed again. Rotated in the plane
         // rather than out of it: an out-of-plane turn foreshortens the wing
         // cases toward the midline, which reads as closing, not opening.
-        const open = (wing, angle) => wing.ease({
-            rotation_angle_z: angle,
+        const open = (wing, angle) => turn(wing, 'rotation_angle_z', 0, angle, {
             duration: 420,
             mode: Clutter.AnimationMode.EASE_OUT_BACK,
-            onComplete: () => wing.ease({
-                rotation_angle_z: 0,
+            onDone: () => turn(wing, 'rotation_angle_z', angle, 0, {
                 duration: 520,
                 delay: 260,
                 mode: Clutter.AnimationMode.EASE_IN_OUT_SINE,

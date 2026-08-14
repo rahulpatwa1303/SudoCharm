@@ -126,7 +126,8 @@ export const CHARMS = [
             {key: 'wingL', file: 'scarab-wing-l.svg', pivot: [0.5, 0.31]},
             {key: 'wingR', file: 'scarab-wing-r.svg', pivot: [0.5, 0.31]},
         ],
-        hangPivot: [0.5, 0.12],
+        // Centre of the gold ring on the new artwork, measured off it.
+        hangPivot: [0.5, 0.095],
         cord: {rope: '#123a6b'},
     },
     {

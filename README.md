@@ -176,6 +176,21 @@ code guessing one constant for all of them; every piece now carries the same
 moulded loop with its hole at (64, 8) on the 128 grid, so `hangPivot` is one
 number and the guessing is gone.
 
+**ease() cannot animate a rotation on these actors, and fails silently.** It
+builds a transition for `rotation-angle-z`, the transition starts and completes
+on schedule, and the angle sits at zero the whole way through — the interval it
+builds comes out with no value type, so there is nothing to interpolate. Easing
+opacity on the same actor in the same frame works exactly as asked. Every ritual
+that turned something was therefore doing nothing at all, for as long as the
+extension has existed: the scarab's wing cases, the nazar's spin, the neko's
+beckon, the horseshoe's flip, the daruma's nudge. Rotations run off a timeline
+that sets the angle each frame instead — `turn()` in charms.js.
+
+**Two independently generated wings will not match.** The scarab's elytra came
+back from separate renders with the same silhouette to within 2% but a mean
+colour difference of 44/255, which reads immediately as one wing being bluer
+than the other. One wing, mirrored, cannot disagree with itself.
+
 **Knowing when the screen is being captured is one signal, not several.**
 Mutter's remote-access controller is what drives the shell's own sharing
 indicator, so watching it covers the xdg-desktop-portal screencast that Zoom,
