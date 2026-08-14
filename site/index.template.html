@@ -475,7 +475,7 @@ const CHARMS = [
            {k:'eyeR', svg:'83.8,48.2,81.7,45.9', hidden:true}] },
   { id:'neko', claim:'Waves good fortune in off the street.<sup>*</sup>', name:'Maneki-neko', origin:'Japan', ritual:'it beckons, three times', hang:0.076,
     story:'A beckoning cat that invites good fortune in. The raised paw is a come-here, not a wave — the gesture reads backwards to most of the world.',
-    parts:[{k:'body', img:'neko-body'}, {k:'paw', img:'neko-paw', pivot:'40.1% 63.9%'}] },
+    parts:[{k:'paw', img:'neko-paw', pivot:'40.1% 63.9%'}, {k:'body', img:'neko-body'}] },
   { id:'horseshoe', claim:'Catches luck, and keeps hold of it.<sup>*</sup>', name:'Horseshoe', origin:'Europe', ritual:'it flips', hang:0.10,
     story:'Iron, luck, and an argument that has run for centuries: ends up to hold the luck in, or ends down to pour it over you. Pick a side.',
     parts:[{k:'body', img:'horseshoe'}] },
@@ -630,12 +630,12 @@ async function ritual() {
   switch (charm.id) {
     case 'nazar':
       stack.style.transformStyle = 'preserve-3d';
-      anim(stack, [{ transform: 'rotateY(0)' }, { transform: 'rotateY(360deg)' }], 900,
-        { easing: 'cubic-bezier(.5,0,.3,1)' });
+      anim(stack, [{ transform: 'rotateY(0)' }, { transform: 'rotateY(720deg)' }], 900,
+        { easing: 'cubic-bezier(.22,1,.36,1)' });
       return 900;
     case 'hamsa':
       anim(stack, [{ transform: 'scale(1)', filter: 'brightness(1)' },
-                   { transform: 'scale(1.09)', filter: 'brightness(1.35)', offset: .35 },
+                   { transform: 'scale(1.12)', filter: 'brightness(1.3)', offset: .3 },
                    { transform: 'scale(1)', filter: 'brightness(1)' }], 780);
       return 780;
     case 'nimbu': {
@@ -658,25 +658,27 @@ async function ritual() {
       return 620;
     }
     case 'neko': {
-      const f = [{ transform: 'rotate(0)' }, { transform: 'rotate(-27deg)', offset: .5 }, { transform: 'rotate(0)' }];
+      const f = [{ transform: 'rotate(0)' }, { transform: 'rotate(26deg)', offset: .5 }, { transform: 'rotate(0)' }];
       for (let i = 0; i < 3; i++) { anim(parts.paw, f, 300, { easing: 'ease-in-out' }); await wait(310); }
       return 60;
     }
     case 'horseshoe':
-      stack.style.transformStyle = 'preserve-3d';
-      anim(stack, [{ transform: 'rotateX(0) translateY(0)' },
-                   { transform: 'rotateX(180deg) translateY(-14%)', offset: .45 },
-                   { transform: 'rotateX(360deg) translateY(0)' }], 860,
-        { easing: 'cubic-bezier(.4,0,.3,1)' });
-      return 860;
+      anim(stack, [{ transform: 'rotate(0deg) translateY(0)', offset: 0 },
+                   { transform: 'rotate(360deg) translateY(-24%)', offset: .46 },
+                   { transform: 'rotate(360deg) translateY(0)', offset: .74 },
+                   { transform: 'rotate(360deg) translateY(-7%)', offset: .86 },
+                   { transform: 'rotate(360deg) translateY(0)', offset: 1 }], 1000,
+        { easing: 'linear' });
+      return 1000;
     case 'scarab': {
-      const open = [{ transform: 'rotate(0)' }, { transform: 'rotate(-34deg)' }];
-      anim(parts.wingL, open, 420, { fill: 'forwards' });
-      anim(parts.wingR, open.map(f => ({ transform: f.transform.replace('-', '') })), 420, { fill: 'forwards' });
-      await wait(700);
-      anim(parts.wingL, [...open].reverse(), 380, { fill: 'forwards' });
-      anim(parts.wingR, [...open].reverse().map(f => ({ transform: f.transform.replace('-', '') })), 380, { fill: 'forwards' });
-      return 400;
+      const swing = a => [{ transform: 'rotate(0deg)' }, { transform: `rotate(${a}deg)` }];
+      const back = a => [{ transform: `rotate(${a}deg)` }, { transform: 'rotate(0deg)' }];
+      anim(parts.wingL, swing(34), 420, { fill: 'forwards', easing: 'cubic-bezier(.34,1.56,.64,1)' });
+      anim(parts.wingR, swing(-34), 420, { fill: 'forwards', easing: 'cubic-bezier(.34,1.56,.64,1)' });
+      await wait(680);
+      anim(parts.wingL, back(34), 520, { fill: 'forwards', easing: 'ease-in-out' });
+      anim(parts.wingR, back(-34), 520, { fill: 'forwards', easing: 'ease-in-out' });
+      return 540;
     }
   }
   return 400;
