@@ -101,31 +101,21 @@ export const CHARMS = [
         story: 'A beckoning cat that invites good fortune in. The raised paw is a ' +
                'come-here, not a wave — the gesture reads backwards to most of the world.',
         ritual: 'Beckon',
-        /* No paw layer, deliberately, until the body art is redrawn.
+        /* The paw is listed AFTER the body, so it is drawn in FRONT of it.
          *
-         * The body was specified to come with a BARE RIGHT SHOULDER so the
-         * separate paw could sit on it — see CHARM-PROMPTS.md, which says so in
-         * bold. It came back as a complete cat with both forelegs: one down the
-         * chest on the left, one resting on the koban on the right. Adding a
-         * raised paw to that gives the cat three front legs, which is what it
-         * did, and no amount of placing or layering can fix it:
+         * That is only safe because this body finally has the bare shoulder the
+         * brief asked for. The previous one had both forelegs, so any raised
+         * paw made three; behind the body it hid the join but passed behind the
+         * head, which is not where a raised paw goes.
          *
-         *   paw over the body  — the severed end shows as a pink oval in mid-air
-         *   paw behind it      — the arm passes behind the head, so it reads as
-         *                        a hand floating by the face and would slide
-         *                        under it as it moved
-         *
-         * So the cat is shown as it was actually drawn, which is a perfectly
-         * good maneki-neko, and the beckon rocks the whole charm instead. Put
-         * this line back the moment the body has a bare shoulder:
-         *
-         *   {key: 'paw', file: 'neko-paw.svg', pivot: [0.54, 0.59]},
-         *
-         * and list it AFTER the body so the paw sits in front of the face. */
+         * The pivot is the arm's cut end, which sits on the shoulder — turning
+         * it about anything else swings the whole limb off the cat. */
         parts: [
             {key: 'body', file: 'neko-body.svg'},
+            {key: 'paw', file: 'neko-paw.svg', pivot: [0.401, 0.639]},
         ],
-        hangPivot: [0.5, 0.1],
+        // Centre of the gold loop's hole, measured off the art.
+        hangPivot: [0.5, 0.076],
         cord: {rope: '#8e1420'},
     },
     {
