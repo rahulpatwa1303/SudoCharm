@@ -181,8 +181,8 @@ The daruma detail is worth its own moment somewhere on the page:
 Install, shown plainly:
 
 ```sh
-gnome-extensions install --force sudocharm@rahul.local.shell-extension.zip
-gnome-extensions enable sudocharm@rahul.local
+gnome-extensions install --force sudocharm@rahulpatwa1303.github.io.shell-extension.zip
+gnome-extensions enable sudocharm@rahulpatwa1303.github.io
 ```
 
 Needs: a download button, a GitHub link, "GNOME Shell 45–48, Wayland or X11",

@@ -37,8 +37,8 @@ version and none planned.
 Download the zip from [Releases](../../releases) and:
 
 ```sh
-gnome-extensions install --force sudocharm@rahul.local.shell-extension.zip
-gnome-extensions enable sudocharm@rahul.local
+gnome-extensions install --force sudocharm@rahulpatwa1303.github.io.shell-extension.zip
+gnome-extensions enable sudocharm@rahulpatwa1303.github.io
 ```
 
 Or from source:
@@ -78,7 +78,7 @@ leather cord, or twisted rope — how strong the breeze is and how fast a flick
 rings down are all in the preferences:
 
 ```sh
-gnome-extensions prefs sudocharm@rahul.local
+gnome-extensions prefs sudocharm@rahulpatwa1303.github.io
 ```
 
 ## From a script

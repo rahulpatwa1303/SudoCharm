@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build an installable zip: dist/sudocharm@rahul.local.shell-extension.zip
+# Build an installable zip: dist/<uuid>.shell-extension.zip
 #
 # Install it with:   gnome-extensions install --force <zip>
 # This is the same format extensions.gnome.org accepts.

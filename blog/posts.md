@@ -34,7 +34,7 @@ by hand and it can take weeks.
 
 Two things to sort out first:
 
-1. **The UUID.** It is currently `sudocharm@rahul.local`. The convention for a
+1. **The UUID.** It is currently `sudocharm@rahulpatwa1303.github.io`. The convention for a
    published extension is a domain you control — `sudocharm@rahulpatwa1303.github.io`.
    Changing it means new GSettings paths and a logout, so do it before the first
    submission rather than after.
