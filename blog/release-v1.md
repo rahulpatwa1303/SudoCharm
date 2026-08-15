@@ -7,7 +7,9 @@ instructions for me, not for the release.
 
 ## Cutting it
 
-The zip is built and verified: `dist/sudocharm@rahulpatwa1303.github.io.shell-extension.zip`
+**v1.0.0 is published.** The notes below are the body; `get.sh` on `master` is
+what the one-line installer fetches, so that file has to be pushed for the
+install command in these notes to work.
 
 ```sh
 cd ~/code/personal/sudocharm
@@ -96,12 +98,19 @@ tap it again when the wish lands and it paints the right. That survives reboots.
 ## Install
 
 ```sh
+curl -fsSL https://raw.githubusercontent.com/rahulpatwa1303/SudoCharm/master/get.sh | bash
+```
+
+That fetches this release, installs it and enables it. Or, by hand — there is
+nothing to unzip:
+
+```sh
 gnome-extensions install --force sudocharm@rahulpatwa1303.github.io.shell-extension.zip
 gnome-extensions enable sudocharm@rahulpatwa1303.github.io
 ```
 
 **Then log out and back in.** GNOME cannot pick up a new extension any other
-way. It catches everyone once.
+way. On X11 you can press Alt+F2, type `r`, and hit Enter instead.
 
 GNOME Shell 45–48, Wayland or X11. Linux only, with no other platforms planned.
 GPL-3.0-or-later.

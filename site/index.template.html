@@ -398,10 +398,16 @@ footer p { margin-bottom: .55em; }
 
   <section id="install">
     <h2>Getting one</h2>
-    <p class="lede">Download the zip from the releases page, then two commands:</p>
-<pre><span class="c l"># from the downloaded zip</span><span class="l">gnome-extensions install --force sudocharm@rahulpatwa1303.github.io.shell-extension.zip</span><span class="l">gnome-extensions enable sudocharm@rahulpatwa1303.github.io</span></pre>
+    <p class="lede">One line. It fetches the latest release, installs it and switches it on.</p>
+<pre><span class="l">curl -fsSL https://raw.githubusercontent.com/rahulpatwa1303/SudoCharm/master/get.sh | bash</span></pre>
     <p style="margin-top:1.3rem"><strong>Then log out and back in.</strong> GNOME will not pick
     up a new extension any other way. It catches everyone once, including me.</p>
+    <p class="fine" style="margin-top:1.1rem">Would rather not pipe a script into your shell?
+    Fair. <a href="https://github.com/rahulpatwa1303/SudoCharm/blob/master/get.sh">Read it
+    first</a>, or grab the zip from
+    <a href="https://github.com/rahulpatwa1303/SudoCharm/releases">releases</a> and run
+    <code>gnome-extensions install --force</code> on it yourself &mdash; there is nothing to
+    unzip.</p>
     <div class="row">
       <a class="btn" href="https://github.com/rahulpatwa1303/SudoCharm/releases">Get SudoCharm</a>
     </div>

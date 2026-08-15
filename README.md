@@ -34,12 +34,22 @@ survives reboots, which means the doll on your screen is keeping score.
 GNOME Shell 45 to 48. Wayland or X11. Linux only — there is no macOS or Windows
 version and none planned.
 
-Download the zip from [Releases](../../releases) and:
+```sh
+curl -fsSL https://raw.githubusercontent.com/rahulpatwa1303/SudoCharm/master/get.sh | bash
+```
+
+That fetches the latest release, installs it and enables it.
+
+If you would rather not pipe a script into your shell — a reasonable thing to
+prefer — [read it first](get.sh), or do the same three steps by hand. Download
+the zip from [Releases](../../releases) and:
 
 ```sh
 gnome-extensions install --force sudocharm@rahulpatwa1303.github.io.shell-extension.zip
 gnome-extensions enable sudocharm@rahulpatwa1303.github.io
 ```
+
+There is nothing to unzip; `gnome-extensions install` takes the zip as it comes.
 
 Or from source:
 

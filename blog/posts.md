@@ -28,16 +28,20 @@ Before either goes out under my name:
 
 ## extensions.gnome.org
 
-This matters more than any of the social posts, because it is where GNOME users
-actually look for extensions. It is also the slowest — submissions are reviewed
-by hand and it can take weeks.
+This matters more than any of the social posts, and more than any of the launch
+copy. It is where GNOME users actually look, and it is the only route that ends
+in **one toggle in a browser** — no terminal, no zip, no logout instructions
+typed out by hand. Everything else asks a stranger to paste a command.
+
+It is also the slowest: submissions are reviewed by hand and it can take weeks.
+Which is the argument for sending it today rather than after the launch posts.
 
 Two things to sort out first:
 
-1. **The UUID.** It is currently `sudocharm@rahulpatwa1303.github.io`. The convention for a
-   published extension is a domain you control — `sudocharm@rahulpatwa1303.github.io`.
-   Changing it means new GSettings paths and a logout, so do it before the first
-   submission rather than after.
+1. **The UUID is already right.** `sudocharm@rahulpatwa1303.github.io` — a
+   domain you control, which is what reviewers expect. It used to be
+   `sudocharm@rahul.local`; that was changed before v1 shipped, so nothing is
+   installed anywhere under the old one.
 2. **Review takes the source seriously.** Reviewers read every line, and the
    hot-reload loader copying files into `.hot/` will draw questions. It is off
    without the `DEV` marker, but say so in the submission notes rather than
@@ -185,5 +189,6 @@ Only worth posting for the lesson, and only the honest version:
 4. dev.to, then Medium with the canonical URL set.
 5. Mastodon and r/gnome the same day.
 6. Show HN the following morning, US time.
-7. Submit to extensions.gnome.org whenever the UUID question is settled — it is
-   slow, so earlier is better.
+7. Submit to extensions.gnome.org **first, not last** — it is the only
+   one-click install anyone gets, and the queue is measured in weeks. Nothing
+   else on this list has to wait for it.
