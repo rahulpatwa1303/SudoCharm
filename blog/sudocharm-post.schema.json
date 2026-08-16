@@ -1,0 +1,94 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://rahulpatwa1303.github.io/SudoCharm/#post",
+      "headline": "Granting root privileges to good luck on Linux",
+      "description": "A GNOME Shell extension that hangs a good luck charm from the top of your Linux screen. It sways, you can flick it, and it does nothing useful. Free, GPL-3.0.",
+      "image": "https://raw.githubusercontent.com/rahulpatwa1303/SudoCharm/master/docs/hanging.png",
+      "datePublished": "2026-08-16",
+      "dateModified": "2026-08-16",
+      "author": {
+        "@type": "Person",
+        "name": "Rahul Patwa",
+        "url": "https://github.com/rahulpatwa1303"
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Rahul Patwa"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://rahulpatwa1303.github.io/SudoCharm/"
+      },
+      "about": {
+        "@type": "SoftwareApplication",
+        "name": "SudoCharm",
+        "applicationCategory": "DesktopEnhancementApplication",
+        "operatingSystem": "Linux, GNOME Shell 45-48",
+        "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+        "url": "https://github.com/rahulpatwa1303/SudoCharm",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://rahulpatwa1303.github.io/SudoCharm/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does SudoCharm work on Wayland?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, on both Wayland and X11. Wayland is the reason it is a GNOME Shell extension rather than an ordinary app: a normal Wayland client cannot draw above other applications' windows and also let clicks pass through to them. Only the compositor can grant that, and on GNOME the compositor is the shell."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Will the charm show up when I share my screen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. SudoCharm detects screencasts, screen recordings and remote desktop sessions and takes itself down until the capture ends, then hangs itself back up. If you would rather it stayed visible, there is a switch for that in preferences."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it get in the way of clicking things?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The artwork is drawn on a layer that is deliberately absent from the compositor's input region. Only two small rectangles, the charm and its hook, accept input. Everything else passes straight through to whatever is underneath."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why do I have to log out after installing a GNOME extension?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "GNOME Shell loads extensions once, at startup, and cannot pick up a new one in a running Wayland session. It is a GNOME limitation rather than a SudoCharm one. On X11 you can press Alt+F2, type r and press Enter to restart the shell instead of logging out."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is SudoCharm heavy on system resources?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. It is a small amount of arithmetic per frame plus some artwork. There is no network access, no telemetry and no background process; it runs inside the GNOME Shell process that is already running."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is SudoCharm free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. SudoCharm is licensed GPL-3.0-or-later, with no paid tier and nothing to buy."
+          }
+        }
+      ]
+    }
+  ]
+}
