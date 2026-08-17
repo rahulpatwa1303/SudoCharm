@@ -140,6 +140,18 @@ const SLIDE_C = 6.5;
  * ritual every time. The charm looked inert: clicking it did nothing at all. */
 const TAP_SLOP = 6;          // pixels
 
+/* Below all of these at once, the charm is not moving in any way a person
+ * could see, so there is nothing left to draw and the clock can stop. Angles
+ * are radians, so 0.0005 is under a twentieth of a degree. */
+const REST_THETA = 0.0005;
+const REST_OMEGA = 0.0015;
+const REST_PIXELS = 0.15;
+
+/* How often the watchdog looks around while the clock is parked. This is a
+ * plain timer, not a frame callback: it runs code without asking the
+ * compositor to draw anything, which is the entire point of parking. */
+const WATCHDOG_MS = 250;
+
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
 class Pendulum {
@@ -189,6 +201,8 @@ class Pendulum {
 
         this._destroyed = false;
         this._clockId = 0;
+        this._watchdogId = 0;
+        this._parked = false;
         this._blocked = false;
         this._overview = false;
         this._dragging = false;
@@ -218,11 +232,15 @@ class Pendulum {
         this._watchCapture();
 
         this._monitorsId = Main.layoutManager.connect('monitors-changed',
-            () => this._syncGeometry());
+            () => { this._syncGeometry(); this._wake(); });
     }
 
     _watch(key, fn) {
-        this._signals.push([this._settings, this._settings.connect(`changed::${key}`, fn)]);
+        this._signals.push([this._settings,
+            this._settings.connect(`changed::${key}`, () => {
+                fn();
+                this._wake();
+            })]);
     }
 
     /* ------------------------------------------------------------ structure */
@@ -473,6 +491,10 @@ class Pendulum {
         this._hook.visible = !gone;
         this._hitCharm.visible = hanging && !this._blocked && !this._shared;
         this._hitHook.visible = !this._blocked && !this._shared;
+
+        // Reappearing must not wait for the next watchdog tick.
+        if (this._pendulum.visible)
+            this._wake();
     }
 
     /* Take the charm down while the screen is being captured.
@@ -533,10 +555,111 @@ class Pendulum {
 
     /* --------------------------------------------------------------- physics */
 
+    /* The clock is a frame callback, so while it runs the compositor has to
+     * keep producing frames — on an otherwise idle desktop that is the whole
+     * cost of this extension, and it dwarfs the arithmetic it exists to do.
+     * So it only runs while something is actually moving.
+     *
+     * A damped swing decays towards zero without ever arriving, so "moving"
+     * cannot mean "not exactly zero" or it would never stop. Below REST_* the
+     * charm is parked outright.
+     *
+     * Something must still be watching while it is parked, or nothing would
+     * ever notice the overview closing and the charm would never come back.
+     * That is the watchdog: a plain GLib timer, which runs code without
+     * asking for a frame. It is what makes parking safe. */
     _startClock() {
         this._clock = Clutter.Timeline.new_for_actor(this._layer, 1000);
         this._clock.set_repeat_count(-1);
         this._clockId = this._clock.connect('new-frame', () => this._tick());
+        this._clock.start();
+
+        this._watchdogId = GLib.timeout_add(GLib.PRIORITY_DEFAULT_IDLE,
+            WATCHDOG_MS, () => {
+                if (this._destroyed)
+                    return GLib.SOURCE_REMOVE;
+                try {
+                    this._updateShellState();
+                    if (this._parked && this._shouldRun())
+                        this._wake();
+                } catch (e) {
+                    this._destroyed = true;
+                    console.error(`SudoCharm: watchdog stopped after an error — ${e}`);
+                    return GLib.SOURCE_REMOVE;
+                }
+                return GLib.SOURCE_CONTINUE;
+            });
+    }
+
+    /** Is there any reason to be drawing frames right now? */
+    _shouldRun() {
+        if (this._destroyed || !this._pendulum.visible)
+            return false;
+        if (this._dragging || this._rehanging || this._blessing)
+            return true;
+        // A breeze is a force applied forever, so it never settles. That is
+        // the feature; turning it off is what makes the charm able to rest.
+        if (this._settings.get_boolean('sway'))
+            return true;
+        if (Math.abs(this._dropTarget - this._drop) > REST_PIXELS)
+            return true;
+        return !this._atRest();
+    }
+
+    /** Nothing moving by an amount anyone could see. */
+    _atRest() {
+        return Math.abs(this._theta) < REST_THETA &&
+            Math.abs(this._omega) < REST_OMEGA &&
+            Math.abs(this._stretch) < REST_PIXELS &&
+            Math.abs(this._stretchVel) < REST_PIXELS &&
+            Math.abs(this._lag - this._theta) < REST_THETA &&
+            Math.abs(this._lagVel) < REST_OMEGA &&
+            Math.abs(this._bow) < REST_PIXELS &&
+            Math.abs(this._bowVel) < REST_PIXELS &&
+            Math.abs(this._slide) < REST_PIXELS &&
+            Math.abs(this._slideVel) < REST_PIXELS;
+    }
+
+    /* Stop drawing. Snap the last few thousandths off first: parking mid-decay
+     * would leave the charm hanging a hair off vertical until something else
+     * woke it, and that hair is visible on a long cord. */
+    _park() {
+        if (this._parked || !this._clock)
+            return;
+        this._theta = 0;
+        this._omega = 0;
+        this._lag = 0;
+        this._lagVel = 0;
+        this._stretch = 0;
+        this._stretchVel = 0;
+        this._bow = 0;
+        this._bowVel = 0;
+        this._slide = 0;
+        this._slideVel = 0;
+        this._draw();
+        this._clock.stop();
+        this._parked = true;
+    }
+
+    /* Render from state, integrating nothing. _park needs this to place the
+     * charm once after snapping it to rest, since by then no further frames
+     * are coming. */
+    _draw() {
+        const lag = clamp(this._lag - this._theta, -MAX_LAG, MAX_LAG);
+        this._pendulum.rotation_angle_z = -this._theta * 180 / Math.PI;
+        this._charmBin.rotation_angle_z = -lag * 180 / Math.PI;
+        this._cord.setBow(this._bow);
+        this._cord.setLag(lag);
+        this._cord.setSlide(this._slide);
+        this._followHitArea();
+    }
+
+    /** Anything that gives the charm a reason to move calls this. */
+    _wake() {
+        if (this._destroyed || !this._clock || !this._parked)
+            return;
+        this._parked = false;
+        this._lastFrame = GLib.get_monotonic_time();
         this._clock.start();
     }
 
@@ -570,7 +693,16 @@ class Pendulum {
          * un-hides it. */
         this._updateShellState();
 
-        if (dt === 0 || this._overview || !this._pendulum.visible)
+        /* Hidden, or behind the overview: there is nothing to draw, so park
+         * rather than returning early and leaving the clock running. Getting
+         * this wrong is what made "take it down" hide the charm while still
+         * costing exactly as much as leaving it up. The watchdog is what
+         * brings it back, so parking here cannot strand it. */
+        if (!this._pendulum.visible || this._overview) {
+            this._park();
+            return;
+        }
+        if (dt === 0)
             return;
 
         this._time += dt;
@@ -691,6 +823,10 @@ class Pendulum {
         this._cord.setSlide(this._slide);
 
         this._followHitArea();
+
+        // Nothing moving and nothing driving it: stop asking for frames.
+        if (!this._shouldRun())
+            this._park();
     }
 
     /* ------------------------------------------------------------ the hands */
@@ -721,6 +857,7 @@ class Pendulum {
         const ctrl = (event.get_state() & Clutter.ModifierType.CONTROL_MASK) !== 0;
         this._rehanging = onHook || ctrl;
         this._dragging = true;
+        this._wake();
         this._dragMoved = false;
         this._pressTime = this._time;
         const [pressX, pressY] = global.get_pointer();
@@ -912,6 +1049,7 @@ class Pendulum {
 
     flick(strength = 2.5) {
         this._omega = clamp(this._omega + strength, -FLICK_CAP, FLICK_CAP);
+        this._wake();
     }
 
     /* -------------------------------------------------------------- rituals */
@@ -920,6 +1058,7 @@ class Pendulum {
     bless() {
         if (this._blessing)
             return;
+        this._wake();
         if (!this._settings.get_boolean('visible'))
             this._settings.set_boolean('visible', true);
 
@@ -1094,7 +1233,7 @@ class Pendulum {
             this._clock = null;
         }
 
-        for (const id of ['_retreatId', '_settleId']) {
+        for (const id of ['_retreatId', '_settleId', '_watchdogId']) {
             if (this[id]) {
                 GLib.Source.remove(this[id]);
                 this[id] = 0;
