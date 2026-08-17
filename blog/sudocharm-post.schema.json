@@ -74,10 +74,10 @@
         },
         {
           "@type": "Question",
-          "name": "Is SudoCharm heavy on system resources?",
+          "name": "Is SudoCharm heavy on battery or system resources?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. It is a small amount of arithmetic per frame plus some artwork. There is no network access, no telemetry and no background process; it runs inside the GNOME Shell process that is already running."
+            "text": "Not while the charm is still. Once it settles, SudoCharm stops its animation clock entirely, so an idle desktop draws nothing; a quarter-second timer watches for a reason to resume without requesting any redraw. The exception is the optional breeze, which is a real animation and does cost something, and which can be switched off. There is no network access and no telemetry."
           }
         },
         {

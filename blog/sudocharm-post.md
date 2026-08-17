@@ -195,10 +195,15 @@ GNOME Shell loads extensions once, at startup, and cannot pick up a new one in a
 running Wayland session. It is a GNOME limitation, not a SudoCharm one. On X11,
 `Alt`+`F2` then `r` restarts the shell without logging out.
 
-**Is it heavy?**
-No. It is a handful of arithmetic per frame and some artwork. There is no
-network access, no telemetry and no background process — it lives inside the
-shell that is already running.
+**Is it heavy on the battery?**
+Not when it is still. Once the charm settles it stops the animation clock
+completely, so an idle desktop goes back to drawing nothing at all — a quarter-
+second timer watches for a reason to start again, which costs nothing because it
+never asks the screen to redraw. Measured in a nested shell: with the charm at
+rest the shell used less CPU than it did with the extension disabled. The one
+exception is the breeze, which is a genuine animation and genuinely costs
+something; turn it off with a right-click and the charm parks. There is no
+network access and no telemetry.
 
 **Is it really free?**
 Yes. GPL-3.0-or-later, no paid tier, nothing to buy.
