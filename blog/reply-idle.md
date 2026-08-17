@@ -4,8 +4,11 @@ Paste from the line below.
 
 ---
 
-Great question, and the honest answer was no — so I fixed it. Thank you for
-asking.
+Thank you for raising this — you found a real optimisation problem, and a bug
+underneath it that I would not have gone looking for. Acknowledged, and now
+fixed.
+
+The honest answer to your question was **no, it did not park itself.**
 
 **How it was.** The animation clock started when the extension loaded and never
 stopped. Worse, it *couldn't* stop on its own: a damped swing gets smaller and
@@ -45,4 +48,7 @@ when hidden — before it ever reached the code that decides whether to stop. I 
 almost recommended it as the battery-saving option in this very reply. It now
 genuinely stops.
 
-Fix is on `master`; I'll cut a release shortly.
+None of this would have been found without the question, so genuinely — thank
+you. The fix is on `master` and goes out as v1.0.1; the one-line installer picks
+up the new release automatically, so there is nothing you need to do differently
+when you try it.
