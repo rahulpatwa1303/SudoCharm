@@ -8,15 +8,15 @@ Thank you for raising this — you found a real optimisation problem, and a bug
 underneath it that I would not have gone looking for. Acknowledged, and now
 fixed.
 
-The honest answer to your question was **no, it did not park itself.**
+**Short version: it didn't park. It does now.**
 
-**How it was.** The animation clock started when the extension loaded and never
+**Before.** The animation clock started when the extension loaded and never
 stopped. Worse, it *couldn't* stop on its own: a damped swing gets smaller and
 smaller but never reaches exactly zero, so there was always a hair of movement
 left to draw. Your screen only redraws when something changes, and something was
 always changing.
 
-**How it is now.** Once the charm is genuinely still, it snaps the last
+**After.** Once the charm is genuinely still, it snaps the last
 thousandth off and stops the clock completely. A cheap quarter-second timer keeps
 watching — that's ordinary code, it doesn't ask the screen to redraw anything —
 and starts the clock again the moment you touch the charm, click it, change a
