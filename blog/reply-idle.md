@@ -1,60 +1,31 @@
 # Reply to the "does it park itself?" comment
 
-Paste from the line below.
+Short and plain. The long technical version is in the commit message for
+"Stop the clock when there is nothing to draw" if anyone wants it.
 
 ---
 
-Thank you for raising this — you found a real optimisation problem, and a bug
-underneath it that I would not have gone looking for. Acknowledged, and now
-fixed.
+You were right, and thank you — this was worth fixing.
 
-**Short version: it didn't park. It does now.**
+**It didn't park.** The animation clock started when the extension loaded and
+never stopped. It couldn't have stopped on its own either: a damped swing keeps
+getting smaller without ever reaching zero, so there was always a sliver of
+movement left to draw.
 
-**Before.** The animation clock started when the extension loaded and never
-stopped. Worse, it *couldn't* stop on its own: a damped swing gets smaller and
-smaller but never reaches exactly zero, so there was always a hair of movement
-left to draw. Your screen only redraws when something changes, and something was
-always changing.
+**It parks now.** Once the charm is still, it snaps off the last fraction and
+stops the clock. A quarter-second timer watches for a reason to start again — a
+click, a drag, a settings change — and that timer never asks the screen to
+redraw anything.
 
-**After.** Once the charm is genuinely still, it snaps the last
-thousandth off and stops the clock completely. A cheap quarter-second timer keeps
-watching — that's ordinary code, it doesn't ask the screen to redraw anything —
-and starts the clock again the moment you touch the charm, click it, change a
-setting, or close the overview.
+Two things your question turned up that I had wrong:
 
-I measured it properly before claiming anything: two builds differing only in
-this change, installed from their release zips into a throwaway home, each run
-twice, sampling GNOME Shell's own CPU over 45 seconds.
+- **Turning the breeze off wasn't saving anything.** Now it does.
+- **"Take it down" left everything running**, so it cost the same as leaving the
+  charm up. That was just a bug. It genuinely stops now.
 
-| | before | after |
-| --- | --- | --- |
-| Charm up, breeze off | 296%, 343% | **2.3%, 2.5%** |
-| For reference: extension not installed at all | | 2.0% |
+On numbers: with the charm idle, GNOME Shell now uses about what it uses with
+the extension not installed at all. I measured that in a nested test shell
+rather than on real hardware, so take it as a comparison rather than a battery
+figure — but the problem underneath it was real, and it's gone.
 
-An idle charm now costs about what having no charm at all costs.
-
-Two caveats, because the numbers deserve them. That is a nested shell falling
-back to software rendering, so the absolute figures are far larger than a real
-GPU would produce — read them against each other, not as watts. And the
-mechanism, rather than the magnitude, is the part that does not depend on the
-renderer: a running frame-clock asks the compositor for frames whether or not
-anything moved, and software rendering changes what each frame costs, not
-whether it happens.
-
-Two things worth calling out:
-
-**The breeze is the honest exception.** With it on, the charm really is animating
-— that's the feature, and no amount of cleverness makes a moving object free. But
-turning it off is now a genuine power switch instead of a cosmetic one, which it
-wasn't before. Right-click → Breeze.
-
-**"Take it down" was a real bug and you found it.** It hid the charm but left
-everything running, so it cost the same as leaving it up. The tick returned early
-when hidden — before it ever reached the code that decides whether to stop. I had
-almost recommended it as the battery-saving option in this very reply. It now
-genuinely stops.
-
-None of this would have been found without the question, so genuinely — thank
-you. The fix is on `master` and goes out as v1.0.1; the one-line installer picks
-up the new release automatically, so there is nothing you need to do differently
-when you try it.
+Ships in v1.0.1.
