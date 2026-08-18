@@ -22,18 +22,24 @@ watching — that's ordinary code, it doesn't ask the screen to redraw anything 
 and starts the clock again the moment you touch the charm, click it, change a
 setting, or close the overview.
 
-I measured before and after, sampling GNOME Shell's own CPU over 45 seconds:
+I measured it properly before claiming anything: two builds differing only in
+this change, installed from their release zips into a throwaway home, each run
+twice, sampling GNOME Shell's own CPU over 45 seconds.
 
 | | before | after |
 | --- | --- | --- |
-| Extension disabled (baseline) | 4.8% | — |
-| Charm up, breeze **off** | 406% | **2.6%** |
-| Charm taken down | 476% | **2.2%** |
-| Charm up, breeze **on** | 421% | 259% |
+| Charm up, breeze off | 296%, 343% | **2.3%, 2.5%** |
+| For reference: extension not installed at all | | 2.0% |
 
-Those are software-rendering numbers from a nested shell, so the absolute values
-are far higher than real hardware — read the columns against each other, not as
-watts. Resting now costs less than the baseline did.
+An idle charm now costs about what having no charm at all costs.
+
+Two caveats, because the numbers deserve them. That is a nested shell falling
+back to software rendering, so the absolute figures are far larger than a real
+GPU would produce — read them against each other, not as watts. And the
+mechanism, rather than the magnitude, is the part that does not depend on the
+renderer: a running frame-clock asks the compositor for frames whether or not
+anything moved, and software rendering changes what each frame costs, not
+whether it happens.
 
 Two things worth calling out:
 
