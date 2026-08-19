@@ -1,31 +1,41 @@
 # Reply to the "does it park itself?" comment
 
-Short and plain. The long technical version is in the commit message for
-"Stop the clock when there is nothing to draw" if anyone wants it.
+> Does the pendulum keep solving frames once the swing has settled, or does it
+> park itself until something touches it? Anything ticking per frame inside the
+> shell process is the bit I'd want to know about before leaving it on a laptop
+> all day.
+
+**Publish v1.0.1 before posting this** — the last line points them at it, and
+right now the newest release is v1.0.0, which still has the old behaviour.
 
 ---
 
-You were right, and thank you — this was worth fixing.
+You were right to ask, and it was doing the thing you were worried about.
+Acknowledged, and now fixed — thank you, genuinely.
 
-**It didn't park.** The animation clock started when the extension loaded and
-never stopped. It couldn't have stopped on its own either: a damped swing keeps
-getting smaller without ever reaching zero, so there was always a sliver of
-movement left to draw.
+**Before:** it kept solving frames. The clock started when the extension loaded
+and never stopped. It couldn't have stopped by itself either — a damped swing
+keeps getting smaller without ever reaching zero, so there was always a sliver
+of movement left to draw.
 
-**It parks now.** Once the charm is still, it snaps off the last fraction and
-stops the clock. A quarter-second timer watches for a reason to start again — a
-click, a drag, a settings change — and that timer never asks the screen to
-redraw anything.
+**Now:** it parks itself until something touches it, which is exactly how you
+put it. Once the charm is still it snaps off the last fraction and stops the
+clock. A quarter-second timer watches for a reason to start again — a click, a
+drag, a settings change — and that timer never asks the screen to redraw.
 
 Two things your question turned up that I had wrong:
 
-- **Turning the breeze off wasn't saving anything.** Now it does.
+- **Turning the breeze off wasn't saving anything.** Now it does. With the
+  breeze on the charm genuinely is animating, so that one still costs something
+   — but it's a switch, and now it's a real one.
 - **"Take it down" left everything running**, so it cost the same as leaving the
-  charm up. That was just a bug. It genuinely stops now.
+  charm up. That was just a bug. It stops properly now.
 
-On numbers: with the charm idle, GNOME Shell now uses about what it uses with
-the extension not installed at all. I measured that in a nested test shell
-rather than on real hardware, so take it as a comparison rather than a battery
-figure — but the problem underneath it was real, and it's gone.
+On leaving it running all day: with the charm idle, GNOME Shell now uses about
+what it uses with the extension not installed at all. I measured that in a
+nested test shell rather than on real hardware, so treat it as a comparison
+rather than a battery figure — but the problem underneath was real, and it's
+gone.
 
-Ships in v1.0.1.
+If you're trying it, take **v1.0.1** — v1.0.0 is the one with the old
+behaviour.
