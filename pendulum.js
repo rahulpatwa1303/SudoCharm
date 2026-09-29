@@ -251,7 +251,6 @@ class Pendulum {
         // Everything the eye sees. Never takes input.
         this._layer = new St.Widget({layout_manager: layout(), reactive: false});
         Main.layoutManager.addTopChrome(this._layer, {
-            affectsInputRegion: false,
             affectsStruts: false,
             trackFullscreen: true,
         });
@@ -297,7 +296,7 @@ class Pendulum {
     _makeHitArea() {
         const area = new St.Widget({reactive: true});
         this._layer.add_child(area);
-        Main.layoutManager.trackChrome(area, {affectsInputRegion: true});
+        Main.layoutManager.trackChrome(area);
         return area;
     }
 
