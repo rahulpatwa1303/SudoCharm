@@ -22,6 +22,8 @@
  * takes clicks. On Wayland an ordinary client cannot do that. Inside the
  * compositor it is two lines: chrome with affectsInputRegion:false for the
  * artwork, and a small tracked hit area for the part you can actually grab.
+ * (GNOME 50 dropped affectsInputRegion: input goes by pick alone there, and
+ * the artwork is not reactive, so the same split holds without it.)
  */
 
 import GObject from 'gi://GObject';
@@ -33,10 +35,15 @@ import Meta from 'gi://Meta';
 import Shell from 'gi://Shell';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as Config from 'resource:///org/gnome/shell/misc/config.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {CHARMS, charmById, buildCharm, playRitual} from './charms.js';
 import {Cord} from './cord.js';
+
+// Up to GNOME 49 the input region still decides clicks on X11. GNOME 50
+// removed the parameter, and passing it there throws.
+const HAS_INPUT_REGION = parseInt(Config.PACKAGE_VERSION) < 50;
 
 const DBUS_PATH = '/org/gnome/shell/extensions/sudocharm';
 const DBUS_IFACE = `
@@ -251,6 +258,7 @@ class Pendulum {
         // Everything the eye sees. Never takes input.
         this._layer = new St.Widget({layout_manager: layout(), reactive: false});
         Main.layoutManager.addTopChrome(this._layer, {
+            ...(HAS_INPUT_REGION ? {affectsInputRegion: false} : {}),
             affectsStruts: false,
             trackFullscreen: true,
         });
@@ -296,7 +304,8 @@ class Pendulum {
     _makeHitArea() {
         const area = new St.Widget({reactive: true});
         this._layer.add_child(area);
-        Main.layoutManager.trackChrome(area);
+        Main.layoutManager.trackChrome(area,
+            HAS_INPUT_REGION ? {affectsInputRegion: true} : {});
         return area;
     }
 
